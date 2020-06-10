@@ -21,6 +21,8 @@ Route::prefix('v1')
             // 删除token
             Route::delete('authorizations/current', 'AuthorizationsController@destroy')
                 ->name('authorizations.destroy');
+
+
         
         Route::middleware('throttle:' . config('api.rate_limits.access'))
             ->group(function () {
@@ -30,7 +32,25 @@ Route::prefix('v1')
                     // 登录后可以访问的接口
 
 
-                    });
+                    // 仓库列表
+                    Route::get('storehouses', 'StorehousesController@index')
+                        ->name('storehouses.index');
+                    // 仓库新增
+                    Route::post('storehouses', 'StorehousesController@store')
+                        ->name('storehouses.store');
+                    // 仓库编辑
+                    Route::put('storehouses/{storehouse}', 'StorehousesController@update')
+                        ->name('storehouses.update');
+                    Route::get('storehouses/{storehouse}/edit', 'StorehousesController@edit')
+                        ->name('storehouses.edit');
+                    // 仓库删除
+                    Route::delete('storehouses/{storehouse}', 'StorehousesController@destroy')
+                        ->name('storehouses.destroy');
+
+
+
+
+                });
             });
         });
     });
