@@ -1,0 +1,158 @@
+{
+	"info": {
+		"name": "zhiyuan-90",
+		"_postman_id": "8ffe1d1f-eda6-25f7-168e-fbeafd2be6ef",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "用户注册",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "zhangsan4",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "17780510694",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{host}}/api/v1/users",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "登录获取token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "zhangsan4",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{host}}/api/v1/authorizations",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"authorizations"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "PUT刷新token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC96aGl5dWFuLnRlc3RcL2FwaVwvdjFcL2F1dGhvcml6YXRpb25zIiwiaWF0IjoxNTkxNzgxNTIwLCJleHAiOjE1OTE3ODUxMjAsIm5iZiI6MTU5MTc4MTUyMCwianRpIjoiN2NVR1lFTXVRQjhxcU53eiIsInN1YiI6NiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.erkr4xPoB4wfnJv0MmHk7P6yJ05V0o5Rtm7G5ueVBOE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{host}}/api/v1/authorizations/current",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"authorizations",
+						"current"
+					]
+				},
+				"description": "任何一个永久有效的 token 都是相当危险的，通过任意方式泄露了 token 之后，用户的相关信息都有可能被利用。为了安全考虑令牌会有过期时间，过期时间一般也不会太长。我们提供了刷新的机制，只要在可刷新的时间范围内，即使 token 过期了，依然可以调用接口，换取一个新的 token。这对于 APP 长期保持用户登录状态是十分重要的。"
+			},
+			"response": []
+		},
+		{
+			"name": "删除token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC96aGl5dWFuLnRlc3RcL2FwaVwvdjFcL2F1dGhvcml6YXRpb25zXC9jdXJyZW50IiwiaWF0IjoxNTkxNzgxNTIwLCJleHAiOjE1OTE3ODUxNDUsIm5iZiI6MTU5MTc4MTU0NSwianRpIjoiaW0ybE9lRGdpQTJ3RnFwZiIsInN1YiI6NiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.-4SRXBeLcibG8RSc-8WNpOVq3UcbWXRzaEp4alzJS2s",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{host}}/api/v1/authorizations/current",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"authorizations",
+						"current"
+					]
+				},
+				"description": "删除 token 的场景就是用户退出 APP，将当前的 token 禁用掉，\n返回的状态码是 204，因为对于删除这类的事件，只需要告诉客户端成功了，没什么需要返回的信息。"
+			},
+			"response": []
+		}
+	]
+}
