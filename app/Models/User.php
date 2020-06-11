@@ -6,9 +6,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+use Spatie\Permission\Traits\HasRoles;
+
 class User extends Authenticatable implements JWTSubject
 {
-
+    use HasRoles;
     public function getJWTIdentifier()
     {
         return $this->getKey();
