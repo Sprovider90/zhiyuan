@@ -1,0 +1,684 @@
+{
+	"info": {
+		"_postman_id": "f3be538b-79c1-4734-8e17-0f7f70747d40",
+		"name": "zhiyuan-90",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "仓库管理",
+			"item": [
+				{
+					"name": "仓库列表",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "name",
+								"value": "1",
+								"description": "仓库名称搜索 非必填",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}/api/v1/storehouses?page=1&pageSize=15&name=12",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"storehouses"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "页数 非必传 默认1"
+								},
+								{
+									"key": "pageSize",
+									"value": "15",
+									"description": "每页条数 非必传 默认15"
+								},
+								{
+									"key": "name",
+									"value": "12",
+									"description": "仓库名 搜索 非必填"
+								}
+							]
+						},
+						"description": "仓库列表接口"
+					},
+					"response": []
+				},
+				{
+					"name": "仓库新增",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/storehouses?name=仓库1&address=北京市海淀区科学研究院&desc=仓库描述",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"storehouses"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "仓库1"
+								},
+								{
+									"key": "address",
+									"value": "北京市海淀区科学研究院"
+								},
+								{
+									"key": "desc",
+									"value": "仓库描述"
+								}
+							]
+						},
+						"description": "仓库新增接口"
+					},
+					"response": []
+				},
+				{
+					"name": "客户编辑",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/storehouses/2/edit",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"storehouses",
+								"2",
+								"edit"
+							]
+						},
+						"description": "编辑接口 获取数据"
+					},
+					"response": []
+				},
+				{
+					"name": "仓库更新",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/storehouses/1?name=仓库12&address=北京市海淀区科学研究院&desc=仓库描述",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"storehouses",
+								"1"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "仓库12"
+								},
+								{
+									"key": "address",
+									"value": "北京市海淀区科学研究院"
+								},
+								{
+									"key": "desc",
+									"value": "仓库描述"
+								}
+							]
+						},
+						"description": "仓库更新接口"
+					},
+					"response": []
+				},
+				{
+					"name": "仓库删除",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/storehouses/1",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"storehouses",
+								"1"
+							]
+						},
+						"description": "仓库删除接口"
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0a59d05c-7e85-4edd-b88f-5828a298930c",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "c7347e19-02d3-4687-855b-32139664f238",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "客户管理",
+			"item": [
+				{
+					"name": "客户列表",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/customers?page=1&pageSize=15&name=公司&contact=梁巨才",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "页数 非必填 默认1 "
+								},
+								{
+									"key": "pageSize",
+									"value": "15",
+									"description": "每页条数 非必填 默认15"
+								},
+								{
+									"key": "name",
+									"value": "公司",
+									"description": "客户名称或简称 搜索项非必填"
+								},
+								{
+									"key": "contact",
+									"value": "梁巨才",
+									"description": "联系人搜索项 非必填"
+								}
+							]
+						},
+						"description": "客户列表接口"
+					},
+					"response": []
+				},
+				{
+					"name": "客户新增",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/customers?company_name=北京梁巨才外包公司&company_addr=梁巨才公司&contact=梁巨才&contact_number=13521339391&type=0&email=763114070@qq.com&address=北京市海淀区科学研究院&memo=这是备注",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers"
+							],
+							"query": [
+								{
+									"key": "company_name",
+									"value": "北京梁巨才外包公司",
+									"description": "公司全称"
+								},
+								{
+									"key": "company_addr",
+									"value": "梁巨才公司",
+									"description": "公司简称  非必填"
+								},
+								{
+									"key": "contact",
+									"value": "梁巨才",
+									"description": "联系人"
+								},
+								{
+									"key": "contact_number",
+									"value": "13521339391",
+									"description": "联系电话"
+								},
+								{
+									"key": "type",
+									"value": "0",
+									"description": "对应字典表类型"
+								},
+								{
+									"key": "email",
+									"value": "763114070@qq.com",
+									"description": "邮箱 非必填"
+								},
+								{
+									"key": "address",
+									"value": "北京市海淀区科学研究院",
+									"description": "公司地址 非必填"
+								},
+								{
+									"key": "memo",
+									"value": "这是备注",
+									"description": "备注 非必填"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "客户编辑",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/customers/2/edit",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"2",
+								"edit"
+							]
+						},
+						"description": "编辑获取数据展示接口"
+					},
+					"response": []
+				},
+				{
+					"name": "客户更新",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/customers/1?company_name=编辑北京梁巨才外包公司&company_addr=梁巨才公司&contact=梁巨才&contact_number=13521339391&type=0&email=763114070@qq.com&address=北京市海淀区科学研究院&memo=这是备注",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"1"
+							],
+							"query": [
+								{
+									"key": "company_name",
+									"value": "编辑北京梁巨才外包公司"
+								},
+								{
+									"key": "company_addr",
+									"value": "梁巨才公司"
+								},
+								{
+									"key": "contact",
+									"value": "梁巨才"
+								},
+								{
+									"key": "contact_number",
+									"value": "13521339391"
+								},
+								{
+									"key": "type",
+									"value": "0"
+								},
+								{
+									"key": "email",
+									"value": "763114070@qq.com"
+								},
+								{
+									"key": "address",
+									"value": "北京市海淀区科学研究院"
+								},
+								{
+									"key": "memo",
+									"value": "这是备注"
+								}
+							]
+						},
+						"description": "客户编辑提交保存接口"
+					},
+					"response": []
+				},
+				{
+					"name": "客户详情",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/customers/2",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"2"
+							]
+						},
+						"description": "查看客户详情接口"
+					},
+					"response": []
+				}
+			],
+			"description": "客户管理接口",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "用户注册",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "zhangsan4",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "17780510694",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{host}}/api/v1/users",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "登录获取token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e17392da-796f-421b-81f4-e3a26574700c",
+						"exec": [
+							"var data=JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"token\",data.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "zhangsan4",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{host}}/api/v1/authorizations",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"authorizations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT刷新token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC96aGl5dWFuLnRlc3RcL2FwaVwvdjFcL2F1dGhvcml6YXRpb25zIiwiaWF0IjoxNTkxNzgxNTIwLCJleHAiOjE1OTE3ODUxMjAsIm5iZiI6MTU5MTc4MTUyMCwianRpIjoiN2NVR1lFTXVRQjhxcU53eiIsInN1YiI6NiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.erkr4xPoB4wfnJv0MmHk7P6yJ05V0o5Rtm7G5ueVBOE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/api/v1/authorizations/current",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"authorizations",
+						"current"
+					]
+				},
+				"description": "任何一个永久有效的 token 都是相当危险的，通过任意方式泄露了 token 之后，用户的相关信息都有可能被利用。为了安全考虑令牌会有过期时间，过期时间一般也不会太长。我们提供了刷新的机制，只要在可刷新的时间范围内，即使 token 过期了，依然可以调用接口，换取一个新的 token。这对于 APP 长期保持用户登录状态是十分重要的。"
+			},
+			"response": []
+		},
+		{
+			"name": "删除token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC96aGl5dWFuLnRlc3RcL2FwaVwvdjFcL2F1dGhvcml6YXRpb25zXC9jdXJyZW50IiwiaWF0IjoxNTkxNzgxNTIwLCJleHAiOjE1OTE3ODUxNDUsIm5iZiI6MTU5MTc4MTU0NSwianRpIjoiaW0ybE9lRGdpQTJ3RnFwZiIsInN1YiI6NiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.-4SRXBeLcibG8RSc-8WNpOVq3UcbWXRzaEp4alzJS2s",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/api/v1/authorizations/current",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"authorizations",
+						"current"
+					]
+				},
+				"description": "删除 token 的场景就是用户退出 APP，将当前的 token 禁用掉，\n返回的状态码是 204，因为对于删除这类的事件，只需要告诉客户端成功了，没什么需要返回的信息。"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
