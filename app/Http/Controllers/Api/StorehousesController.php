@@ -10,13 +10,13 @@ use Illuminate\Http\Request;
 
 class StorehousesController extends Controller
 {
-    //
+    // 仓库列表
     public function index(Storehouses $storehouses, Request $request)
     {
         if($request->name){
             $storehouses = $storehouses->where('name', 'like', '%' . $request->name. '%');
         }
-        return new StorehousesResource($storehouses->paginate(10));
+        return new StorehousesResource($storehouses->paginate($request->pageSize ?? $request->pageSize));
     }
 
     // 仓库新增
@@ -24,16 +24,21 @@ class StorehousesController extends Controller
         $storehouses = Storehouses::create($request->all());
         return new StorehousesResource($storehouses);
     }
+
+    // 仓库编辑
     public function edit(Storehouses $storehouse)
     {
         return new StorehousesResource($storehouse);
     }
 
+    // 仓库更新
     public function update(Storehouses $storehouse, StorehousesRequest $request)
     {
         $storehouse->update($request->all());
         return new StorehousesResource($storehouse);
     }
+
+    // 仓库删除
     public function destroy($id)
     {
         Storehouses::where('id',$id)->delete();
