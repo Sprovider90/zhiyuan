@@ -30,7 +30,10 @@ Route::prefix('v1')
                 
                 Route::middleware('auth:api')->group(function() {
                     // 登录后可以访问的接口
-
+                    
+                    // 当前登录用户权限
+                    Route::get('user/permissions', 'PermissionsController@index')
+                    ->name('user.permissions.index');
 
                     // 仓库列表
                     Route::get('storehouses', 'StorehousesController@index')
