@@ -18,10 +18,10 @@ class CustomersController extends Controller
     public function index(Customers $customers , Request $request)
     {
         if($request->name){
-            $customers = $customers->where('company_name','like','%'.$request->name.'%')->orWhere('company_addr');
+            $customers = $customers->where('company_name','like','%'.$request->name.'%')->orWhere('company_addr','like','%'.$request->name.'%');
         }
         if($request->contact){
-                $customers = $customers->where('contact','like','%'.$request->contact.'%');
+            $customers = $customers->where('contact','like','%'.$request->contact.'%');
         }
         return new CustomersResources($customers->paginate($request->pageSize ?? $request->pageSize));
     }
