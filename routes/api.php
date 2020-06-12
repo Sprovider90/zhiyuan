@@ -9,9 +9,6 @@ Route::prefix('v1')
         Route::middleware('throttle:' . config('api.rate_limits.sign'))
             ->group(function () {
             
-            // 用户注册
-            Route::post('users', 'UsersController@store')
-                ->name('users.store');
             // 登录
             Route::post('authorizations', 'AuthorizationsController@store')
                 ->name('api.authorizations.store');
@@ -30,10 +27,25 @@ Route::prefix('v1')
                 
                 Route::middleware('auth:api')->group(function() {
                     // 登录后可以访问的接口
-                    
-                    // 当前登录用户权限
-                    Route::get('user/permissions', 'PermissionsController@index')
-                    ->name('user.permissions.index');
+                    // 用户新增
+                    Route::post('users', 'UsersController@store')
+                        ->name('users.store');
+                    //角色列表
+                    Route::get('/role', 'RoleController@index')
+                    ->name('role.index');
+                    //权限列表
+                    Route::get('/permissions', 'PermissionsController@index')
+                    ->name('permissions.index');
+                     // 当前登录用户权限
+                    Route::get('user', 'PermissionsController@userIndex')
+                        ->name('user.permissions');
+                    //角色的权限列表
+                    Route::get('/role/{role}/permissions', 'PermissionsController@roleIndex')
+                    ->name('role.permissions');
+
+                    Route::resource('role', 'RoleController')->only([
+                        'store', 'update'
+                    ]);
 
                     // 仓库列表
                     Route::get('storehouses', 'StorehousesController@index')
