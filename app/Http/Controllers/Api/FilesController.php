@@ -19,7 +19,7 @@ class FilesController extends Controller
         $file = $request->file('file');
         $type = $request->get('type',0); //0图片 1视频
 
-        $fileSize = $file->getSize();
+        $fileSize = sprintf("%.2f",round($file->getSize()/1024,2));
         $fileExt = strtolower($file->getClientOriginalExtension());
 
         switch ($type){
@@ -46,14 +46,13 @@ class FilesController extends Controller
         $fileTmp = $file->getRealPath();
         $fileName = date("YmdHis").rand(10000000,99999999).'.'.$fileExt;
         $fileMime = $file->getMimeType();
-        $upFilePathName = '/'.config('filesystems.disks.oss.bucket').'/'.$fileName;
-        $fileUpFlg = Storage::disk('public')->put($upFilePathName,file_get_contents($fileTmp));
-        $filePath = Storage::disk('public')->url($upFilePathName);
+        $fileUpFlg = Storage::disk('public')->put($fileName,file_get_contents($fileTmp));
+        $filePath = Storage::disk('public')->url($fileName);
         if($fileUpFlg){
             #插入数据库
             $file = Files::create([
                 'name'          =>  $fileName,
-                'size'          =>  round($fileSize/1024,2),
+                'size'          =>  $fileSize,
                 'ext'           =>  $fileExt,
                 'path'          =>  $filePath,
                 'mime'          =>  $fileMime,
