@@ -9,11 +9,12 @@ use App\Models\Customers;
 use App\Models\Files;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class FilesController extends Controller
 {
     //
-    public function uploadFile(FilesRequest $request){
+    public function store(FilesRequest $request){
         $file = $request->file('file');
         $type = $request->get('type',0); //0图片 1视频
 
@@ -23,28 +24,22 @@ class FilesController extends Controller
         switch ($type){
             case 0:
                 //校验图片格式 图片大小
-                $configImgMaxSize = config('filesystems.UPLOAD_IMAGE_MAX_SIZE');
-                $configImgExt = config('filesystems.UPLOAD_IMAGE_EXT');
+                $configFileMaxSize = config('filesystems.UPLOAD_IMAGE_MAX_SIZE');
+                $configFileExt = config('filesystems.UPLOAD_IMAGE_EXT');
                 break;
             case 1:
                 //校验视频格式 视频大小
-                $configImgMaxSize = config('filesystems.UPLOAD_VIDEOS_MAX_SIZE');
-                $configImgExt = config('filesystems.UPLOAD_VIDEOS_EXT');
+                $configFileMaxSize = config('filesystems.UPLOAD_VIDEOS_MAX_SIZE');
+                $configFileExt = config('filesystems.UPLOAD_VIDEOS_EXT');
                 break;
         }
 
-        if(round($fileSize/1024/1024,2) > $configImgMaxSize){
-            /*return response()->json([
-                'code' => 1000100 ,
-                'msg' => '文件最大不超过'.$configImgMaxSize.'M'
-            ])->setEncodingOptions(JSON_UNESCAPED_UNICODE);*/
+        if(round($fileSize/1024/1024,2) > $configFileMaxSize){
+            throw new HttpException(401, '文件最大不超过'.$configFileMaxSize.'M');
         }
 
-        if(!in_array($fileExt,explode(',',$configImgExt))){
-            /*return response()->json([
-                'code' => 1000100 ,
-                'msg' => '文件不在允许的'.$configImgExt.'扩展中'
-            ])->setEncodingOptions(JSON_UNESCAPED_UNICODE);*/
+        if(!in_array($fileExt,explode(',',$configFileExt))){
+            throw new HttpException(401, '文件不在允许的'.$configFileExt.'扩展中');
         }
         $clientName = $file->getClientOriginalName();
         $fileTmp = $file->getRealPath();
@@ -62,9 +57,10 @@ class FilesController extends Controller
                 'path'          =>  $filePath,
                 'mime'          =>  $fileMime,
                 'upload_name'   =>  $clientName]);
+            return new FilesResource($file);
 
         }else{
-            return new FilesResource($file);
+            return new HttpException(400, '内部错误');
         }
 
     }

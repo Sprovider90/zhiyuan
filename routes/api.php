@@ -60,6 +60,15 @@ Route::prefix('v1')
 
 
 
+                    //公共接口
+
+                    //文件上传
+                    Route::resource('file', 'FilesController')->only([
+                        'store'
+                    ]);
+
+
+
 
 
 

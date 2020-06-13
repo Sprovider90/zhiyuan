@@ -9,4 +9,7 @@ class Files extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'name','upload_name', 'size','ext','mime','path'
+    ];
 }
