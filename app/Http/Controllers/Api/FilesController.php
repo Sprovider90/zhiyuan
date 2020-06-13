@@ -13,8 +13,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class FilesController extends Controller
 {
-    //
-    public function store(FilesRequest $request){
+
+    // 图片上传
+    public function uploadFile(FilesRequest $request){
         $file = $request->file('file');
         $type = $request->get('type',0); //0图片 1视频
 

@@ -16,7 +16,7 @@ class StorehousesController extends Controller
         if($request->name){
             $storehouses = $storehouses->where('name', 'like', '%' . $request->name. '%');
         }
-        return new StorehousesResource($storehouses->paginate($request->pageSize ?? $request->pageSize));
+        return new StorehousesResource($storehouses->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize));
     }
 
     // 仓库新增

@@ -23,7 +23,7 @@ class CustomersController extends Controller
         if($request->contact){
             $customers = $customers->where('contact','like','%'.$request->contact.'%');
         }
-        return new CustomersResources($customers->paginate($request->pageSize ?? $request->pageSize));
+        return new CustomersResources($customers->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize));
     }
 
 
