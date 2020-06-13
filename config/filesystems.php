@@ -41,6 +41,28 @@ return [
     |
     */
 
+
+    /**
+     * 上传图片最大限制 默认5M
+     */
+    'UPLOAD_IMAGE_MAX_SIZE' => env('UPLOAD_IMAGE_MAX_SIZE', 5),
+
+    /**
+     * 上传图片扩展 默认['jpg','png','jepg','gif']
+     */
+    'UPLOAD_IMAGE_EXT' => env('UPLOAD_IMAGE_EXT', 'jpg,png,jepg,gif'),
+
+    /**
+     * 上传视频最大限制 默认50M
+     */
+    'UPLOAD_VIDEOS_MAX_SIZE' => env('UPLOAD_VIDEOS_MAX_SIZE', 50),
+
+    /**
+     * 上传视频扩展 默认['jpg','png','jepg','gif']
+     */
+    'UPLOAD_VIDEOS_EXT' => env('UPLOAD_VIDEOS_EXT', 'avi,mp4,3gp,mov,rmvb,rm,flv'),
+
+
     'disks' => [
 
         'local' => [

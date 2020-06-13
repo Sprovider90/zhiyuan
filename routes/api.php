@@ -47,41 +47,19 @@ Route::prefix('v1')
                         'store', 'update'
                     ]);
 
-                    // 仓库列表
-                    Route::get('storehouses', 'StorehousesController@index')
-                        ->name('storehouses.index');
-                    // 仓库新增
-                    Route::post('storehouses', 'StorehousesController@store')
-                        ->name('storehouses.store');
-                    // 仓库编辑
-                    Route::get('storehouses/{storehouse}/edit', 'StorehousesController@edit')
-                        ->name('storehouses.edit');
-                    // 仓库更新
-                    Route::put('storehouses/{storehouse}', 'StorehousesController@update')
-                        ->name('storehouses.update');
-                    // 仓库删除
-                    Route::delete('storehouses/{storehouse}', 'StorehousesController@destroy')
-                        ->name('storehouses.destroy');
+
+                    //仓库列表 仓库新增  仓库编辑 仓库更新 仓库删除
+                    Route::resource('storehouses', 'StorehousesController')->only([
+                        'index','store', 'edit','update','destroy'
+                    ]);
+
+                    //客户列表 客户新增  客户编辑 客户更新 客户删除
+                    Route::resource('customers', 'CustomersController')->only([
+                        'index','store', 'edit','update','show'
+                    ]);
 
 
-                    // 客户列表
-                    Route::get('customers', 'CustomersController@index')
-                        ->name('customers.index');
-                    // 客户新增
-                    Route::post('customers', 'CustomersController@store')
-                        ->name('customers.store');
-                    // 客户编辑
-                    Route::get('customers/{customer}/edit', 'CustomersController@edit')
-                        ->name('customers.edit');
-                    // 客户更新
-                    Route::put('customers/{customer}', 'CustomersController@update')
-                        ->name('customers.update');
-                    // 客户删除
-//                    Route::delete('customers/{customer}', 'CustomersController@destroy')
-//                        ->name('customers.destroy');
-                    // 客户查看
-                    Route::get('customers/{customer}', 'CustomersController@show')
-                        ->name('customers.show');
+
 
 
 
