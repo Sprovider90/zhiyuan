@@ -20,9 +20,8 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-   
     protected $fillable = [
-        'name','password', 'phone'
+        'name','phone', 'truename','password','type','belongs_customer','roles'
     ];
 
     protected $hidden = [
@@ -46,5 +45,8 @@ class User extends Authenticatable implements JWTSubject
 
         $this->attributes['password'] = $value;
     }
-
+    public function customer()
+    {
+        return $this->belongsTo(Customers::class);
+    }
 }

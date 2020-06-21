@@ -30,6 +30,9 @@ Route::prefix('v1')
                     // 用户新增
                     Route::post('users', 'UsersController@store')
                         ->name('users.store');
+                    //用户列表
+                    Route::get('users', 'UsersController@index')
+                    ->name('users.index');
                     //角色列表
                     Route::get('/role', 'RoleController@index')
                     ->name('role.index');

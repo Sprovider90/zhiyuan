@@ -8,8 +8,28 @@ use App\Http\Resources\UserResource;
 use App\Http\Requests\Api\UserRequest;
 use Spatie\Permission\Models\Role;
 
+use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\AllowedFilter;
+
 class UsersController extends Controller
 {
+	public function index(UserRequest $request,User $user)
+    {
+    	//用户名，姓名，电话,ID
+    	$usrs = QueryBuilder::for(User::class)
+            ->allowedIncludes('customer')
+            ->allowedFilters([
+                'name',
+                'truename',
+                'phone',
+                AllowedFilter::exact('id'),
+                //AllowedFilter::scope('withOrder')->default('updated_at'),
+            ])
+            ->paginate();
+
+        return UserResource::collection($usrs);
+    }
+
     public function store(UserRequest $request)
     {
     	\DB::beginTransaction();

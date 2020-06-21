@@ -14,6 +14,11 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $data=parent::toArray($request);
+        $data['customer'] = new CustomersResources($this->whenLoaded('customer'));
+        $data['status']=$data['status']==1?"正常":"禁用";
+        $data['type']=$data['type']==1?"数据中心":"客户平台";
+        return $data;       
+        
     }
 }
