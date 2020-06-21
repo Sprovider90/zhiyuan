@@ -14,8 +14,10 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
+        $roles=$request->user()->roles();
         $data=parent::toArray($request);
         $data['customer'] = new CustomersResources($this->whenLoaded('customer'));
+        $data['roles'] = $roles;
         $data['status']=$data['status']==1?"正常":"禁用";
         $data['type']=$data['type']==1?"数据中心":"客户平台";
         return $data;       
