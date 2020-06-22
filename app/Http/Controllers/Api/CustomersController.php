@@ -36,7 +36,7 @@ class CustomersController extends Controller
     public function store(CustomersRequest $request)
     {
         $customer = Customers::create($request->all());
-        return new CustomersResources($customer);
+        return response(new CustomersResources($customer),201);;
     }
 
     /**
@@ -71,7 +71,7 @@ class CustomersController extends Controller
     public function update(Customers $customer,CustomersRequest $request)
     {
         $customer->update($request->all());
-        return new CustomersResources($customer);
+        return response(new CustomersResources($customer),201);
     }
 
     /**

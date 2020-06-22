@@ -22,7 +22,7 @@ class StorehousesController extends Controller
     // 仓库新增
     public function store(StorehousesRequest $request){
         $storehouses = Storehouses::create($request->all());
-        return new StorehousesResource($storehouses);
+        return response(new StorehousesResource($storehouses),201);
     }
 
     // 仓库编辑
@@ -35,7 +35,7 @@ class StorehousesController extends Controller
     public function update(Storehouses $storehouse, StorehousesRequest $request)
     {
         $storehouse->update($request->all());
-        return new StorehousesResource($storehouse);
+        return response(new StorehousesResource($storehouse),201);
     }
 
     // 仓库删除
