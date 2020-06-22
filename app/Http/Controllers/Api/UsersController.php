@@ -60,7 +60,7 @@ class UsersController extends Controller
     {
        	\DB::beginTransaction();
        	try{
-	        $attributes = $request->only(['truename', 'password']);
+	        $attributes = $request->only(['truename', 'password','status']);
 	        
 	        if (isset($request->roles)) {
 

@@ -11,6 +11,7 @@ class RoleRequest extends FormRequest
             case 'POST':
 	            return [
 	            'name'=>'required|unique:roles|max:10',
+                'type'=>'required|numeric',
 	            'permissions' =>'required',
 	        	];
             case 'PUT':

@@ -20,8 +20,10 @@ class RoleController extends Controller {
     public function store(RoleRequest $request) {
      
         $name = $request['name'];
+        $type = $request['type'];
         $role = new Role();
         $role->name = $name;
+        $role->type = $type;
 
         $permissions = explode(',', $request['permissions']);
         \DB::beginTransaction();

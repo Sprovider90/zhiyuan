@@ -17,7 +17,7 @@ class UserRequest extends FormRequest
 		            'truename' => 'required|string',
 		            'password' => 'required|alpha_dash|between:6,20',
 		            'type' => 'required|numeric',
-		            'customer_id' => 'required|numeric',
+		            'customer_id' => 'required|numeric|exists:customers,id',
 		            'roles' => 'required|string'
 		        ];
 		        if($this->type==1){
@@ -30,10 +30,20 @@ class UserRequest extends FormRequest
 			            'roles' => 'required|string'            
 			        ];
 		        }
+                break;
 		    }
+            case 'PATCH':
+            {
+                $rules=[
+                    'truename' => 'string',
+                    'password' => 'alpha_dash|between:6,20',
+                    'status' => 'boolean',
+                    'roles' => 'string'
+                ];
+                break;
+            }
             // UPDATE
             case 'PUT':
-            case 'PATCH':
             case 'GET':
             case 'DELETE':
             default:
@@ -41,8 +51,7 @@ class UserRequest extends FormRequest
                 return [];
             };
         }
-
-    	
+ 
         return $rules;
     }
     public function messages()
