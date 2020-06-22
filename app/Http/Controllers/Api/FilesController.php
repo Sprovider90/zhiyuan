@@ -57,7 +57,7 @@ class FilesController extends Controller
                 'path'          =>  $filePath,
                 'mime'          =>  $fileMime,
                 'upload_name'   =>  $clientName]);
-            return new FilesResource($file);
+            return response(new FilesResource($file),201);
 
         }else{
             return new HttpException(400, '内部错误');
