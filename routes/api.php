@@ -48,6 +48,9 @@ Route::prefix('v1')
                         'store', 'update'
                     ]);
 
+                    //登录日志列表
+                    Route::get('/usersloginlog', 'UsersloginlogController@index')
+                    ->name('UsersloginlogController.index');
 
                     //仓库列表 仓库新增  仓库编辑 仓库更新 仓库删除
                     Route::resource('storehouses', 'StorehousesController')->only([
