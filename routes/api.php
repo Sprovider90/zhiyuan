@@ -62,14 +62,22 @@ Route::prefix('v1')
                         'index','store', 'edit','update','show'
                     ]);
 
+                    //订单列表 订单新增  订单编辑 订单更新 订单详情
+                    Route::resource('orders', 'OrdersController')->only([
+                        'index','store', 'edit','update','show'
+                    ]);
+
 
 
                     //公共接口
+                    Route::group(['prefix' => 'public'],function () {
+                        //文件上传
+                        Route::resource('file', 'PublicController')->only([
+                            'store'
+                        ]);
+                        Route::get('customers','PublicController@customers')->name('public.customers');
+                    });
 
-                    //文件上传
-                    Route::resource('file', 'FilesController')->only([
-                        'store'
-                    ]);
 
 
 

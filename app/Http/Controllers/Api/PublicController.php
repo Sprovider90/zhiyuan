@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FilesRequest;
+use App\Http\Resources\CustomersResources;
 use App\Http\Resources\FilesResource;
 use App\Models\Customers;
 use App\Models\Files;
@@ -11,8 +12,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class FilesController extends Controller
+class PublicController extends Controller
 {
+    //客户列表
+    public function customers(Customers $customers){
+        return new CustomersResources($customers->orderBy('id','desc')->get(['id','company_name','company_addr']));
+    }
+
 
     // 图片上传
     public function store(FilesRequest $request){
