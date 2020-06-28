@@ -273,7 +273,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}/api/v1/customers?page=1&pageSize=15&name=公司&contact=梁巨才",
+							"raw": "http://{{host}}/api/v1/customers?page=1&pageSize=15",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -297,12 +297,14 @@
 								{
 									"key": "name",
 									"value": "公司",
-									"description": "客户名称或简称 搜索项非必填"
+									"description": "客户名称或简称 搜索项非必填",
+									"disabled": true
 								},
 								{
 									"key": "contact",
-									"value": "梁巨才",
-									"description": "联系人搜索项 非必填"
+									"value": "花花公子",
+									"description": "联系人搜索项 非必填",
+									"disabled": true
 								}
 							]
 						},
@@ -326,7 +328,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}/api/v1/customers?company_name=北京梁巨才外包公司&company_addr=梁巨才公司&contact=梁巨才&contact_number=13521339391&type=0&email=763114070@qq.com&address=北京市海淀区科学研究院&memo=这是备注",
+							"raw": "http://{{host}}/api/v1/customers?company_name=北京梁巨才外包公司&company_addr=梁巨才公司&type=0&email=763114070@qq.com&address=北京市海淀区科学研究院&memo=这是备注&contact=[{\"contact\":\"\\u6881\\u5de8\\u624d\",\"contact_phone\":\"13521339391\",\"job\":\"\\u8001\\u677f\"},{\"contact\":\"\\u6d4b\\u8bd5\\u7ec3\\u4e60\\u4eba\",\"contact_phone\":\"13521339391\",\"job\":\"\\u8001\\u677f\"}]",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -348,14 +350,10 @@
 									"description": "公司简称  非必填"
 								},
 								{
-									"key": "contact",
-									"value": "梁巨才",
-									"description": "联系人"
-								},
-								{
-									"key": "contact_number",
-									"value": "13521339391",
-									"description": "联系电话"
+									"key": "logo",
+									"value": "1",
+									"description": "logo",
+									"disabled": true
 								},
 								{
 									"key": "type",
@@ -376,6 +374,10 @@
 									"key": "memo",
 									"value": "这是备注",
 									"description": "备注 非必填"
+								},
+								{
+									"key": "contact",
+									"value": "[{\"contact\":\"\\u6881\\u5de8\\u624d\",\"contact_phone\":\"13521339391\",\"job\":\"\\u8001\\u677f\"},{\"contact\":\"\\u6d4b\\u8bd5\\u7ec3\\u4e60\\u4eba\",\"contact_phone\":\"13521339391\",\"job\":\"\\u8001\\u677f\"}]"
 								}
 							]
 						}
@@ -398,7 +400,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}/api/v1/customers/2/edit",
+							"raw": "http://{{host}}/api/v1/customers/55/edit",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -407,7 +409,7 @@
 								"api",
 								"v1",
 								"customers",
-								"2",
+								"55",
 								"edit"
 							]
 						},
@@ -431,7 +433,7 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}/api/v1/customers/1?company_name=编辑北京梁巨才外包公司&company_addr=梁巨才公司&contact=梁巨才&contact_number=13521339391&type=0&email=763114070@qq.com&address=北京市海淀区科学研究院&memo=这是备注",
+							"raw": "http://{{host}}/api/v1/customers/73?company_name=编辑北京梁巨才外包公司&company_addr=梁巨才公司&contact=[{\"contact\":\"花花公子\",\"contact_phone\":\"13521339391\",\"job\":\"\\u8001\\u677f\"},{\"contact\":\"\\u6d4b\\u8bd5\\u7ec3\\u4e60\\u4eba\",\"contact_phone\":\"13521339391\",\"job\":\"\\u8001\\u677f\"}]&type=0&email=763114070@qq.com&address=北京市海淀区科学研究院&memo=这是备注",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -440,7 +442,7 @@
 								"api",
 								"v1",
 								"customers",
-								"1"
+								"73"
 							],
 							"query": [
 								{
@@ -453,11 +455,7 @@
 								},
 								{
 									"key": "contact",
-									"value": "梁巨才"
-								},
-								{
-									"key": "contact_number",
-									"value": "13521339391"
+									"value": "[{\"contact\":\"花花公子\",\"contact_phone\":\"13521339391\",\"job\":\"\\u8001\\u677f\"},{\"contact\":\"\\u6d4b\\u8bd5\\u7ec3\\u4e60\\u4eba\",\"contact_phone\":\"13521339391\",\"job\":\"\\u8001\\u677f\"}]"
 								},
 								{
 									"key": "type",
@@ -528,6 +526,68 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "公共接口",
+			"item": [
+				{
+					"name": "上传文件",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/Justin/Desktop/测试文件/测试图片/banner_3.jpg"
+								},
+								{
+									"key": "type",
+									"value": "1",
+									"description": "0图片 1视频 默认0",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{host}}/api/v1/file",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"file"
+							],
+							"query": [
+								{
+									"key": "file",
+									"value": "",
+									"disabled": true
+								}
+							]
+						},
+						"description": "上传文件接口"
+					},
+					"response": []
+				}
+			],
+			"description": "需要登录权限 但无需校验权限接口",
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "用户注册",
 			"request": {
 				"method": "POST",
@@ -574,6 +634,54 @@
 					"listen": "test",
 					"script": {
 						"id": "e17392da-796f-421b-81f4-e3a26574700c",
+						"exec": [
+							"var data=JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"token\",data.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "zhangsan4",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{host}}/api/v1/authorizations",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"authorizations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "登录获取token Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "eabab16b-29f5-463b-ac71-dcf26651d119",
 						"exec": [
 							"var data=JSON.parse(responseBody);",
 							"postman.setEnvironmentVariable(\"token\",data.access_token);"

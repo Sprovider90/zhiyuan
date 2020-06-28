@@ -25,9 +25,25 @@ class CustomersRequest extends FormRequest
     public function rules()
     {
         return [
-            'company_name'              => 'required',
-            'contact'           => 'required',
-            'contact_number'    => 'required',
+            'company_name'      => 'required',
+            'type'              => 'required',
+            'contact'           => ['required',
+            function ($attribute, $value, $fail) {
+                $data = json_decode($value,true);
+                if(!is_array($data)){
+                    return $fail($attribute.' is invalid.');
+                }
+                $arr = ['contact','contact_phone','job'];
+                foreach ($data as $k => $v){
+                    foreach ($arr as $k1 => $v1){
+                        if(!isset($v[$v1]) || empty($v[$v1])){
+                            return $fail('array['.$k.'] '.$v1.' is empty.');
+                            break;
+                        }
+                    }
+                }
+            }
+            ]
         ];
     }
 }

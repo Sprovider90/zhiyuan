@@ -11,6 +11,14 @@ class Customers extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'company_name','company_addr', 'contact','contact_number','type','email','address','memo'
+        'company_name','company_addr', 'type','logo','email','address','memo'
     ];
+
+    /**
+     * 关联联系人表
+     * @return mixed
+     */
+    public function contacts(){
+        return $this->hasMany(CustomersContacts::class, 'cid', 'id');
+    }
 }

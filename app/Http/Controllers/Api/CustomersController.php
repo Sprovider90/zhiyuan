@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CustomersRequest;
 use App\Http\Resources\CustomersResources;
 use App\Models\Customers;
+use App\Models\CustomersContacts;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CustomersController extends Controller
 {
@@ -17,12 +20,13 @@ class CustomersController extends Controller
      */
     public function index(Customers $customers , Request $request)
     {
-        if($request->name){
-            $customers = $customers->where('company_name','like','%'.$request->name.'%')->orWhere('company_addr','like','%'.$request->name.'%');
-        }
-        if($request->contact){
-            $customers = $customers->where('contact','like','%'.$request->contact.'%');
-        }
+        $customers = $customers->with('contacts');
+        $request->name && $customers = $customers->where(function($query) use ($request){
+            $query->where('company_name','like',"%{$request->name}%")->orWhere('company_addr','like','%'.$request->name.'%');
+        });
+        $request->contact && $customers = $customers->whereHas('contacts', function ($builder) use ($request,&$customers) {
+            $builder->where('contact', 'like', "%{$request->contact}%");
+        });
         return new CustomersResources($customers->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize));
     }
 
@@ -33,10 +37,13 @@ class CustomersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CustomersRequest $request)
+    public function store(CustomersRequest $request,Customers $customers)
     {
-        $customer = Customers::create($request->all());
-        return response(new CustomersResources($customer),201);;
+        DB::transaction(function() use ($request, &$customers){
+            $customers = $customers->create($request->all());
+            $customers->contacts()->createMany(json_decode($request->contact,true));
+        });
+        return response(new CustomersResources($customers->load('contacts')));
     }
 
     /**
@@ -47,7 +54,7 @@ class CustomersController extends Controller
      */
     public function show(Customers $customer)
     {
-        return new CustomersResources($customer);
+        return new CustomersResources($customer->load('contacts'));
     }
 
     /**
@@ -58,7 +65,7 @@ class CustomersController extends Controller
      */
     public function edit(Customers $customer)
     {
-        return new CustomersResources($customer);
+        return new CustomersResources($customer->load('contacts'));
     }
 
     /**
@@ -68,10 +75,14 @@ class CustomersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Customers $customer,CustomersRequest $request)
+    public function update(CustomersRequest $request,Customers $customer)
     {
-        $customer->update($request->all());
-        return response(new CustomersResources($customer),201);
+        DB::transaction(function() use ($request, &$customer){
+            $customer->update($request->all());
+            $customer->contacts()->delete();
+            $customer->contacts()->createMany(json_decode($request->contact,true));
+        });
+        return response(new CustomersResources($customer->load('contacts')),201);
     }
 
     /**
