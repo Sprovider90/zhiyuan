@@ -7,64 +7,358 @@
 	},
 	"item": [
 		{
-			"name": "新增用户",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{jwt_user1}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "name",
-							"value": "zhangsan4",
-							"description": "",
-							"type": "text"
+			"name": "用户管理",
+			"description": "",
+			"item": [
+				{
+					"name": "新增用户",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user1}}",
+									"type": "string"
+								}
+							]
 						},
-						{
-							"key": "phone",
-							"value": "17780510694",
-							"description": "",
-							"type": "text"
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "zhangsan9",
+									"description": "用户名",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "17780510600",
+									"description": "手机号码",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"description": "密码",
+									"type": "text"
+								},
+								{
+									"key": "roles",
+									"value": "1",
+									"description": "角色，多个用逗号隔开",
+									"type": "text"
+								},
+								{
+									"key": "truename",
+									"value": "张久林",
+									"description": "姓名",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "2",
+									"description": "账号类型",
+									"type": "text"
+								},
+								{
+									"key": "belongs_customer",
+									"value": "1",
+									"description": "所属客户",
+									"type": "text"
+								}
+							]
 						},
-						{
-							"key": "password",
-							"value": "123456",
-							"description": "",
-							"type": "text"
+						"url": {
+							"raw": "http://{{host}}/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
 						},
-						{
-							"key": "roles",
-							"value": "1",
-							"description": "",
-							"type": "text"
-						}
-					]
+						"description": ""
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://{{host}}/api/v1/users",
-					"protocol": "http",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"users"
-					]
+				{
+					"name": "编辑用户信息",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user1}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "truename",
+									"value": "张久林2",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "roles",
+									"value": "2",
+									"description": "角色id，逗号隔开",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "0",
+									"description": "0禁用 1启用",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{host}}/api/v1/users/:id",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
 				},
-				"description": ""
-			},
-			"response": []
+				{
+					"name": "用户列表",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user1}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://{{host}}/api/v1/users?include=customer,roles&reuse_param=10",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							],
+							"query": [
+								{
+									"key": "include",
+									"value": "customer,roles",
+									"equals": true
+								},
+								{
+									"key": "reuse_param",
+									"value": "10",
+									"equals": true,
+									"description": "查询条件"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "角色管理",
+			"description": "",
+			"item": [
+				{
+					"name": "新增角色",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user1}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "角色3",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "permissions",
+									"value": "1",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "1",
+									"description": "角色类型",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{host}}/api/v1/role/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"role",
+								""
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "角色列表",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user1}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://{{host}}/api/v1/role",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"role"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "编辑角色",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user1}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "juese1",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "permissions",
+									"value": "2",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{host}}/api/v1/role/:id",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"role",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "登录获取token",
@@ -76,13 +370,13 @@
 					"formdata": [
 						{
 							"key": "username",
-							"value": "zhansan",
-							"description": "",
+							"value": "neque66",
+							"description": "用户名或者手机号",
 							"type": "text"
 						},
 						{
 							"key": "password",
-							"value": "123456",
+							"value": "secret",
 							"description": "",
 							"type": "text"
 						}
@@ -204,38 +498,6 @@
 			"response": []
 		},
 		{
-			"name": "角色列表",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{jwt_user1}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"url": {
-					"raw": "http://{{host}}/api/v1/role",
-					"protocol": "http",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"role"
-					]
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
 			"name": "权限列表",
 			"request": {
 				"auth": {
@@ -302,7 +564,7 @@
 			"response": []
 		},
 		{
-			"name": "新增角色",
+			"name": "登录日志",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -314,27 +576,11 @@
 						}
 					]
 				},
-				"method": "POST",
+				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "name",
-							"value": "角色3",
-							"description": "",
-							"type": "text"
-						},
-						{
-							"key": "permissions",
-							"value": "1",
-							"description": "",
-							"type": "text"
-						}
-					]
-				},
+				"body": {},
 				"url": {
-					"raw": "http://{{host}}/api/v1/role/",
+					"raw": "http://{{host}}/api/v1/usersloginlog?include=users",
 					"protocol": "http",
 					"host": [
 						"{{host}}"
@@ -342,67 +588,13 @@
 					"path": [
 						"api",
 						"v1",
-						"role",
-						""
-					]
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "修改角色",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{jwt_user1}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PATCH",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/x-www-form-urlencoded"
-					}
-				],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "name",
-							"value": "juese1",
-							"description": "",
-							"type": "text"
-						},
-						{
-							"key": "permissions",
-							"value": "2",
-							"description": "",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://{{host}}/api/v1/role/:id",
-					"protocol": "http",
-					"host": [
-						"{{host}}"
+						"usersloginlog"
 					],
-					"path": [
-						"api",
-						"v1",
-						"role",
-						":id"
-					],
-					"variable": [
+					"query": [
 						{
-							"key": "id",
-							"value": "3"
+							"key": "include",
+							"value": "users",
+							"equals": true
 						}
 					]
 				},
