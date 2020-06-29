@@ -37,7 +37,7 @@ class OrdersController extends Controller
     public function store(OrdersRequest $request,Orders $orders)
     {
         $data = $request->all();
-        $data['order_number'] = $this->createOrderNumber();
+//        $data['order_number'] = $this->createOrderNumber();
         $orders = $orders->create($data);
         return response(new OrdersResources($orders),201);
     }
@@ -88,20 +88,5 @@ class OrdersController extends Controller
         //
     }
 
-    /**
-     * 生成订单号
-     * @return string
-     */
-    private function createOrderNumber(){
-        $orderNumber = '';
-        $order = Orders::where('id','>',0)->orderBy('id','desc')->first();
-        if($order){
-            $arr = explode('-',$order->order_number);
-            $orderNumber = $arr[0] == date("Ymd") ? $arr[0].'-'.sprintf("%04d", $arr[1]+1):'';
-        }
-        if(!$orderNumber){
-            $orderNumber = $arr[1] = date("Ymd").'-'.sprintf("%04d", 1);
-        }
-        return $orderNumber;
-    }
+
 }
