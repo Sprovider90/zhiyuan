@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\OrdersDevicesRequest;
 use App\Http\Requests\Api\OrdersRequest;
+use App\Http\Resources\CustomersResources;
 use App\Http\Resources\OrdersResources;
 use App\Models\Orders;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
 {
@@ -48,9 +51,9 @@ class OrdersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Orders $orders)
+    public function show(Orders $order)
     {
-        return new OrdersResources($orders);
+        return new OrdersResources($order->load('devices'));
     }
 
     /**
@@ -75,6 +78,15 @@ class OrdersController extends Controller
     {
         $order->update($request->all());
         return response(new OrdersResources($order),201);
+    }
+
+
+    public function send(OrdersDevicesRequest $request,Orders $order){
+        DB::transaction(function() use ($request, &$order){
+            $order->update($request->all());
+            $order->devices()->createMany(json_decode($request->data,true));
+        });
+        return response(new OrdersResources($order->load('devices')),201);
     }
 
     /**

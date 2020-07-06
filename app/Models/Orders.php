@@ -15,6 +15,8 @@ class Orders extends Model
     ];
 
 
+
+
     /**
      * 创建时自动生成订单编号
      */
@@ -41,5 +43,14 @@ class Orders extends Model
             $orderNumber = $arr[1] = date("Ymd").'-'.sprintf("%04d", 1);
         }
         return $orderNumber;
+    }
+
+
+    /**
+     * 关联发货表
+     * @return mixed
+     */
+    public function devices(){
+        return $this->hasMany(OrdersDevices::class, 'order_id', 'id');
     }
 }

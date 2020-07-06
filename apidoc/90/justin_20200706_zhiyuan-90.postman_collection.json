@@ -79,7 +79,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}/api/v1/storehouses?name=仓库1&address=北京市海淀区科学研究院&desc=仓库描述",
+							"raw": "http://{{host}}/api/v1/storehouses?name=afsdfsasdfsf123213&address=北京市海淀区科学研究院&desc=仓库描述",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -92,7 +92,7 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "仓库1"
+									"value": "afsdfsasdfsf123213"
 								},
 								{
 									"key": "address",
@@ -157,7 +157,7 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}/api/v1/storehouses/1?name=仓库12&address=北京市海淀区科学研究院&desc=仓库描述",
+							"raw": "http://{{host}}/api/v1/storehouses/5?name=仓库12沙发斯蒂芬&address=北京市海淀区科学研究院&desc=仓库描述",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -166,12 +166,12 @@
 								"api",
 								"v1",
 								"storehouses",
-								"1"
+								"5"
 							],
 							"query": [
 								{
 									"key": "name",
-									"value": "仓库12"
+									"value": "仓库12沙发斯蒂芬"
 								},
 								{
 									"key": "address",
@@ -495,7 +495,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}/api/v1/customers/2",
+							"raw": "http://{{host}}/api/v1/customers/55",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -504,7 +504,7 @@
 								"api",
 								"v1",
 								"customers",
-								"2"
+								"55"
 							]
 						},
 						"description": "查看客户详情接口"
@@ -561,7 +561,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://{{host}}/api/v1/file",
+							"raw": "http://{{host}}/api/v1/public/file",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -569,6 +569,7 @@
 							"path": [
 								"api",
 								"v1",
+								"public",
 								"file"
 							],
 							"query": [
@@ -582,9 +583,212 @@
 						"description": "上传文件接口"
 					},
 					"response": []
+				},
+				{
+					"name": "客户列表",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/public/customers",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"public",
+								"customers"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"description": "需要登录权限 但无需校验权限接口",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "订单管理",
+			"item": [
+				{
+					"name": "新增订单",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/orders?cid=73&num=10&money=1000.00",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "cid",
+									"value": "73",
+									"description": "客户id"
+								},
+								{
+									"key": "num",
+									"value": "10",
+									"description": "数量"
+								},
+								{
+									"key": "money",
+									"value": "1000.00",
+									"description": "金额"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "订单编辑",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/orders/49/edit",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"49",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "订单更新",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/orders/49?cid=73&num=15&money=15000.00",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"49"
+							],
+							"query": [
+								{
+									"key": "cid",
+									"value": "73"
+								},
+								{
+									"key": "num",
+									"value": "15"
+								},
+								{
+									"key": "money",
+									"value": "15000.00"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "订单查看",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/orders/49",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"49"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "发货",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
 			"protocolProfileBehavior": {}
 		},
 		{
@@ -634,54 +838,6 @@
 					"listen": "test",
 					"script": {
 						"id": "e17392da-796f-421b-81f4-e3a26574700c",
-						"exec": [
-							"var data=JSON.parse(responseBody);",
-							"postman.setEnvironmentVariable(\"token\",data.access_token);"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "username",
-							"value": "zhangsan4",
-							"type": "text"
-						},
-						{
-							"key": "password",
-							"value": "123456",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://{{host}}/api/v1/authorizations",
-					"protocol": "http",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"authorizations"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "登录获取token Copy",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "eabab16b-29f5-463b-ac71-dcf26651d119",
 						"exec": [
 							"var data=JSON.parse(responseBody);",
 							"postman.setEnvironmentVariable(\"token\",data.access_token);"

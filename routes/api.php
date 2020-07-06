@@ -66,6 +66,8 @@ Route::prefix('v1')
                     Route::resource('orders', 'OrdersController')->only([
                         'index','store', 'edit','update','show'
                     ]);
+                    Route::post('orders/{order}/send', 'OrdersController@send')
+                        ->name('orders.send');
 
 
 
@@ -75,7 +77,8 @@ Route::prefix('v1')
                         Route::resource('file', 'PublicController')->only([
                             'store'
                         ]);
-                        Route::get('customers','PublicController@customers')->name('public.customers');
+                        Route::get('customers','PublicController@customers')
+                            ->name('public.customers');
                     });
 
 
