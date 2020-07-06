@@ -53,4 +53,14 @@ class Orders extends Model
     public function devices(){
         return $this->hasMany(OrdersDevices::class, 'order_id', 'id');
     }
+
+    /**
+     * 关联客户表
+     * @return mixed
+     */
+    public function customs(){
+//        return $this->hasMany(OrdersDevices::class, 'order_id', 'id');
+        return $this->belongsTo(Customers::class, 'cid', 'id');
+
+    }
 }

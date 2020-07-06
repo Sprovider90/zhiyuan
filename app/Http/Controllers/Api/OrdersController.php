@@ -53,7 +53,7 @@ class OrdersController extends Controller
      */
     public function show(Orders $order)
     {
-        return new OrdersResources($order->load('devices'));
+        return new OrdersResources($order->load(['devices','customs']));
     }
 
     /**
