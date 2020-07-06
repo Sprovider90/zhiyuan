@@ -68,6 +68,10 @@ Route::prefix('v1')
                     ]);
                     Route::post('orders/{order}/send', 'OrdersController@send')
                         ->name('orders.send');
+                    Route::put('orders/{order}/cancel', 'OrdersController@cancel')
+                        ->name('orders.cancel');
+                    Route::get('orders/count', 'OrdersController@count')
+                        ->name('orders.count');
 
 
 

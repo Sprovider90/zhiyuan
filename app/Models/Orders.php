@@ -59,8 +59,6 @@ class Orders extends Model
      * @return mixed
      */
     public function customs(){
-//        return $this->hasMany(OrdersDevices::class, 'order_id', 'id');
         return $this->belongsTo(Customers::class, 'cid', 'id');
-
     }
 }

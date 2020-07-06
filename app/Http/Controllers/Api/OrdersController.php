@@ -20,14 +20,14 @@ class OrdersController extends Controller
      */
     public function index(Orders $orders , Request $request)
     {
-        /*$customers = $customers->with('contacts');
-        $request->name && $customers = $customers->where(function($query) use ($request){
+        $orders = $orders->with('customs');
+        $request->money     && $orders = $orders->whereBetween('money',explode('-',$request->money));
+        $request->status    && $orders = $orders->where('order_status',$request->status);
+        $request->name      && $orders = $orders->whereHas('customs',function($query) use ($request){
             $query->where('company_name','like',"%{$request->name}%")->orWhere('company_addr','like','%'.$request->name.'%');
         });
-        $request->contact && $customers = $customers->whereHas('contacts', function ($builder) use ($request,&$customers) {
-            $builder->where('contact', 'like', "%{$request->contact}%");
-        });
-        return new CustomersResources($customers->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize));*/
+        $request->time      && $orders = $orders->whereDate('created_at',$request->time);
+        return new OrdersResources($orders->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize));
     }
 
 
@@ -40,7 +40,6 @@ class OrdersController extends Controller
     public function store(OrdersRequest $request,Orders $orders)
     {
         $data = $request->all();
-//        $data['order_number'] = $this->createOrderNumber();
         $orders = $orders->create($data);
         return response(new OrdersResources($orders),201);
     }
@@ -81,12 +80,39 @@ class OrdersController extends Controller
     }
 
 
+    /**
+     * Update Order And Create Devices.
+     *
+     * @param OrdersDevicesRequest $request
+     * @param Orders $order
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function send(OrdersDevicesRequest $request,Orders $order){
         DB::transaction(function() use ($request, &$order){
+            $request['send_goods_status'] = 2;
             $order->update($request->all());
+            $order->devices()->delete();
             $order->devices()->createMany(json_decode($request->data,true));
         });
         return response(new OrdersResources($order->load('devices')),201);
+    }
+
+    /**
+     * cancel order
+     *
+     * @param OrdersRequest $request
+     * @param Orders $order
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function cancel(Orders $order)
+    {
+        if($order->order_status==1 && $order->send_goods_status == 1){
+            $order->update(['order_status' => 4]);
+            return response(new OrdersResources($order),201);
+        }else{
+            abort(400,'参数错误');
+        }
+
     }
 
     /**
