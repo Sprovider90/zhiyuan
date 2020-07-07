@@ -623,6 +623,50 @@
 			"name": "订单管理",
 			"item": [
 				{
+					"name": "订单列表",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/orders",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "梁巨才",
+									"description": "公司名称",
+									"disabled": true
+								},
+								{
+									"key": "money",
+									"value": "0-1001",
+									"description": "金额",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "3",
+									"disabled": true
+								},
+								{
+									"key": "time",
+									"value": "2020-07-06",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "新增订单",
 					"request": {
 						"auth": {
@@ -752,7 +796,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}/api/v1/orders/49",
+							"raw": "http://{{host}}/api/v1/orders/48",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -761,7 +805,7 @@
 								"api",
 								"v1",
 								"orders",
-								"49"
+								"48"
 							]
 						}
 					},
@@ -770,10 +814,105 @@
 				{
 					"name": "发货",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/orders/47/send?express_name=顺丰快递&express_number=123213123213213213213&data=[{\"number\":\"123456789\"},{\"number\":\"123456790\"},{\"number\":\"123456791\"}]",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"47",
+								"send"
+							],
+							"query": [
+								{
+									"key": "express_name",
+									"value": "顺丰快递"
+								},
+								{
+									"key": "express_number",
+									"value": "123213123213213213213"
+								},
+								{
+									"key": "data",
+									"value": "[{\"number\":\"123456789\"},{\"number\":\"123456790\"},{\"number\":\"123456791\"}]"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取消订单",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/orders/45/cancel",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"45",
+								"cancel"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "订单统计",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": ""
+							"raw": "http://{{host}}/api/v1/orders/count?type=3",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"count"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "3",
+									"description": "1本周 2本月 3本年 默认2"
+								}
+							]
 						}
 					},
 					"response": []

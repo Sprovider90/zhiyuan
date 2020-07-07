@@ -62,16 +62,20 @@ Route::prefix('v1')
                         'index','store', 'edit','update','show'
                     ]);
 
+                    //订单数及金额统计
+                    Route::get('orders/count', 'OrdersController@count')
+                        ->name('orders.count');
                     //订单列表 订单新增  订单编辑 订单更新 订单详情
                     Route::resource('orders', 'OrdersController')->only([
                         'index','store', 'edit','update','show'
                     ]);
+                    //订单发货
                     Route::post('orders/{order}/send', 'OrdersController@send')
                         ->name('orders.send');
+                    //订单取消
                     Route::put('orders/{order}/cancel', 'OrdersController@cancel')
                         ->name('orders.cancel');
-                    Route::get('orders/count', 'OrdersController@count')
-                        ->name('orders.count');
+
 
 
 

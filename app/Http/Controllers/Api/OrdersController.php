@@ -13,6 +13,39 @@ use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
 {
+
+    /**
+     * 统计订单数
+     * $type  1本周 2本月 3今年 默认2
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function count(Request $request){
+        $date = $this->returnDate($request->type ?? 2);
+        //订单总数
+        $order_count = Orders::whereNotIn('order_status',[4,5])->whereBetween('created_at',$date)->count();
+        //已付款订单数
+        $order_pay_count = Orders::where('order_status',3)->whereBetween('created_at',$date)->count();
+        //待付款订单数
+        $order_no_pay_count = $order_count - $order_pay_count;
+        //订单总金额
+        $order_money_count = Orders::whereNotIn('order_status',[4,5])->whereBetween('created_at',$date)->sum('money');
+        //已付订单总金额
+        $order_pay_money_count = Orders::where('order_status',3)->whereBetween('created_at',$date)->sum('money');
+        //待付订单总金额
+        $order_no_pay_money_count = $order_money_count - $order_pay_money_count;
+
+        return response()->json([
+                'order_count'           => $order_count,
+                'order_pay_count'       => $order_pay_count,
+                'order_no_pay_count'    => $order_no_pay_count,
+                'order_money_count'         => $order_money_count,
+                'order_pay_money_count'     => $order_pay_money_count,
+                'order_no_pay_money_count'  => $order_no_pay_money_count,
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -126,5 +159,33 @@ class OrdersController extends Controller
         //
     }
 
+
+    /***
+     * 返回开始结束日期
+     *
+     * @param int $type 1 本周 2 本月 3本年度
+     * @return array 【开始日期,结束日期】
+     */
+    private function returnDate($type = 1){
+        $type = ($type < 1  || $type > 3) ? 1 : $type ;
+        $start 	= '';
+        $end 	= '';
+        switch ($type) {
+            case 1:
+                $start 	= date("Y-m-d H:i:s",mktime(0, 0 , 0,date("m"),date("d")-date("w")+1,date("Y")));
+                $end 	= date("Y-m-d H:i:s",mktime(23,59,59,date("m"),date("d")-date("w")+7,date("Y")));
+                break;
+
+            case 2:
+                $start 	= date("Y-m-d H:i:s",mktime(0, 0 , 0,date("m"),1,date("Y")));
+                $end 	= date("Y-m-d H:i:s",mktime(23,59,59,date("m"),date("t"),date("Y")));
+                break;
+            case 3:
+                $start 	= date('Y-m-d 00:00:00',strtotime(date("Y",time())."-1"."-1")); //本年开始
+                $end 	= date('Y-m-d 23:59:59',strtotime(date("Y",time())."-12"."-31")); //本年结束
+                break;
+        }
+        return [$start,$end];
+    }
 
 }
