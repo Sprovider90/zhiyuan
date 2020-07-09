@@ -931,6 +931,214 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "项目管理",
+			"item": [
+				{
+					"name": "项目新增",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "项目新增12345",
+									"description": "项目名称",
+									"type": "text"
+								},
+								{
+									"key": "customer_id",
+									"value": "73",
+									"description": "客户id",
+									"type": "text"
+								},
+								{
+									"key": "hcho",
+									"value": "1.333",
+									"description": "甲醛",
+									"type": "text"
+								},
+								{
+									"key": "tvoc",
+									"value": "8.233",
+									"description": "TVOC",
+									"type": "text"
+								},
+								{
+									"key": "stages",
+									"value": "[{\"stage_name\":\"\\u65bd\\u5de5\\u9636\\u6bb51\",\"start_date\":\"2020-03-12\",\"end_date\":\"2020-03-20\",\"threshold_id\":1,\"stage\":1,\"default\":1},{\"stage_name\":\"\\u65bd\\u5de5\\u9636\\u6bb52\",\"start_date\":\"2020-03-12\",\"end_date\":\"2020-03-20\",\"threshold_id\":1,\"stage\":1,\"default\":0},{\"stage_name\":\"\\u4ea4\\u4ed8\\u9636\\u6bb51\",\"start_date\":\"2020-05-12\",\"end_date\":\"2020-05-20\",\"threshold_id\":1,\"stage\":1,\"default\":1},{\"stage_name\":\"\\u4ea4\\u4ed8\\u9636\\u6bb52\",\"start_date\":\"2020-05-12\",\"end_date\":\"2020-05-20\",\"threshold_id\":1,\"stage\":1,\"default\":0},{\"stage_name\":\"\\u7ef4\\u62a4\\u9636\\u6bb51\",\"start_date\":\"2020-06-12\",\"end_date\":\"2020-06-20\",\"threshold_id\":1,\"stage\":1,\"default\":1},{\"stage_name\":\"\\u7ef4\\u62a4\\u9636\\u6bb52\",\"start_date\":\"2020-06-12\",\"end_date\":\"2020-06-20\",\"threshold_id\":1,\"stage\":1,\"default\":0}]",
+									"description": "阶段信息 json格式",
+									"type": "text"
+								},
+								{
+									"key": "areas",
+									"value": "[{\"area_name\":\"\\u56fe\\u7eb81\",\"file\":1},{\"area_name\":\"\\u56fe\\u7eb82\",\"file\":2},{\"area_name\":\"\\u56fe\\u7eb83\",\"file\":3}]",
+									"description": "区域信息 json格式",
+									"type": "text"
+								},
+								{
+									"key": "stages3",
+									"value": "[{\"name\":\"\\u7ef4\\u62a4\\u9636\\u6bb51\",\"start_date\":\"2020-03-12\",\"end_date\":\"2020-03-20\",\"0\":1},{\"name\":\"\\u7ef4\\u62a4\\u9636\\u6bb52\",\"start_date\":\"2020-03-21\",\"end_date\":\"2020-03-25\",\"0\":1}]",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{host}}/api/v1/projects",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "项目查看",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/projects/7",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"projects",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "项目编辑",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/projects/7/edit",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"projects",
+								"7",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "项目更新",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/projects/7?name=项目新增12345&customer_id=73&hcho=1.333&tvoc=8.233&stages=[{\"stage_name\":\"\\u65bd\\u5de5\\u9636\\u6bb51\",\"start_date\":\"2020-03-12\",\"end_date\":\"2020-03-20\",\"threshold_id\":1,\"stage\":1,\"default\":1},{\"stage_name\":\"\\u65bd\\u5de5\\u9636\\u6bb52\",\"start_date\":\"2020-03-12\",\"end_date\":\"2020-03-20\",\"threshold_id\":1,\"stage\":1,\"default\":0},{\"stage_name\":\"\\u4ea4\\u4ed8\\u9636\\u6bb51\",\"start_date\":\"2020-05-12\",\"end_date\":\"2020-05-20\",\"threshold_id\":1,\"stage\":1,\"default\":1},{\"stage_name\":\"\\u4ea4\\u4ed8\\u9636\\u6bb52\",\"start_date\":\"2020-05-12\",\"end_date\":\"2020-05-20\",\"threshold_id\":1,\"stage\":1,\"default\":0},{\"stage_name\":\"\\u7ef4\\u62a4\\u9636\\u6bb51\",\"start_date\":\"2020-06-12\",\"end_date\":\"2020-06-20\",\"threshold_id\":1,\"stage\":1,\"default\":1},{\"stage_name\":\"\\u7ef4\\u62a4\\u9636\\u6bb52\",\"start_date\":\"2020-06-12\",\"end_date\":\"2020-06-20\",\"threshold_id\":1,\"stage\":1,\"default\":0}]&areas=[{\"area_name\":\"\\u56fe\\u7eb81\",\"file\":1},{\"area_name\":\"\\u56fe\\u7eb82\",\"file\":2},{\"area_name\":\"\\u56fe\\u7eb83\",\"file\":3}]",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"projects",
+								"7"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "项目新增12345"
+								},
+								{
+									"key": "customer_id",
+									"value": "73"
+								},
+								{
+									"key": "hcho",
+									"value": "1.333"
+								},
+								{
+									"key": "tvoc",
+									"value": "8.233"
+								},
+								{
+									"key": "stages",
+									"value": "[{\"stage_name\":\"\\u65bd\\u5de5\\u9636\\u6bb51\",\"start_date\":\"2020-03-12\",\"end_date\":\"2020-03-20\",\"threshold_id\":1,\"stage\":1,\"default\":1},{\"stage_name\":\"\\u65bd\\u5de5\\u9636\\u6bb52\",\"start_date\":\"2020-03-12\",\"end_date\":\"2020-03-20\",\"threshold_id\":1,\"stage\":1,\"default\":0},{\"stage_name\":\"\\u4ea4\\u4ed8\\u9636\\u6bb51\",\"start_date\":\"2020-05-12\",\"end_date\":\"2020-05-20\",\"threshold_id\":1,\"stage\":1,\"default\":1},{\"stage_name\":\"\\u4ea4\\u4ed8\\u9636\\u6bb52\",\"start_date\":\"2020-05-12\",\"end_date\":\"2020-05-20\",\"threshold_id\":1,\"stage\":1,\"default\":0},{\"stage_name\":\"\\u7ef4\\u62a4\\u9636\\u6bb51\",\"start_date\":\"2020-06-12\",\"end_date\":\"2020-06-20\",\"threshold_id\":1,\"stage\":1,\"default\":1},{\"stage_name\":\"\\u7ef4\\u62a4\\u9636\\u6bb52\",\"start_date\":\"2020-06-12\",\"end_date\":\"2020-06-20\",\"threshold_id\":1,\"stage\":1,\"default\":0}]"
+								},
+								{
+									"key": "areas",
+									"value": "[{\"area_name\":\"\\u56fe\\u7eb81\",\"file\":1},{\"area_name\":\"\\u56fe\\u7eb82\",\"file\":2},{\"area_name\":\"\\u56fe\\u7eb83\",\"file\":3}]"
+								},
+								{
+									"key": "stages3",
+									"value": "[{\"name\":\"\\u7ef4\\u62a4\\u9636\\u6bb51\",\"start_date\":\"2020-03-12\",\"end_date\":\"2020-03-20\",\"0\":1},{\"name\":\"\\u7ef4\\u62a4\\u9636\\u6bb52\",\"start_date\":\"2020-03-21\",\"end_date\":\"2020-03-25\",\"0\":1}]",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "用户注册",
 			"request": {
 				"method": "POST",

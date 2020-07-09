@@ -52,12 +52,17 @@ Route::prefix('v1')
                     Route::get('/usersloginlog', 'UsersloginlogController@index')
                     ->name('UsersloginlogController.index');
 
+                    //项目列表 项目新增  项目编辑 项目更新 仓库删除
+                    Route::resource('projects', 'ProjectsController')->only([
+                        'index','store', 'edit','update','show'
+                    ]);
+
                     //仓库列表 仓库新增  仓库编辑 仓库更新 仓库删除
                     Route::resource('storehouses', 'StorehousesController')->only([
                         'index','store', 'edit','update','destroy'
                     ]);
 
-                    //客户列表 客户新增  客户编辑 客户更新 客户删除
+                    //客户列表 客户新增  客户编辑 客户更新 客户详情
                     Route::resource('customers', 'CustomersController')->only([
                         'index','store', 'edit','update','show'
                     ]);
@@ -85,6 +90,7 @@ Route::prefix('v1')
                         Route::resource('file', 'PublicController')->only([
                             'store'
                         ]);
+                        //客户列表
                         Route::get('customers','PublicController@customers')
                             ->name('public.customers');
                     });
