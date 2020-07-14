@@ -56,6 +56,13 @@ Route::prefix('v1')
                     Route::resource('projects', 'ProjectsController')->only([
                         'index','store', 'edit','update','show'
                     ]);
+                    //点位启用停用 1启用 2停用
+//                    Route::post('position/{position}/status', 'ProjectsPositionsController@status')
+//                        ->name('position.status');
+                    //点位新增 点位编辑 点位更新 点位删除
+                    Route::resource('position', 'ProjectsPositionsController')->only([
+                        'store', 'edit' , 'update' ,'destroy'
+                    ]);
 
                     //仓库列表 仓库新增  仓库编辑 仓库更新 仓库删除
                     Route::resource('storehouses', 'StorehousesController')->only([
