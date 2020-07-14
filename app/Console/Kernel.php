@@ -13,8 +13,10 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
-        \App\Console\Commands\UpdateProStage::class
+
+        //检测项目状态并修改
+        \App\Console\Commands\checkProjectsStatus::class,
+
     ];
 
     /**
@@ -27,6 +29,12 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+
+        //检测项目状态并修改  每天晚上一点执行
+        $schedule->command('command:checkProjectsStatus')
+            ->dailyAt('1:00')
+            ->timezone('Asia/Shanghai');	;
+
     }
 
     /**
