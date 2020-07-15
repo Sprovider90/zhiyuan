@@ -21,7 +21,7 @@ class CreateProjectsTable extends Migration
             $table->string('address')->nullable()->comment('项目地址');
             $table->string('hcho')->comment('甲醛');
             $table->string('tvoc')->comment('TVOS');
-            $table->tinyInteger('status')->comment('状态0未开始1暂停中2已结束3运行中4项目状态有误');
+            $table->tinyInteger('status')->comment('状态0未开始1暂停中2已结束3项目错误4施工中5交付中6维护中7项目大阶段错误');
             $table->softDeletes();
             $table->timestamps();
         });
