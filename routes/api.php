@@ -52,16 +52,19 @@ Route::prefix('v1')
                     Route::get('/usersloginlog', 'UsersloginlogController@index')
                     ->name('UsersloginlogController.index');
 
+                    //项目点位检测管理
+                    Route::get('projects/{project}/postions','ProjectsController@projects')
+                        ->name('projects.positions');
                     //项目列表 项目新增  项目编辑 项目更新 仓库删除
                     Route::resource('projects', 'ProjectsController')->only([
                         'index','store', 'edit','update','show'
                     ]);
                     //点位启用停用 1启用 2停用
-//                    Route::post('position/{position}/status', 'ProjectsPositionsController@status')
-//                        ->name('position.status');
+                    Route::put('position/{position}/status', 'PositionsController@status')
+                        ->name('position.status');
                     //点位新增 点位编辑 点位更新 点位删除
-                    Route::resource('position', 'ProjectsPositionsController')->only([
-                        'store', 'edit' , 'update' ,'destroy'
+                    Route::resource('position', 'PositionsController')->only([
+                        'store', 'update','destroy'
                     ]);
 
                     //仓库列表 仓库新增  仓库编辑 仓库更新 仓库删除

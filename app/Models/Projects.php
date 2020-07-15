@@ -51,10 +51,26 @@ class Projects extends Model
     }
 
     /**
+     * 关联客户表
+     * @return mixed
+     */
+    public function customs(){
+        return $this->hasMany(Customers::class, 'id', 'customer_id');
+    }
+
+    /**
      * 关联阶段表
      * @return mixed
      */
     public function stages(){
         return $this->hasMany(ProjectsStages::class, 'project_id', 'id');
+    }
+
+    /**
+     * 关联点位表
+     * @return mixed
+     */
+    public function position(){
+        return $this->hasMany(Position::class, 'project_id', 'id');
     }
 }
