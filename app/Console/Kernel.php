@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
 
         //检测项目状态并修改
-        \App\Console\Commands\checkProjectsStatus::class,
+        //\App\Console\Commands\checkProjectsStatus::class,
+        \App\Console\Commands\UpdateProStage::class,
 
     ];
 
@@ -31,7 +32,7 @@ class Kernel extends ConsoleKernel
         //          ->hourly();
 
         //检测项目状态并修改  每天晚上一点执行
-        $schedule->command('command:checkProjectsStatus')
+        $schedule->command('zhiyuan:updateprostage')
             ->dailyAt('1:00')
             ->timezone('Asia/Shanghai');	;
 
