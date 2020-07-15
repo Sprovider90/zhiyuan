@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+//use App\Console\Commands\UpdateProStage;
+use App\Jobs\UpdateProStage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ProjectsRequest;
 use App\Http\Resources\ProjectsResources;
@@ -51,6 +53,7 @@ class ProjectsController extends Controller
             $projects->areas()->createMany(json_decode($request->areas,true));
             $projects->stages()->createMany(json_decode($request->stages,true));
         });
+        dispatch(new UpdateProStage(["project_id"=>$projects->id]));
         return response(new ProjectsResources($projects->load('areas')->load('stages')));
     }
 
@@ -92,6 +95,7 @@ class ProjectsController extends Controller
             $project->areas()->createMany(json_decode($request->areas,true));
             $project->stages()->createMany(json_decode($request->stages,true));
         });
+        dispatch(new UpdateProStage(["project_id"=>$project->id]));
         return response(new ProjectsResources($project->load('areas')->load('stages')),201);
     }
 
