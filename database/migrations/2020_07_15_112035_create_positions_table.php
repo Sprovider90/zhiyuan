@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProjectsPositionsTable extends Migration
+class CreatePositionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,6 @@ class CreateProjectsPositionsTable extends Migration
      */
     public function up()
     {
-        //点位信息表
         Schema::create('projects_positions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('project_id')->comment('项目ID');

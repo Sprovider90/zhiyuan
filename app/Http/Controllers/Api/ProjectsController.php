@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ProjectsRequest;
 use App\Http\Resources\ProjectsResources;
+use App\Models\Position;
 use App\Models\Projects;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,9 +19,22 @@ class ProjectsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request , Projects $projects)
     {
-
+        $projects = $projects->with(['customs']);
+        $request->status && $projects->where('status',$request->status);
+        $request->name   && $projects->whereHas('customs',function($query) use ($request){
+            $query->where('company_name','like',"%{$request->name}%")
+                ->orWhere('company_addr','like','%'.$request->name.'%')
+                ->orWhere('name','like',"%{$request->name}%")
+                ->orWhere('number','like',"%{$request->name}%");
+        });
+        $projects = $projects->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
+        foreach ($projects as $k => $v){
+            $v->position_count = Position::where('project_id',$v->id)->count();
+            //设备数 ??
+        }
+        return response(new ProjectsResources($projects));
     }
 
 
@@ -48,7 +62,7 @@ class ProjectsController extends Controller
      */
     public function show(Projects $project)
     {
-        return new ProjectsResources($project->load('areas')->load('stages'));
+        return new ProjectsResources($project->load('areas')->load('stages')->load('position'));
     }
 
     /**
@@ -90,5 +104,9 @@ class ProjectsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function positions(Projects $project){
+        return new ProjectsResources($project->load('areas')->load('stages')->load('position'));
     }
 }
