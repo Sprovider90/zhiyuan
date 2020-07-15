@@ -35,6 +35,7 @@ class ProjectsController extends Controller
         foreach ($projects as $k => $v){
             $v->position_count = Position::where('project_id',$v->id)->count();
             //设备数 ??
+            $v->device_count = Position::where('project_id',$v->id)->whereNotNull('device_id')->count();
         }
         return response(new ProjectsResources($projects));
     }
