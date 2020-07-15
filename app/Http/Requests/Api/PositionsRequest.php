@@ -27,7 +27,7 @@ class PositionsRequest extends FormRequest
             'project_id'    => 'required',
             'number'        => 'required',
             'name'          => 'required',
-            'device_id'     => 'required',
+//            'device_id'     => 'required',
             'area_id'       => 'required',
         ];
     }

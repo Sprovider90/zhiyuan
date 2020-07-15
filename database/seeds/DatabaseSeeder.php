@@ -17,5 +17,9 @@ class DatabaseSeeder extends Seeder
         $this->call(ProjectsTableSeeder::class);
         //$this->call(ProjectsAreasTableSeeder::class);
         $this->call(ProjectsStagesTableSeeder::class);
+        //生成订单
+        $this->call(OrdersTableSeeder::class);
+        //生成订单发货设备信息
+        $this->call(OrdersDevicesTableSeeder::class);
     }
 }
