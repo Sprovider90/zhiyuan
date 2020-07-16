@@ -17,7 +17,7 @@ $factory->define(\App\Models\Orders::class, function (Faker $faker) {
         'good_id'           => 1,
         'num'               => rand(1,10),
         'money'             => sprintf("%.2f",rand(1000,5000)),
-        'order_status'      => rand(1,4),
+        'order_status'      => rand(1,5),
         'send_goods_status' => $send_status,
         'express_name'      => $send_status ==2 ? ['顺丰快递','韵达快递','中通快递','EMS','圆通快递'][rand(0,4)] : '',
         'express_number'    => $send_status ==2 ? rand(100000000,999999999).rand(100000000,999999999) : '',

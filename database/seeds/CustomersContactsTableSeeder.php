@@ -16,7 +16,7 @@ class CustomersContactsTableSeeder extends Seeder
         // 获取 Faker 实例
         $faker = app(Faker\Generator::class);
         $customerContacts = factory(\App\Models\CustomersContacts::class)
-            ->times(300)
+            ->times(20)
             ->make()
             ->each(function ($data, $index) use ($customer_ids, $faker)
             {
