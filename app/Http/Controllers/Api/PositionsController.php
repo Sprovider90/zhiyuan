@@ -45,7 +45,7 @@ class PositionsController extends Controller
     }
 
     public function status(Request $request,Position $position){
-        $position->update($request->all());
+        $position->update(['status' => $request->status]);
         return response(new PositionsResource($position),201);
     }
 }

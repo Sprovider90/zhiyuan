@@ -70,6 +70,9 @@ Route::prefix('v1')
                         'store', 'update','destroy'
                     ]);
 
+                    //点位启用停用 1启用 2停用
+                    Route::put('storehouses/{storehouse}/status', 'StorehousesController@status')
+                        ->name('storehouses.status');
                     //仓库列表 仓库新增  仓库编辑 仓库更新 仓库删除
                     Route::resource('storehouses', 'StorehousesController')->only([
                         'index','store', 'edit','update','destroy'

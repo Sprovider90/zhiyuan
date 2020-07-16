@@ -12,6 +12,7 @@ $factory->define(App\Models\Customers::class, function (Faker $faker) {
         'company_name'  => $company_name,
         'company_addr'  => mb_substr($company_name,0,rand(2,5)),
         'type'          => rand(0,6),
+        'logo'          => rand(0,10),
         'email'         => $faker->unique()->safeEmail,
         'address'       => $faker->address,
         'created_at' => $created_at,

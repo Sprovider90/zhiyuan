@@ -44,4 +44,10 @@ class StorehousesController extends Controller
         Storehouses::where('id',$id)->delete();
         return response(null, 204);
     }
+
+    //更新状态
+    public function status(Request $request,Storehouses $storehouse){
+        $storehouse->update(['status' => $request->status]);
+        return response(new StorehousesResource($storehouse),201);
+    }
 }

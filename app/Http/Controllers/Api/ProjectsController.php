@@ -21,19 +21,21 @@ class ProjectsController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function count(Projects $projects){
+    public function count(Projects $projects,Request $request){
         $date = $this->returnDate($request->type ?? 2);
-        $projects = $projects->whereBetween('created_at',$date);
         //进行中 1暂停中 4施工中 5交付中 6维护中
-        $on_count   = $projects->whereIn('status',[1,4,5,6])->count();
+        $ongoing_count   = $projects->whereBetween('created_at',$date)->whereIn('status',[1,4,5,6])->count();
         //已结束 2已结束
-        $end_count  = $projects->where('status',2)->count();
+        $over_count  = $projects->whereBetween('created_at',$date)->where('status',2)->count();
         //未开始 0未开始
-        $start_count   = $projects->where('status',0)->count();
+        $not_started_count   = $projects->whereBetween('created_at',$date)->where('status',0)->count();
+        //项目总数量
+        $all_count  = $projects->whereBetween('created_at',$date)->whereIn('status',[0,1,2,4,5,6])->count();
         return response()->json([
-            'start_count'   => $start_count,
-            'end_count'     => $end_count,
-            'on_count'      => $on_count,
+            'not_started_count'     => $not_started_count,
+            'over_count'            => $over_count,
+            'ongoing_count'         => $ongoing_count,
+            'all_count'             => $all_count,
         ]);
     }
 
