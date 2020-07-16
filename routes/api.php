@@ -52,6 +52,9 @@ Route::prefix('v1')
                     Route::get('/usersloginlog', 'UsersloginlogController@index')
                     ->name('UsersloginlogController.index');
 
+                    //订单数及金额统计
+                    Route::get('projects/count', 'ProjectsController@count')
+                        ->name('projects.count');
                     //项目点位检测管理
                     Route::get('projects/{project}/postions','ProjectsController@projects')
                         ->name('projects.positions');

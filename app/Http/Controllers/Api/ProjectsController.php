@@ -14,7 +14,28 @@ use Illuminate\Support\Facades\DB;
 
 class ProjectsController extends Controller
 {
-    //
+    /**
+     * 统计状态
+     * $type  1本周 2本月 3今年 默认2
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function count(Projects $projects){
+        $date = $this->returnDate($request->type ?? 2);
+        $projects = $projects->whereBetween('created_at',$date);
+        //进行中 1暂停中 4施工中 5交付中 6维护中
+        $on_count   = $projects->whereIn('status',[1,4,5,6])->count();
+        //已结束 2已结束
+        $end_count  = $projects->where('status',2)->count();
+        //未开始 0未开始
+        $start_count   = $projects->where('status',0)->count();
+        return response()->json([
+            'start_count'   => $start_count,
+            'end_count'     => $end_count,
+            'on_count'      => $on_count,
+        ]);
+    }
 
     /**
      * Display a listing of the resource.
@@ -113,5 +134,33 @@ class ProjectsController extends Controller
 
     public function positions(Projects $project){
         return new ProjectsResources($project->load('areas')->load('stages')->load('position'));
+    }
+
+    /***
+     * 返回开始结束日期
+     *
+     * @param int $type 1 本周 2 本月 3本年度
+     * @return array 【开始日期,结束日期】
+     */
+    private function returnDate($type = 1){
+        $type = ($type < 1  || $type > 3) ? 1 : $type ;
+        $start 	= '';
+        $end 	= '';
+        switch ($type) {
+            case 1:
+                $start 	= date("Y-m-d H:i:s",mktime(0, 0 , 0,date("m"),date("d")-date("w")+1,date("Y")));
+                $end 	= date("Y-m-d H:i:s",mktime(23,59,59,date("m"),date("d")-date("w")+7,date("Y")));
+                break;
+
+            case 2:
+                $start 	= date("Y-m-d H:i:s",mktime(0, 0 , 0,date("m"),1,date("Y")));
+                $end 	= date("Y-m-d H:i:s",mktime(23,59,59,date("m"),date("t"),date("Y")));
+                break;
+            case 3:
+                $start 	= date('Y-m-d 00:00:00',strtotime(date("Y",time())."-1"."-1")); //本年开始
+                $end 	= date('Y-m-d 23:59:59',strtotime(date("Y",time())."-12"."-31")); //本年结束
+                break;
+        }
+        return [$start,$end];
     }
 }

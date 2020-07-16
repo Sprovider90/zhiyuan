@@ -14,9 +14,9 @@ $factory->define(App\Models\Projects::class, function (Faker $faker) {
     return [
         'number' => "202007150001",
         'name'=>$faker->title,
-        'hcho' => 0.5,
-        'tvoc'=>0.6,
-        'status'=>0,
+        'hcho' => rand(1,9)/10,
+        'tvoc'=>rand(1,9)/10,
+        'status'=>[1,2,3,4,5,6][rand(0,5)],
         'created_at' => $created_at,
         'updated_at' => $updated_at,
     ];
