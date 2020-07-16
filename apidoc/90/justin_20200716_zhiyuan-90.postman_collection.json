@@ -156,8 +156,28 @@
 						},
 						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "递四方速递",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "sdajf实力坑爹福建省立刻",
+									"type": "text"
+								},
+								{
+									"key": "desc",
+									"value": "sdafdsf",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "http://{{host}}/api/v1/storehouses/5?name=仓库12沙发斯蒂芬&address=北京市海淀区科学研究院&desc=仓库描述",
+							"raw": "http://{{host}}/api/v1/storehouses/1",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -166,20 +186,23 @@
 								"api",
 								"v1",
 								"storehouses",
-								"5"
+								"1"
 							],
 							"query": [
 								{
 									"key": "name",
-									"value": "仓库12沙发斯蒂芬"
+									"value": "仓库12沙发斯蒂芬",
+									"disabled": true
 								},
 								{
 									"key": "address",
-									"value": "北京市海淀区科学研究院"
+									"value": "北京市海淀区科学研究院",
+									"disabled": true
 								},
 								{
 									"key": "desc",
-									"value": "仓库描述"
+									"value": "仓库描述",
+									"disabled": true
 								}
 							]
 						},
@@ -216,6 +239,35 @@
 							]
 						},
 						"description": "仓库删除接口"
+					},
+					"response": []
+				},
+				{
+					"name": "更新状态",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/storehouses/1/status?status=2",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"storehouses",
+								"1",
+								"status"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "2",
+									"description": "1开启 2关闭 默认1开启"
+								}
+							]
+						}
 					},
 					"response": []
 				}
@@ -934,6 +986,104 @@
 			"name": "项目管理",
 			"item": [
 				{
+					"name": "项目统计",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://{{host}}/api/v1/projects/count?type=3",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"projects",
+								"count"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "3",
+									"description": " 1本周 2本月 3今年 不传默认2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "项目列表",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/projects?pageSize=20&page=1",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"projects"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "20",
+									"description": "每页条数"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "页数"
+								},
+								{
+									"key": "status",
+									"value": "6",
+									"description": "状态 1未开始 2施工中 3交付中 4维护中 5暂停 已结束",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "项目",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "项目新增",
 					"request": {
 						"auth": {
@@ -953,7 +1103,7 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "项目新增12345",
+									"value": "项目新sfd1",
 									"description": "项目名称",
 									"type": "text"
 								},
@@ -1134,6 +1284,256 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "项目检测点管理",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/projects/7/positions",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"projects",
+								"7",
+								"positions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "点位新增",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "project_id",
+									"value": "7",
+									"type": "text"
+								},
+								{
+									"key": "number",
+									"value": "12342312",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "测试点位",
+									"type": "text"
+								},
+								{
+									"key": "device_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "area_id",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{host}}/api/v1/position",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"position"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "点位删除",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/position/1",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"position",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "点位更新",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "project_id",
+									"value": "7",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "number",
+									"value": "12342312",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "测试点位",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "device_id",
+									"value": "1",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "area_id",
+									"value": "1",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "1",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{host}}/api/v1/position/1?project_id=1&name=修改点位1111&number=123123213&device_id=123&area_id=123&status=2",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"position",
+								"1"
+							],
+							"query": [
+								{
+									"key": "project_id",
+									"value": "1"
+								},
+								{
+									"key": "name",
+									"value": "修改点位1111"
+								},
+								{
+									"key": "number",
+									"value": "123123213"
+								},
+								{
+									"key": "device_id",
+									"value": "123"
+								},
+								{
+									"key": "area_id",
+									"value": "123"
+								},
+								{
+									"key": "status",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "更新状态",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/position/2/status?status=2",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"position",
+								"2",
+								"status"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "2",
+									"description": "1启用 2停用"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -1201,12 +1601,12 @@
 					"formdata": [
 						{
 							"key": "username",
-							"value": "zhangsan4",
+							"value": "uprovident",
 							"type": "text"
 						},
 						{
 							"key": "password",
-							"value": "123456",
+							"value": "secret",
 							"type": "text"
 						}
 					]
