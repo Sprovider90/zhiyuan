@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CustomersRequest;
 use App\Http\Resources\CustomersResources;
+use App\Http\Resources\ProjectsResources;
 use App\Models\Customers;
 use App\Models\CustomersContacts;
+use App\Models\Projects;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -52,7 +54,7 @@ class CustomersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request,Customers $customer)
+    public function show(Customers $customer,Request $request)
     {
         $customer  = $customer->load(['contacts','projects' =>function($query) use ($request){
             $query->orderBy('id','desc')
@@ -65,6 +67,15 @@ class CustomersController extends Controller
         }]);
         return new CustomersResources($customer);
     }
+
+    /*public function show($id,Projects $projcets)
+    {
+        $projcets = $projcets->with(['customs' => function($query){
+            $query->with('contacts');
+        }])->where('customer_id',$id)->orderBy('id','desc')->paginate(15);
+        return response(new ProjectsResources($projcets));
+    }*/
+
 
     /**
      * Show the form for editing the specified resource.

@@ -98,6 +98,14 @@ Route::prefix('v1')
                         ->name('orders.cancel');
 
 
+                    //财务列表
+                    Route::get('finance','FinanceController@index')
+                        ->name('finance.index');
+                    //财务查看
+                    Route::get('finance/{order}','FinanceController@show')
+                        ->name('finance.show');
+
+
 
 
                     //公共接口

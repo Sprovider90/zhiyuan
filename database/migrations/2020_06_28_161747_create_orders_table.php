@@ -19,8 +19,8 @@ class CreateOrdersTable extends Migration
             $table->integer('good_id')->default(1)->comment('产品id 默认1 空气检测器');
             $table->integer('cid')->comment('客户id');
             $table->integer('num')->comment('订单数量');
-            $table->string('money')->comment('订单金额');
-            $table->tinyInteger('order_status')->default(1)->comment('状态 默认1 1待付款 2已付款 3已退款 4已取消');
+            $table->decimal('money',9,2)->comment('订单金额');
+            $table->tinyInteger('order_status')->default(1)->comment('状态 默认1 1待付款 2已付款 3部分付款 4已退款 5已取消');
             $table->tinyInteger('send_goods_status')->default(1)->comment('状态 默认1 1待出库 2已出库');
             $table->string('express_name')->nullable()->comment('快递名称');
             $table->string('express_number')->nullable()->comment('快递编号');
