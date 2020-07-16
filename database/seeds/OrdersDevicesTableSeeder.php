@@ -15,7 +15,7 @@ class OrdersDevicesTableSeeder extends Seeder
         // 获取 Faker 实例
         $faker = app(Faker\Generator::class);
         $ordersDevices = factory(\App\Models\OrdersDevices::class)
-            ->times(300)
+            ->times(100)
             ->make()
             ->each(function ($data, $index) use ($order_ids, $faker)
             {

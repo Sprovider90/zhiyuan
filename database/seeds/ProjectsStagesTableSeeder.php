@@ -24,7 +24,7 @@ class ProjectsStagesTableSeeder extends Seeder
             ->each(function ($projectsStage, $index)
             use ($project_ids,$threshold_ids, $faker)
             {
-                $projectsStage->project_id = $faker->unique()->randomElement($project_ids);
+                $projectsStage->project_id = $faker->randomElement($project_ids);
                 $projectsStage->threshold_id = $faker->randomElement($threshold_ids);
 
             });
