@@ -21,4 +21,12 @@ class Customers extends Model
     public function contacts(){
         return $this->hasMany(CustomersContacts::class, 'cid', 'id');
     }
+
+    /**
+     * 关联项目表
+     * @return mixed
+     */
+    public function projects(){
+        return $this->hasMany(Projects::class, 'customer_id', 'id');
+    }
 }

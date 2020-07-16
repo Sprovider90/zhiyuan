@@ -547,7 +547,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}/api/v1/customers/55",
+							"raw": "http://{{host}}/api/v1/customers/1",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -556,7 +556,7 @@
 								"api",
 								"v1",
 								"customers",
-								"55"
+								"1"
 							]
 						},
 						"description": "查看客户详情接口"

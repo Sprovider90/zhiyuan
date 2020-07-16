@@ -52,9 +52,18 @@ class CustomersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Customers $customer)
+    public function show(Request $request,Customers $customer)
     {
-        return new CustomersResources($customer->load('contacts'));
+        $customer  = $customer->load(['contacts','projects' =>function($query) use ($request){
+            $query->orderBy('id','desc')
+                ->paginate(
+                    $request->pageSize ?? $request->pageSize,
+                    '*',
+                    'page',
+                    $request->page ?? $request->page
+                );
+        }]);
+        return new CustomersResources($customer);
     }
 
     /**
