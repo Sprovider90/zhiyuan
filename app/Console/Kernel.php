@@ -34,7 +34,11 @@ class Kernel extends ConsoleKernel
         //检测项目状态并修改  每天晚上一点执行
         $schedule->command('zhiyuan:updateprostage')
             ->dailyAt('1:00')
-            ->timezone('Asia/Shanghai');	;
+            ->timezone('Asia/Shanghai');
+        //没十分钟生成系统中项目相关数据快照
+        $schedule->command('zhiyuan:createpropic')
+            ->dailyAt('00:00')
+            ->timezone('Asia/Shanghai')->everyMinute();
 
     }
 
