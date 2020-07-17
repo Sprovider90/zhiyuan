@@ -56,26 +56,22 @@ class CustomersController extends Controller
      */
     public function show(Customers $customer,Request $request)
     {
-        $customer  = $customer->load(['contacts','projects' =>function($query) use ($request){
-            $query->orderBy('id','desc')
-                ->paginate(
-                    $request->pageSize ?? $request->pageSize,
-                    '*',
-                    'page',
-                    $request->page ?? $request->page
-                );
-        }]);
+        $customer  = $customer->load(['contacts']);
         return new CustomersResources($customer);
     }
 
-    /*public function show($id,Projects $projcets)
-    {
-        $projcets = $projcets->with(['customs' => function($query){
-            $query->with('contacts');
-        }])->where('customer_id',$id)->orderBy('id','desc')->paginate(15);
-        return response(new ProjectsResources($projcets));
-    }*/
-
+    /**
+     * 客户详情项目列表接口
+     *
+     * @param $customer
+     * @param Projects $projects
+     * @param Request $request
+     * @return ProjectsResources
+     */
+    public function projects($customer,Projects $projects,Request $request){
+        $projects = $projects->where('customer_id',$customer);
+        return new ProjectsResources($projects->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize));
+    }
 
     /**
      * Show the form for editing the specified resource.
