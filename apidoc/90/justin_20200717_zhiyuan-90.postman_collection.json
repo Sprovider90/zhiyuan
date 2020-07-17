@@ -547,7 +547,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}/api/v1/customers/1",
+							"raw": "http://{{host}}/api/v1/customers/2",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -556,10 +556,52 @@
 								"api",
 								"v1",
 								"customers",
-								"1"
+								"2"
 							]
 						},
 						"description": "查看客户详情接口"
+					},
+					"response": []
+				},
+				{
+					"name": "客户详情项目列表",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/customers/1/projects?page=2&pageSize=4",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"1",
+								"projects"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								},
+								{
+									"key": "pageSize",
+									"value": "4"
+								}
+							]
+						}
 					},
 					"response": []
 				}
@@ -675,6 +717,44 @@
 			"name": "订单管理",
 			"item": [
 				{
+					"name": "订单统计",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/orders/count?type=3",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"count"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "3",
+									"description": "1本周 2本月 3本年 默认2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "订单列表",
 					"request": {
 						"method": "GET",
@@ -693,24 +773,24 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "梁巨才",
+									"value": "信息",
 									"description": "公司名称",
-									"disabled": true
-								},
-								{
-									"key": "money",
-									"value": "0-1001",
-									"description": "金额",
 									"disabled": true
 								},
 								{
 									"key": "status",
 									"value": "3",
+									"description": " 1待付款 2已付款 3部分付款 4已退款 5已取消",
 									"disabled": true
 								},
 								{
 									"key": "time",
 									"value": "2020-07-06",
+									"disabled": true
+								},
+								{
+									"key": "money",
+									"value": "0-2000",
 									"disabled": true
 								}
 							]
@@ -848,7 +928,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{host}}/api/v1/orders/48",
+							"raw": "http://{{host}}/api/v1/orders/100",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -857,7 +937,7 @@
 								"api",
 								"v1",
 								"orders",
-								"48"
+								"100"
 							]
 						}
 					},
@@ -926,44 +1006,6 @@
 								"orders",
 								"45",
 								"cancel"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "订单统计",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://{{host}}/api/v1/orders/count?type=3",
-							"protocol": "http",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"orders",
-								"count"
-							],
-							"query": [
-								{
-									"key": "type",
-									"value": "3",
-									"description": "1本周 2本月 3本年 默认2"
-								}
 							]
 						}
 					},
@@ -1539,6 +1581,177 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "财务管理",
+			"item": [
+				{
+					"name": "财务统计",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/finance/count?type=3",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"finance",
+								"count"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "财务列表",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/finance?pageSize=20&page=1",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"finance"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "20"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "财务详情",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/finance/100",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"finance",
+								"100"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "收款/退款",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}/api/v1/finance/100?money=1000&type=1&pay_type=1&file=1,2&date=2020-07-18",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"finance",
+								"100"
+							],
+							"query": [
+								{
+									"key": "money",
+									"value": "1000",
+									"description": "金额"
+								},
+								{
+									"key": "type",
+									"value": "1",
+									"description": "1收款 2退款"
+								},
+								{
+									"key": "pay_type",
+									"value": "1",
+									"description": "1对公转账 2微信 3支付宝 4现金 5其他"
+								},
+								{
+									"key": "file",
+									"value": "1,2"
+								},
+								{
+									"key": "date",
+									"value": "2020-07-18",
+									"description": "收款退款日期"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "用户注册",
 			"request": {
 				"method": "POST",
@@ -1601,7 +1814,7 @@
 					"formdata": [
 						{
 							"key": "username",
-							"value": "uprovident",
+							"value": "sequi_natus",
 							"type": "text"
 						},
 						{

@@ -61,4 +61,12 @@ class Orders extends Model
     public function customs(){
         return $this->belongsTo(Customers::class, 'cid', 'id');
     }
+
+    /**
+     * 关联收退款记录表
+     * @return mixed
+     */
+    public function logs(){
+        return $this->hasMany( FinanceLog::class, 'order_id', 'id');
+    }
 }
