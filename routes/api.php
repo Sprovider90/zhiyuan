@@ -78,6 +78,9 @@ Route::prefix('v1')
                         'index','store', 'edit','update','destroy'
                     ]);
 
+                    //客户详情项目列表
+                    Route::get('customers/{customer}/projects', 'CustomersController@projects')
+                        ->name('customers.projects');
                     //客户列表 客户新增  客户编辑 客户更新 客户详情
                     Route::resource('customers', 'CustomersController')->only([
                         'index','store', 'edit','update','show'
