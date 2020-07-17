@@ -100,16 +100,22 @@ Route::prefix('v1')
                     Route::put('orders/{order}/cancel', 'OrdersController@cancel')
                         ->name('orders.cancel');
 
-
-                    //财务列表
+                    //财务统计
+                    Route::get('finance/count','FinanceController@count')
+                        ->name('finance.count');
+                   /* //财务列表
                     Route::get('finance','FinanceController@index')
                         ->name('finance.index');
                     //财务查看
-                    Route::get('finance/{order}','FinanceController@show')
+                    Route::get('finance/{finance}','FinanceController@show')
                         ->name('finance.show');
-
-
-
+                    //财务收退款
+                    Route::put('finance/{finance}','FinanceController@update')
+                        ->name('financeLog.update');*/
+                    //订单列表 订单新增  订单编辑 订单更新 订单详情
+                    Route::resource('finance', 'FinanceController')->only([
+                        'index','update','show'
+                    ]);
 
                     //公共接口
                     Route::group(['prefix' => 'public'],function () {
