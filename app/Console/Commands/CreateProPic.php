@@ -48,7 +48,7 @@ class CreateProPic extends Command
             }
         }
 
-        file_put_contents($dic."/".$filename,json_encode($this->getKzData()));
+        file_put_contents($dic."/".$filename,json_encode($this->getKzData(),true));
         $this->info("ok");
     }
     protected function getKzData(){
@@ -72,8 +72,9 @@ class CreateProPic extends Command
             WHERE
                 a. STATUS IN (4, 5, 6)
             AND a.stage_id IS NOT NULL";
+             $rs=DB::select($sql);
 
-        return DB::select($sql);
+        return $rs;
     }
 
 }
