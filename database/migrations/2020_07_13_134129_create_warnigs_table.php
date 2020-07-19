@@ -19,6 +19,7 @@ class CreateWarnigsTable extends Migration
             $table->integer('point_id')->unsigned()->default(0)->comment('检测id');
             $table->timestampTz('waring_time',0)->nullable();
             $table->string('threshold_keys')->comment("预警指标（多个逗号隔开）");
+            $table->text('originaldata')->comment("预警原始数据");
             $table->unique(["project_id","point_id","waring_time"]);
             $table->timestamps();
         });

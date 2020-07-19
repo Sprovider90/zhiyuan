@@ -25,5 +25,7 @@ class DatabaseSeeder extends Seeder
         //$this->call(OrdersDevicesTableSeeder::class);
         //生成仓库
         //$this->call(StorehousesTableSeeder::class);
+        $this->call(ProjectsWaringSettingTableSeeder::class);
+
     }
 }
