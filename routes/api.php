@@ -131,7 +131,9 @@ Route::prefix('v1')
                     Route::get('breakdown','BreakdownController@index')
                         ->name('breakdown.index');
 
-
+                    //消息列表
+                    Route::get('message','MessageController@index')
+                        ->name('message.index');
 
 
 
