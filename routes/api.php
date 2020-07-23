@@ -127,8 +127,9 @@ Route::prefix('v1')
                         Route::get('customers','PublicController@customers')
                             ->name('public.customers');
                     });
-
-
+                    //故障排查
+                    Route::get('breakdown','BreakdownController@index')
+                        ->name('breakdown.index');
 
 
 
