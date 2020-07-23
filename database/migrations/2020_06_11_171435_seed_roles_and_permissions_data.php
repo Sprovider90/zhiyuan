@@ -16,20 +16,22 @@ class SeedRolesAndPermissionsData extends Migration
         app()['cache']->forget('spatie.permission.cache');
 
         // 先创建权限
-        Permission::create(['name' => 'kehuguanli-chakan',"guard_name"=>"api"]);
-        Permission::create(['name' => 'kehuguanli-xinzeng',"guard_name"=>"api"]);
-        Permission::create(['name' => 'kehuguanli-xiugai',"guard_name"=>"api"]);
-        Permission::create(['name' => 'kehuguanli-shanchu',"guard_name"=>"api"]);       
+        Permission::create(['name' => 'kehuguanli-chakan',"guard_name"=>"web"]);
+        Permission::create(['name' => 'kehuguanli-xinzeng',"guard_name"=>"web"]);
+        Permission::create(['name' => 'kehuguanli-xiugai',"guard_name"=>"web"]);
+        Permission::create(['name' => 'kehuguanli-shanchu',"guard_name"=>"web"]);
+        Permission::create(['name' => 'message_list',"guard_name"=>"web"]);
 
         // 创建站长角色，并赋予权限
-        $founder = Role::create(['name' => '至源管理员',"guard_name"=>"api"]);
+        $founder = Role::create(['name' => '至源管理员',"guard_name"=>"web"]);
         $founder->givePermissionTo('kehuguanli-chakan');
         $founder->givePermissionTo('kehuguanli-xinzeng');
         $founder->givePermissionTo('kehuguanli-xiugai');
         $founder->givePermissionTo('kehuguanli-shanchu');
+        $founder->givePermissionTo('message_list');
 
         // 创建管理员角色，并赋予权限
-        $maintainer = Role::create(['name' => '至源项目经理',"guard_name"=>"api"]);
+        $maintainer = Role::create(['name' => '至源项目经理',"guard_name"=>"web"]);
         $maintainer->givePermissionTo('kehuguanli-chakan');
     }
 

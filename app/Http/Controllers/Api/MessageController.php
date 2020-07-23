@@ -15,6 +15,9 @@ class MessageController extends Controller
 {
 	public function index(Request $request,Message $message)
     {
+
+        $this->authorize('list',$message);
+
     	$query = Message::class;
         if(isset($request->type)&&!empty($request->type)){
         	$query =$message->where('type',$request['type']);
