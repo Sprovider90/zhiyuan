@@ -17,13 +17,13 @@ class ProjectsAreasTableSeeder extends Seeder
         $faker = app(Faker\Generator::class);
 
         $projects = factory(ProjectsAreas::class)
-            ->times(100)
+            ->times(5000)
             ->make()
             ->each(function ($projectsArea, $index)
             use ($project_ids, $faker)
             {
 
-                $projectsArea->project_id = $faker->unique()->randomElement($project_ids);
+                $projectsArea->project_id = $faker->randomElement($project_ids);
             });
 
         // 将数据集合转换为数组，并插入到数据库中

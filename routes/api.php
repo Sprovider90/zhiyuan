@@ -58,6 +58,8 @@ Route::prefix('v1')
                     //项目点位检测管理
                     Route::get('projects/{project}/postions','ProjectsController@projects')
                         ->name('projects.positions');
+                    Route::get('projects/{project}/area','ProjectsController@area')
+                        ->name('projects.area');
                     //项目列表 项目新增  项目编辑 项目更新 仓库删除
                     Route::resource('projects', 'ProjectsController')->only([
                         'index','store', 'edit','update','show'

@@ -9,6 +9,7 @@ use App\Http\Requests\Api\ProjectsRequest;
 use App\Http\Resources\ProjectsResources;
 use App\Models\Position;
 use App\Models\Projects;
+use App\Models\ProjectsAreas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -89,7 +90,10 @@ class ProjectsController extends Controller
      */
     public function show(Projects $project)
     {
-        return new ProjectsResources($project->load('areas')->load('stages')->load('position'));
+        $data = $project->load('stages')->load('position')->load('customs')->toArray();
+        $data['start_time']  = $data['stages'][0]['start_date'];
+        $data['end_time']  = $data['stages'][count($data['stages'])-1]['end_date'];
+        return new ProjectsResources($data);
     }
 
     /**
@@ -138,5 +142,18 @@ class ProjectsController extends Controller
         return new ProjectsResources($project->load('areas')->load('stages')->load('position'));
     }
 
+    /**
+     * 项目详情 区域列表
+     *
+     * @param $project
+     * @param ProjectsAreas $projectsAreas
+     * @param Request $request
+     * @return ProjectsResources
+     */
+    public function area($project,ProjectsAreas $projectsAreas,Request $request){
+        $projectsAreas = $projectsAreas->with('file');
+        $area = $projectsAreas->where('project_id',$project);
+        return new ProjectsResources($area->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize));
+    }
 
 }
