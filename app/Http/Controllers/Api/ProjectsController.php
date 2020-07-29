@@ -89,10 +89,10 @@ class ProjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Projects $project)
+    public function show(Projects $project,ProjectsStages $projectsStages)
     {
         $data = $project->load('stages')->load('position')->load('customs')->toArray();
-        $date = ProjectsStages::where('project_id',$project->id);
+        $date = $projectsStages->where('project_id',$project->id);
         $data['start_time'] = $date->min('start_date');
         $data['end_time']   = $date->max('end_date');
         return new ProjectsResources($data);
