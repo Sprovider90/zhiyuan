@@ -92,7 +92,7 @@ class ProjectsController extends Controller
     public function show(Projects $project)
     {
         $data = $project->load('stages')->load('position')->load('customs')->toArray();
-        $date = ProjectsStages::where('project_id',$data['id']);
+        $date = ProjectsStages::where('project_id',$project->id);
         $data['start_time'] = $date->min('start_date');
         $data['end_time']   = $date->max('end_date');
         return new ProjectsResources($data);
