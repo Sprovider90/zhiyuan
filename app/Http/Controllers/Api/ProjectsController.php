@@ -10,6 +10,7 @@ use App\Http\Resources\ProjectsResources;
 use App\Models\Position;
 use App\Models\Projects;
 use App\Models\ProjectsAreas;
+use App\Models\ProjectsStages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -91,8 +92,9 @@ class ProjectsController extends Controller
     public function show(Projects $project)
     {
         $data = $project->load('stages')->load('position')->load('customs')->toArray();
-        $data['start_time']  = $data['stages'][0]['start_date'];
-        $data['end_time']  = $data['stages'][count($data['stages'])-1]['end_date'];
+        $date = ProjectsStages::where('project_id',$data['id']);
+        $data['start_time'] = $date->min('start_date');
+        $data['end_time']   = $date->max('end_date');
         return new ProjectsResources($data);
     }
 
