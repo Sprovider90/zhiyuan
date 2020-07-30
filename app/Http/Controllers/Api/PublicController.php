@@ -6,14 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FilesRequest;
 use App\Http\Resources\CustomersResources;
 use App\Http\Resources\FilesResource;
+use App\Http\Resources\ThresholdsResources;
 use App\Models\Customers;
 use App\Models\Files;
+use App\Models\Thresholds;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PublicController extends Controller
 {
+    //监测标准列表
+    public function thresholds(Thresholds $thresholds){
+        return new ThresholdsResources($thresholds->where('status',1)->orderBy('id','desc')->get(['id','name','status','thresholdinfo']));
+    }
+
     //客户列表
     public function customers(Customers $customers){
         return new CustomersResources($customers->orderBy('id','desc')->get(['id','company_name','company_addr']));

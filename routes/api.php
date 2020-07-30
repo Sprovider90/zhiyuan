@@ -128,6 +128,9 @@ Route::prefix('v1')
                         //客户列表
                         Route::get('customers','PublicController@customers')
                             ->name('public.customers');
+                        //检测标准列表
+                        Route::get('thresholds','PublicController@thresholds')
+                            ->name('public.thresholds');
                     });
                     //故障排查
                     Route::get('breakdown','BreakdownController@index')
