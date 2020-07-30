@@ -39,13 +39,13 @@ class ProjectsStagesTableSeeder extends Seeder
                             $stage_name.='阶段二';
                             $month = rand(24,12);
                             $start_date = date('Y-m-d',strtotime('-'.$month.' month'));
-                            $end_date   = date('Y-m-d',strtotime('-'.$month+$month+rand(1,11) .' month'));
+                            $end_date   = date('Y-m-d',strtotime('-'.$month+rand(1,11) .' month'));
                             break;
                         case 3:
                             $stage_name.='阶段三';
                             $month = rand(12,0);
                             $start_date = date('Y-m-d',strtotime('-'.$month.' month'));
-                            $end_date   = date('Y-m-d',strtotime('-'.$month+$month+rand(1,11) .' month'));
+                            $end_date   = date('Y-m-d',strtotime('-'.$month+rand(1,11) .' month'));
                             break;
                     }
                     $projectsStage->project_id = $project_ids[$s];
