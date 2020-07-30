@@ -91,7 +91,7 @@ class ProjectsController extends Controller
      */
     public function show(Projects $project,ProjectsStages $projectsStages)
     {
-        $data = $project->load('stages')->load('position')->load('customs')->toArray();
+        $data = $project->load('stages')->load(['position','position.areas'])->load('customs');
         $date = $projectsStages->where('project_id',$project->id);
         $data['start_time'] = $date->min('start_date');
         $data['end_time']   = $date->max('end_date');

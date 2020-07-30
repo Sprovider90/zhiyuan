@@ -13,13 +13,13 @@ $factory->define(\App\Models\ProjectsPositions::class, function (Faker $faker) {
     $created_at = $faker->dateTimeThisMonth($updated_at);
 
     return [
-        'project_id'           => 40,
-        'number'           => 1,
-        'name'     => "点位名称",
-        'good_id'               => 1,
-        'device_id'               => 1,
-        "area_id"=>1,
-        'created_at'        => $created_at,
-        'updated_at'        => $updated_at,
+        'project_id'            =>  40,
+        'number'                =>  1,
+        'name'                  =>  "点位名称",
+        'good_id'               =>  1,
+        'device_id'             =>  1,
+        "area_id"               =>  1,
+        'created_at'            =>  $created_at,
+        'updated_at'            =>  $updated_at,
     ];
 });

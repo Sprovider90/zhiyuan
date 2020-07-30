@@ -15,4 +15,12 @@ class Position extends Model
     protected $fillable = [
         'project_id','number', 'name','device_id','area_id','status'
     ];
+
+    /**
+     * 关联区域表
+     * @return mixed
+     */
+    public function areas(){
+        return $this->hasOne(ProjectsAreas::class, 'id', 'area_id');
+    }
 }
