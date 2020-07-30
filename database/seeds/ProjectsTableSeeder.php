@@ -13,7 +13,6 @@ class ProjectsTableSeeder extends Seeder
     public function run()
     {
         $customer_ids = Customers::all()->pluck('id')->toArray();
-
         // 获取 Faker 实例
         $faker = app(Faker\Generator::class);
 
