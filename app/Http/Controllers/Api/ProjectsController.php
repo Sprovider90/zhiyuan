@@ -91,7 +91,7 @@ class ProjectsController extends Controller
      */
     public function show(Projects $project,ProjectsStages $projectsStages)
     {
-        $data = $project->load('stages')->load(['position','position.areas'])->load('customs');
+        $data = $project->load(['stages','stages.thresholds'])->load(['position','position.areas'])->load('customs');
         $date = $projectsStages->where('project_id',$project->id);
         $data['start_time'] = $date->min('start_date');
         $data['end_time']   = $date->max('end_date');
@@ -104,9 +104,13 @@ class ProjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Projects $project)
+    public function edit(Projects $project,ProjectsStages $projectsStages)
     {
-        return new ProjectsResources($project->load('areas')->load('stages'));
+        $data = $project->load(['stages','stages.thresholds'])->load(['position','position.areas'])->load('customs');
+        $date = $projectsStages->where('project_id',$project->id);
+        $data['start_time'] = $date->min('start_date');
+        $data['end_time']   = $date->max('end_date');
+        return new ProjectsResources($data);
     }
 
     /**

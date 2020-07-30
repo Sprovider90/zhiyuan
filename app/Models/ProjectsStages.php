@@ -14,4 +14,11 @@ class ProjectsStages extends Model
         'project_id','stage_name', 'start_date','end_date','threshold_id','stage','default',
     ];
 
+    /**
+     * 关联阈值表
+     * @return mixed
+     */
+    public function thresholds(){
+        return $this->hasOne(Thresholds::class, 'id', 'threshold_id');
+    }
 }
