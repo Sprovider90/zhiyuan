@@ -56,7 +56,7 @@ Route::prefix('v1')
                     Route::get('projects/count', 'ProjectsController@count')
                         ->name('projects.count');
                     //项目点位检测管理
-                    Route::get('projects/{project}/postions','ProjectsController@projects')
+                    Route::get('projects/{project}/positions','ProjectsController@positions')
                         ->name('projects.positions');
                     Route::get('projects/{project}/area','ProjectsController@area')
                         ->name('projects.area');
