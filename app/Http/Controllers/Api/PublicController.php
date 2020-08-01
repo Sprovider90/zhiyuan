@@ -6,9 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FilesRequest;
 use App\Http\Resources\CustomersResources;
 use App\Http\Resources\FilesResource;
+use App\Http\Resources\ProjectsAreasResource;
+use App\Http\Resources\ProjectsResources;
 use App\Http\Resources\ThresholdsResources;
 use App\Models\Customers;
 use App\Models\Files;
+use App\Models\Projects;
+use App\Models\ProjectsAreas;
 use App\Models\Thresholds;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -16,6 +20,18 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PublicController extends Controller
 {
+    //对应项目设备列表
+    /*public function devices(Request $request,''){
+
+    }*/
+
+    //对应项目区域列表
+    public function areas(Request $request,ProjectsAreas $projectsAreas){
+        $project_id = $request->get('project_id','');
+        $project_id && $projectsAreas = $projectsAreas->where('project_id',$project_id);
+        return new ProjectsAreasResource($projectsAreas->orderBy('id','desc')->get());
+    }
+
     //监测标准列表
     public function thresholds(Thresholds $thresholds){
         return new ThresholdsResources($thresholds->where('status',1)->orderBy('id','desc')->get(['id','name','status','thresholdinfo']));

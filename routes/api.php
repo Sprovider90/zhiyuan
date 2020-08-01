@@ -131,6 +131,9 @@ Route::prefix('v1')
                         //检测标准列表
                         Route::get('thresholds','PublicController@thresholds')
                             ->name('public.thresholds');
+                        //项目对应区域列表
+                        Route::get('areas','PublicController@areas')
+                            ->name('public.areas');
                     });
                     //故障排查
                     Route::get('breakdown','BreakdownController@index')
