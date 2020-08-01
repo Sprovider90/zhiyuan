@@ -145,7 +145,7 @@ class ProjectsController extends Controller
     }
 
     public function positions(Projects $project){
-        return new ProjectsResources($project->load('areas')->load('stages')->load('position'));
+        return new ProjectsResources($project->load('customs')->load('areas')->load('stages')->load('position'));
     }
 
     /**
