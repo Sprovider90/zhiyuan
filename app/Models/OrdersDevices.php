@@ -13,7 +13,7 @@ class OrdersDevices extends Model
 
 
     protected $fillable = [
-        'good_id','order_id', 'number'
+        'good_id','order_id', 'number','customer_id'
     ];
 
     /**
@@ -23,4 +23,16 @@ class OrdersDevices extends Model
     public function orders(){
         return $this->belongsTo(Orders::class, 'order_id', 'id');
     }
+
+    /**
+     * 创建时自动添加用户id
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->customer_id =  $model->orders->cid;
+        });
+    }
+
 }

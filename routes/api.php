@@ -134,6 +134,9 @@ Route::prefix('v1')
                         //项目对应区域列表
                         Route::get('areas','PublicController@areas')
                             ->name('public.areas');
+                        //项目对应设备列表
+                        Route::get('devices','PublicController@devices')
+                            ->name('public.devices');
                     });
                     //故障排查
                     Route::get('breakdown','BreakdownController@index')

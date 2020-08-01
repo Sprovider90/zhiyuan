@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FilesRequest;
 use App\Http\Resources\CustomersResources;
 use App\Http\Resources\FilesResource;
+use App\Http\Resources\OrdersResources;
 use App\Http\Resources\ProjectsAreasResource;
 use App\Http\Resources\ProjectsResources;
 use App\Http\Resources\ThresholdsResources;
 use App\Models\Customers;
 use App\Models\Files;
+use App\Models\OrdersDevices;
 use App\Models\Projects;
 use App\Models\ProjectsAreas;
 use App\Models\Thresholds;
@@ -21,9 +23,11 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class PublicController extends Controller
 {
     //对应项目设备列表
-    /*public function devices(Request $request,''){
-
-    }*/
+    public function devices(Request $request,OrdersDevices $ordersDevices){
+        $customer_id = $request->get('customer_id','');
+        $customer_id && $ordersDevices = $ordersDevices->where('customer_id',$customer_id);
+        return new OrdersResources($ordersDevices->orderBy('id','desc')->get());
+    }
 
     //对应项目区域列表
     public function areas(Request $request,ProjectsAreas $projectsAreas){

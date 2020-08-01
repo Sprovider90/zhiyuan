@@ -16,6 +16,7 @@ class CreateOrdersDevicesTable extends Migration
         Schema::create('orders_devices', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('order_id')->comment('订单ID');
+            $table->integer('customer_id')->comment('客户ID');
             $table->integer('good_id')->default(1)->comment('产品id 默认1');
             $table->string('number')->comment('设备编号');
             $table->softDeletes();
