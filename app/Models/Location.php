@@ -12,14 +12,7 @@ class Location extends Model
 
 
     protected $fillable = [
-        'left','top', 'area_id'
+        'left','top', 'position_id'
     ];
 
-    /**
-     * 关联区域表
-     * @return mixed
-     */
-    public function areas(){
-        return $this->hasMany(ProjectsAreas::class, 'area_id', 'id');
-    }
 }

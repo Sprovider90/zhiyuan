@@ -17,7 +17,7 @@ class ProjectsAreasTableSeeder extends Seeder
         $faker = app(Faker\Generator::class);
 
         $projects = factory(ProjectsAreas::class)
-            ->times(5000)
+            ->times(100)
             ->make()
             ->each(function ($projectsArea, $index)
             use ($project_ids, $faker)

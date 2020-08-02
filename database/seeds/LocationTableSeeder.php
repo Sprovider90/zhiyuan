@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Models\ProjectsAreas;
+use App\Models\ProjectsPositions;
 use App\Models\Location;
 
 class LocationTableSeeder extends Seeder
@@ -14,16 +14,16 @@ class LocationTableSeeder extends Seeder
     public function run()
     {
         //
-        $area_ids = ProjectsAreas::all()->pluck('id')->toArray();
+        $postion_ids = ProjectsPositions::all()->pluck('id')->toArray();
         // 获取 Faker 实例
         $faker = app(Faker\Generator::class);
         $location = factory(Location::class)
-            ->times(5000)
+            ->times(200)
             ->make()
             ->each(function ($data, $index)
-            use ($area_ids, $faker)
+            use ($postion_ids, $faker)
             {
-                $data->area_id = $faker->randomElement($area_ids);
+                $data->position_id = $faker->unique()->randomElement($postion_ids);
             });
 
         // 将数据集合转换为数组，并插入到数据库中

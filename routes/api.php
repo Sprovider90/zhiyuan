@@ -71,8 +71,16 @@ Route::prefix('v1')
                     Route::resource('position', 'PositionsController')->only([
                         'store', 'update','destroy'
                     ]);
+                    //获取该区域坐标
+                    Route::get('position/{position}/location', 'LocationController@location')
+                        ->name('position.location');
+                    //区域坐标
+                    Route::resource('location', 'LocationController')->only([
+                        'store', 'update','destroy'
+                    ]);
 
-                    //点位启用停用 1启用 2停用
+
+                    //仓库停用 1启用 2停用
                     Route::put('storehouses/{storehouse}/status', 'StorehousesController@status')
                         ->name('storehouses.status');
                     //仓库列表 仓库新增  仓库编辑 仓库更新 仓库删除
@@ -101,13 +109,7 @@ Route::prefix('v1')
                     //订单取消
                     Route::put('orders/{order}/cancel', 'OrdersController@cancel')
                         ->name('orders.cancel');
-                    //获取该区域坐标
-                    Route::get('area/{area}/location', 'ProjectAreaController@location')
-                        ->name('area.location');
-                    //区域坐标
-                    Route::resource('location', 'LocationController')->only([
-                        'store', 'update','destroy'
-                    ]);
+
 
                     //财务统计
                     Route::get('finance/count','FinanceController@count')

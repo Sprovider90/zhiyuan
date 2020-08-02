@@ -23,8 +23,9 @@ class LocationRequest extends FormRequest
      */
     public function rules()
     {
+        $id = $this->route('location') ? $this->route('location')->id : 0;
         return [
-            'area_id'      => 'required',
+            'position_id'  => 'required|unique:locations,position_id,'.$id,
             'left'         => 'required',
             'top'          => 'required',
         ];

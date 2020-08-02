@@ -16,13 +16,7 @@ class OrdersDevices extends Model
         'good_id','order_id', 'number','customer_id'
     ];
 
-    /**
-     * 关联订单表
-     * @return mixed
-     */
-    public function orders(){
-        return $this->belongsTo(Orders::class, 'order_id', 'id');
-    }
+
 
     /**
      * 创建时自动添加用户id
@@ -33,6 +27,14 @@ class OrdersDevices extends Model
         static::creating(function ($model) {
             $model->customer_id =  $model->orders->cid;
         });
+    }
+
+    /**
+     * 关联订单表
+     * @return mixed
+     */
+    public function orders(){
+        return $this->belongsTo(Orders::class, 'order_id', 'id');
     }
 
 }

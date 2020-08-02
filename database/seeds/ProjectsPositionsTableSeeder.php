@@ -20,13 +20,13 @@ class ProjectsPositionsTableSeeder extends Seeder
         // 获取 Faker 实例
         $faker = app(Faker\Generator::class);
         $projectsPositions = factory(ProjectsPositions::class)
-            ->times(1000)
+            ->times(200)
             ->make()
             ->each(function ($projectPos, $index)
             use ($project_ids,$project_area_ids, $faker)
             {
                 $projectPos->project_id = $faker->randomElement($project_ids);
-                $projectPos->area_id = $faker->unique()->randomElement($project_area_ids);
+                $projectPos->area_id = $faker->randomElement($project_area_ids);
             });
 
 

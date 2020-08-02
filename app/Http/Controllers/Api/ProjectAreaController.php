@@ -9,10 +9,5 @@ use Illuminate\Http\Request;
 
 class ProjectAreaController extends Controller
 {
-    //
-
-    public function location(ProjectsAreas $area){
-        $area->load(['file','locations']);
-        return new ProjectsAreasResource($area);
-    }
+   
 }
