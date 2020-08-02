@@ -101,11 +101,18 @@ Route::prefix('v1')
                     //订单取消
                     Route::put('orders/{order}/cancel', 'OrdersController@cancel')
                         ->name('orders.cancel');
+                    //获取该区域坐标
+                    Route::get('area/{area}/location', 'ProjectAreaController@location')
+                        ->name('area.location');
+                    //区域坐标
+                    Route::resource('location', 'LocationController')->only([
+                        'store', 'update','destroy'
+                    ]);
 
                     //财务统计
                     Route::get('finance/count','FinanceController@count')
                         ->name('finance.count');
-                   /* //财务列表
+                    //财务列表
                     Route::get('finance','FinanceController@index')
                         ->name('finance.index');
                     //财务查看
@@ -113,7 +120,9 @@ Route::prefix('v1')
                         ->name('finance.show');
                     //财务收退款
                     Route::put('finance/{finance}','FinanceController@update')
-                        ->name('financeLog.update');*/
+                        ->name('financeLog.update');
+
+
                     //订单列表 订单新增  订单编辑 订单更新 订单详情
                     Route::resource('finance', 'FinanceController')->only([
                         'index','update','show'

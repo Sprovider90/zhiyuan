@@ -22,4 +22,12 @@ class ProjectsAreas extends Model
         return $this->hasOne(Files::class, 'id', 'file');
     }
 
+    /**
+     * 关联文件表
+     * @return mixed
+     */
+    public function locations(){
+        return $this->hasMany(Location::class, 'area_id', 'id');
+    }
+
 }

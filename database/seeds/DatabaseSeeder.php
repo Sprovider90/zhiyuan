@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ProjectsWaringSettingTableSeeder::class);
         $this->call(ProjectsPositionsTableSeeder::class);
         $this->call(FileTableSeeder::class);
+        $this->call(LocationTableSeeder::class);
 
     }
 }
