@@ -10,6 +10,7 @@ use App\Http\Resources\ProjectsResources;
 use App\Models\Position;
 use App\Models\Projects;
 use App\Models\ProjectsAreas;
+use App\Models\ProjectsPositions;
 use App\Models\ProjectsStages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -157,10 +158,10 @@ class ProjectsController extends Controller
      * @param Request $request
      * @return ProjectsResources
      */
-    public function area($project,ProjectsAreas $projectsAreas,Request $request){
-        $projectsAreas = $projectsAreas->with('file');
-        $area = $projectsAreas->where('project_id',$project);
-        return new ProjectsResources($area->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize));
+    public function area($project,ProjectsPositions $positions,Request $request){
+        $positions = $positions->with(['area','area.file']);
+        $positions = $positions->where('project_id',$project);
+        return new ProjectsResources($positions->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize));
     }
 
 }
