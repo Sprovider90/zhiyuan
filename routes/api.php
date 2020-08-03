@@ -72,8 +72,8 @@ Route::prefix('v1')
                         'store', 'update','destroy'
                     ]);
                     //获取该区域坐标
-                    Route::get('position/{position}/location', 'LocationController@location')
-                        ->name('position.location');
+                    Route::get('position/{project}/area/{area}/location', 'LocationController@location')
+                        ->name('position.area.location');
                     //区域坐标
                     Route::resource('location', 'LocationController')->only([
                         'update','destroy'

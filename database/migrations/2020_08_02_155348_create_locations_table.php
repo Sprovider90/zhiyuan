@@ -16,7 +16,7 @@ class CreateLocationsTable extends Migration
         //关联区域表 一个区域有多个坐标点
         Schema::create('locations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('position_id')->unique()->comment('点位id');
+            $table->integer('position_id')->comment('点位id');
             $table->string('left')->default('0%')->comment('坐标 左 百分数');
             $table->string('top')->default('0%')->comment('坐标 顶 百分数');
             $table->softDeletes();

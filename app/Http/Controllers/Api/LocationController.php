@@ -15,12 +15,10 @@ use Illuminate\Http\Request;
 class LocationController extends Controller
 {
 
-    public function location(ProjectsPositions $position){
-        $location = $position->load(['area','area.file']);
-        $all_positions = ProjectsPositions::where('project_id',$location->project_id)->where('area_id',$location->area_id)->pluck('id');
+    public function location(Projects $project,ProjectsAreas $area){
+        $all_positions = ProjectsPositions::where('project_id',$project->id)->where('area_id',$area->id)->pluck('id');
         $all_device = Location::whereIn('position_id',$all_positions)->get();
-        $location->all_device = $all_device;
-        return new ProjectsPositionsResource($location);
+        return new ProjectsPositionsResource($all_device);
     }
 
     public function store(LocationRequest $request , Location $location){

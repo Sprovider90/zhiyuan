@@ -29,6 +29,8 @@ class PositionsRequest extends FormRequest
             'name'          => 'required',
 //            'device_id'     => 'required',
             'area_id'       => 'required',
+//            'left'          =>  'required',
+//            'top'           =>  'required',
         ];
     }
 }
