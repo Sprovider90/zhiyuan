@@ -76,7 +76,7 @@ Route::prefix('v1')
                         ->name('position.location');
                     //区域坐标
                     Route::resource('location', 'LocationController')->only([
-                        'store', 'update','destroy'
+                        'update','destroy'
                     ]);
 
 

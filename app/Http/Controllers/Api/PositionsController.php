@@ -16,7 +16,8 @@ class PositionsController extends Controller
     public function store(PositionsRequest $request,Position $positions)
     {
         $positions = $positions->create($request->all());
-        return response(new PositionsResource($positions));
+        $positions->location()->create();
+        return response(new PositionsResource($positions->load('location')));
     }
 
     /**

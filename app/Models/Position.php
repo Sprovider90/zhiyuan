@@ -23,4 +23,12 @@ class Position extends Model
     public function areas(){
         return $this->hasOne(ProjectsAreas::class, 'id', 'area_id');
     }
+
+    /**
+     * 关联坐标表
+     * @return mixed
+     */
+    public function location(){
+        return $this->hasOne(Location::class, 'position_id', 'id');
+    }
 }

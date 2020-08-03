@@ -17,8 +17,8 @@ class CreateLocationsTable extends Migration
         Schema::create('locations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('position_id')->unique()->comment('点位id');
-            $table->string('left')->comment('坐标 左 百分数');
-            $table->string('top')->comment('坐标 顶 百分数');
+            $table->string('left')->default('0%')->comment('坐标 左 百分数');
+            $table->string('top')->default('0%')->comment('坐标 顶 百分数');
             $table->softDeletes();
             $table->timestamps();
         });
