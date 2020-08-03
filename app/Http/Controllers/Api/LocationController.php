@@ -17,8 +17,13 @@ class LocationController extends Controller
 
     public function location(Projects $project,ProjectsAreas $area){
         $all_positions = ProjectsPositions::where('project_id',$project->id)->where('area_id',$area->id)->pluck('id');
+        $area = $area->load('area.file');
         $all_device = Location::whereIn('position_id',$all_positions)->get();
-        return new ProjectsPositionsResource($all_device);
+        $data = array(
+            'area'          => $area,
+            'all_device'    => $all_device,
+        );
+        return new ProjectsPositionsResource($data);
     }
 
     public function store(LocationRequest $request , Location $location){
