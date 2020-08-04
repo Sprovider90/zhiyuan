@@ -81,7 +81,14 @@ class FinanceController extends Controller
      */
     public function show(Finance $finance )
     {
-//        $finance_wait_money = Finance::where('order_id',$finance->id)->where('type',1)->sum('money');
+        //已收
+        $money = FinanceLog::where('order_id',$finance->id)->where('type',1)->sum('money');
+        //已退
+        $money1 = FinanceLog::where('order_id',$finance->id)->where('type',2)->sum('money');
+        $money3 = $finance->money - $money + $money1;
+        $money4 = $money - $money1;
+        $finance->wait_put_moeny = $money3;
+        $finance->wait_back_meony = $money4;
         return new FinanceResource($finance->load(['devices','customs']));
     }
 
