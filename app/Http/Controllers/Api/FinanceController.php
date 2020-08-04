@@ -21,17 +21,33 @@ class FinanceController extends Controller
     public function count(Request $request){
         $date = $this->returnDate($request->type ?? 2);
         //订单总金额
-        $order_money_count = Orders::whereNotIn('order_status',[1,2,3])->whereBetween('created_at',$date)->sum('money');
+        $order_money_count = Orders::whereNotIn('order_status',[1,2,3,4,5])->whereBetween('created_at',$date)->sum('money');
         //已收款
-        $receive_money_count  = Orders::whereNotIn('order_status',[1])->whereBetween('created_at',$date)->sum('money');
-        $ok_order = Orders::whereNotIn('order_status',[2])->whereBetween('created_at',$date)->get();
+        $receive_money_count  = Orders::whereNotIn('order_status',[2])->whereBetween('created_at',$date)->sum('money');
+        $ok_order = Orders::whereNotIn('order_status',[3])->whereBetween('created_at',$date)->get();
         foreach ($ok_order as $k => $v){
-            $receive_money_count+=FinanceLog::where('order_id',$v->id)->sum('money');
+            $receive_money_count+=FinanceLog::where('order_id',$v->id)->where('type',1)->sum('money');
         }
         //待收款
-        $wait_money_count = $order_money_count - $receive_money_count;
+        $wait_money_order = Orders::whereIn('order_status',[1,3])->whereBetween('created_at',$date)->get();
+        $wait_money_count = 0;
+        foreach ($wait_money_order as $k => $v){
+            if($v->status == 1){
+                $wait_money_count +=$v->money;
+            }else if($v->status == 2){
+                $wait_money_count += $v->money - FinanceLog::where('order_id',$v->id)->where('type',1)->sum('money');
+            }
+        }
         //已退款
-        $exit_money_count = Orders::whereNotIn('order_status',[4])->whereBetween('created_at',$date)->sum('money');
+        $exit_money_order = Orders::whereNotIn('order_status',[3,4])->whereBetween('created_at',$date)->get();
+        $exit_money_count = 0;
+        foreach ($exit_money_order as $k => $v){
+            if($v->status == 4){
+                $wait_money_count +=$v->money;
+            }else if($v->status == 3){
+                $wait_money_count +=  FinanceLog::where('order_id',$v->id)->where('type',2)->sum('money');
+            }
+        }
         return response()->json([
             'order_money_count'     => $order_money_count,
             'receive_money_count'   => $receive_money_count,
@@ -65,7 +81,7 @@ class FinanceController extends Controller
      */
     public function show(Finance $finance )
     {
-        return new FinanceResource($finance->load(['devices','customs','logs','logs.user']));
+        return new FinanceResource($finance->load(['devices','customs']));
     }
 
 
@@ -78,18 +94,30 @@ class FinanceController extends Controller
      */
     public function update(FinanceRequest $request,Finance $finance){
         DB::transaction(function() use ($request, &$finance){
-            $order_status = 3;
-            if($request->type == 2){
-                //退款
-                $order_status = 4;
-            }else{
+            if($request->type == 1){
                 //收款
                 $order = Orders::find($finance->id);
-                $order_money_count = FinanceLog::where('order_id',$finance->id)->sum('money');
-                $order_money_count = $order_money_count + $request->money;
-                if($order_money_count>= $order->money){
+                //已收
+                $order_money_count1 = FinanceLog::where('order_id',$finance->id)->where('type',1)->sum('money');
+                //已退
+                $order_money_count2 = FinanceLog::where('order_id',$finance->id)->where('type',2)->sum('money');
+                if(($order_money_count1 - $order_money_count2)  >= $order->money ){
                     //修改收款状态 为2
                     $order_status = 2;
+                }else{
+                    $order_status = 3;
+                }
+            }else{
+                //退款
+                $order = Orders::find($finance->id);
+                //已收
+                $order_money_count1 = FinanceLog::where('order_id',$finance->id)->where('type',1)->sum('money');
+                //已退
+                $order_money_count2 = FinanceLog::where('order_id',$finance->id)->where('type',2)->sum('money');
+                if(($order_money_count1 - $order_money_count2)  <= 0 ){
+                    $order_status = 5;
+                }else{
+                    $order_status = 4;
                 }
             }
             $finance->update(['order_status' => $order_status]);
@@ -98,5 +126,12 @@ class FinanceController extends Controller
         return response(new FinanceResource($finance->load(['logs','logs.user'])),201);
     }
 
+
+    public function financeLog($orderId,FinanceLog $financeLog,Request $request){
+        $financeLog = $financeLog->with('user')
+            ->where('order_id',$orderId)
+            ->orderBy('id','desc');
+        return new OrdersResources($financeLog->paginate($request->pageSize ?? $request->pageSize));
+    }
 
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\Api\OrdersDevicesRequest;
 use App\Http\Requests\Api\OrdersRequest;
 use App\Http\Resources\CustomersResources;
 use App\Http\Resources\OrdersResources;
+use App\Models\FinanceLog;
 use App\Models\Orders;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,17 +25,17 @@ class OrdersController extends Controller
     public function count(Request $request){
         $date = $this->returnDate($request->type ?? 2);
         //订单总数
-        $order_count = Orders::whereNotIn('order_status',[1,2,3])->whereBetween('created_at',$date)->count();
+        $order_count = Orders::whereNotIn('order_status',[1,2,3,4,5])->whereBetween('created_at',$date)->count();
         //已付款订单数
         $order_pay_count = Orders::where('order_status',2)->whereBetween('created_at',$date)->count();
         //待付款订单数
-        $order_no_pay_count = $order_count - $order_pay_count;
+        $order_no_pay_count = Orders::where('order_status',1)->whereBetween('created_at',$date)->count();
         //订单总金额
-        $order_money_count = Orders::whereNotIn('order_status',[1,2,3])->whereBetween('created_at',$date)->sum('money');
+        $order_money_count = Orders::whereNotIn('order_status',[1,2,3,4,5])->whereBetween('created_at',$date)->sum('money');
         //已付订单总金额
         $order_pay_money_count = Orders::where('order_status',2)->whereBetween('created_at',$date)->sum('money');
         //待付订单总金额
-        $order_no_pay_money_count = $order_money_count - $order_pay_money_count;
+        $order_no_pay_money_count = Orders::where('order_status',1)->whereBetween('created_at',$date)->sum('money');
 
         return response()->json([
                 'order_count'           => $order_count,
@@ -85,7 +86,7 @@ class OrdersController extends Controller
      */
     public function show(Orders $order)
     {
-        return new OrdersResources($order->load(['devices','customs','logs','logs.user']));
+        return new OrdersResources($order->load(['devices','customs']));
     }
 
     /**
@@ -140,7 +141,7 @@ class OrdersController extends Controller
     public function cancel(Orders $order)
     {
         if($order->order_status==1 && $order->send_goods_status == 1){
-            $order->update(['order_status' => 5]);
+            $order->update(['order_status' => 6]);
             return response(new OrdersResources($order),201);
         }else{
             abort(400,'参数错误');
@@ -159,6 +160,13 @@ class OrdersController extends Controller
         //
     }
 
+
+    public function financeLog($orderId,FinanceLog $financeLog,Request $request){
+        $financeLog = $financeLog->with('user')
+            ->where('order_id',$orderId)
+            ->orderBy('id','desc');
+        return new OrdersResources($financeLog->paginate($request->pageSize ?? $request->pageSize));
+    }
 
 
 

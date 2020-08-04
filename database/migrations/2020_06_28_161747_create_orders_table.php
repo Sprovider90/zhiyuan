@@ -20,7 +20,7 @@ class CreateOrdersTable extends Migration
             $table->integer('cid')->comment('客户id');
             $table->integer('num')->comment('订单数量');
             $table->decimal('money',9,2)->comment('订单金额');
-            $table->tinyInteger('order_status')->default(1)->comment('状态 默认1 1待付款 2已付款 3部分付款 4已退款 5已取消');
+            $table->tinyInteger('order_status')->default(1)->comment('状态 默认1 1待付款 2已付款 3部分付款 4部分退款 5已退款 6已取消');
             $table->tinyInteger('send_goods_status')->default(1)->comment('状态 默认1 1待出库 2已出库');
             $table->string('express_name')->nullable()->comment('快递名称');
             $table->string('express_number')->nullable()->comment('快递编号');

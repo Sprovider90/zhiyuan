@@ -99,6 +99,8 @@ Route::prefix('v1')
                     //订单数及金额统计
                     Route::get('orders/count', 'OrdersController@count')
                         ->name('orders.count');
+                    Route::get('orders/{order}/financeLog', 'OrdersController@financeLog')
+                        ->name('orders.financeLog');
                     //订单列表 订单新增  订单编辑 订单更新 订单详情
                     Route::resource('orders', 'OrdersController')->only([
                         'index','store', 'edit','update','show'
@@ -123,6 +125,8 @@ Route::prefix('v1')
                     //财务收退款
                     Route::put('finance/{finance}','FinanceController@update')
                         ->name('financeLog.update');
+                    Route::get('finance/{finance}/financeLog', 'FinanceController@financeLog')
+                        ->name('finance.financeLog');
 
 
                     //订单列表 订单新增  订单编辑 订单更新 订单详情
