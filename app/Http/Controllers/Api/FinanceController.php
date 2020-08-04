@@ -81,6 +81,7 @@ class FinanceController extends Controller
      */
     public function show(Finance $finance )
     {
+//        $finance_wait_money = Finance::where('order_id',$finance->id)->where('type',1)->sum('money');
         return new FinanceResource($finance->load(['devices','customs']));
     }
 
@@ -101,7 +102,7 @@ class FinanceController extends Controller
                 $order_money_count1 = FinanceLog::where('order_id',$finance->id)->where('type',1)->sum('money');
                 //已退
                 $order_money_count2 = FinanceLog::where('order_id',$finance->id)->where('type',2)->sum('money');
-                if(($order_money_count1 - $order_money_count2)  >= $order->money ){
+                if(($order_money_count1 - $order_money_count2 + $request->money)  >= $order->money ){
                     //修改收款状态 为2
                     $order_status = 2;
                 }else{
@@ -114,7 +115,7 @@ class FinanceController extends Controller
                 $order_money_count1 = FinanceLog::where('order_id',$finance->id)->where('type',1)->sum('money');
                 //已退
                 $order_money_count2 = FinanceLog::where('order_id',$finance->id)->where('type',2)->sum('money');
-                if(($order_money_count1 - $order_money_count2)  <= 0 ){
+                if(($order_money_count1 - $order_money_count2 - $request->money)  <= 0 ){
                     $order_status = 5;
                 }else{
                     $order_status = 4;
