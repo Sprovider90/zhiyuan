@@ -64,7 +64,15 @@ class FinanceController extends Controller
     public function index(Finance $finance , Request $request)
     {
         $finance = $finance->with('customs');
-        $request->money     && $finance = $finance->whereBetween('money',explode('-',$request->money));
+        if($request->money){
+            $arr = explode('-',$request->money);
+            if(count($arr) == 1){
+                $finance = $finance->where('money','>',$arr[0]);
+            }else if(count($arr) == 2){
+                $finance = $finance->whereBetween('money',explode('-',$request->money));
+            }
+        }
+
         $request->status    && $finance = $finance->where('order_status',$request->status);
         $request->name      && $finance = $finance->whereHas('customs',function($query) use ($request){
             $query->where('company_name','like',"%{$request->name}%")->orWhere('company_addr','like','%'.$request->name.'%');

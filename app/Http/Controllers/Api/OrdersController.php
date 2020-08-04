@@ -55,7 +55,14 @@ class OrdersController extends Controller
     public function index(Orders $orders , Request $request)
     {
         $orders = $orders->with('customs');
-        $request->money     && $orders = $orders->whereBetween('money',explode('-',$request->money));
+        if($request->money){
+            $arr = explode('-',$request->money);
+            if(count($arr) == 1){
+                $orders = $orders->where('money','>',$arr[0]);
+            }else if(count($arr) == 2){
+                $orders = $orders->whereBetween('money',explode('-',$request->money));
+            }
+        }
         $request->status    && $orders = $orders->where('order_status',$request->status);
         $request->name      && $orders = $orders->whereHas('customs',function($query) use ($request){
             $query->where('company_name','like',"%{$request->name}%")->orWhere('company_addr','like','%'.$request->name.'%');
