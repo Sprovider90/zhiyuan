@@ -148,7 +148,7 @@ class OrdersController extends Controller
     public function cancel(Orders $order)
     {
         if($order->order_status==1 && $order->send_goods_status == 1){
-            $order->update(['order_status' => 6]);
+            $order->update(['order_status' => 5]);
             return response(new OrdersResources($order),201);
         }else{
             abort(400,'参数错误');

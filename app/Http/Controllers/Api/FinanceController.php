@@ -114,24 +114,22 @@ class FinanceController extends Controller
                 //收款
                 $order = Orders::find($finance->id);
                 //已收
-                $order_money_count1 = FinanceLog::where('order_id',$finance->id)->where('type',1)->sum('money');
-                //已退
-                $order_money_count2 = FinanceLog::where('order_id',$finance->id)->where('type',2)->sum('money');
-                if(($order_money_count1 - $order_money_count2 + $request->money)  >= $order->money ){
-                    //修改收款状态 为2
-                    $order_status = 2;
-                }else{
+                $order_money_count = FinanceLog::where('order_id',$finance->id)->where('type',1)->sum('money');
+                $money = $order->money - $order_money_count;
+                if($money > $request->money){
                     $order_status = 3;
+                }else if($money == $request->money){
+                    $order_status = 2;
+                }else if($money < $request->money  ){
+                    return $this->errorResponse('400','收款金额大于代收款金额');
                 }
             }else{
                 //退款
                 $order = Orders::find($finance->id);
                 //已收
-                $order_money_count1 = FinanceLog::where('order_id',$finance->id)->where('type',1)->sum('money');
-                //已退
-                $order_money_count2 = FinanceLog::where('order_id',$finance->id)->where('type',2)->sum('money');
-                if(($order_money_count1 - $order_money_count2 - $request->money)  <= 0 ){
-                    $order_status = 5;
+                $order_money_count = FinanceLog::where('order_id',$finance->id)->where('type',1)->sum('money');
+                if($order_money_count != $order_money_count){
+                    return $this->errorResponse('400','退款金额必须等于收款金额');
                 }else{
                     $order_status = 4;
                 }
