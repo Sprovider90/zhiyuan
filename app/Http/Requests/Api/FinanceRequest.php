@@ -25,6 +25,8 @@ class FinanceRequest extends FormRequest
     {
         return [
             //
+            'type'  => 'required|numeric',
+            'money' => 'required|min:1|numeric',
         ];
     }
 }

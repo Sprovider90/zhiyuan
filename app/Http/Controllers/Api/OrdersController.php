@@ -25,17 +25,17 @@ class OrdersController extends Controller
     public function count(Request $request){
         $date = $this->returnDate($request->type ?? 2);
         //订单总数
-        $order_count = Orders::whereNotIn('order_status',[1,2,3,4,5])->whereBetween('created_at',$date)->count();
+        $order_count = Orders::whereNotIn('order_status',[1,2,3])->whereBetween('created_at',$date)->count();
         //已付款订单数
         $order_pay_count = Orders::where('order_status',2)->whereBetween('created_at',$date)->count();
         //待付款订单数
-        $order_no_pay_count = Orders::where('order_status',1)->whereBetween('created_at',$date)->count();
+        $order_no_pay_count = $order_count - $order_pay_count;
         //订单总金额
-        $order_money_count = Orders::whereNotIn('order_status',[1,2,3,4,5])->whereBetween('created_at',$date)->sum('money');
+        $order_money_count = Orders::whereNotIn('order_status',[1,2,3])->whereBetween('created_at',$date)->sum('money');
         //已付订单总金额
         $order_pay_money_count = Orders::where('order_status',2)->whereBetween('created_at',$date)->sum('money');
         //待付订单总金额
-        $order_no_pay_money_count = Orders::where('order_status',1)->whereBetween('created_at',$date)->sum('money');
+        $order_no_pay_money_count = $order_money_count - $order_pay_money_count;
 
         return response()->json([
                 'order_count'           => $order_count,
