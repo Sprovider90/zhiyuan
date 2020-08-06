@@ -29,4 +29,12 @@ class Customers extends Model
     public function projects(){
         return $this->hasMany(Projects::class, 'customer_id', 'id');
     }
+
+    /**
+     * 关联文件表
+     * @return mixed
+     */
+    public function logosFile(){
+        return $this->hasOne(Files::class, 'id', 'logo');
+    }
 }
