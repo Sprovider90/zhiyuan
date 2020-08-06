@@ -9,6 +9,7 @@ use App\Http\Resources\ProjectsResources;
 use App\Models\Customers;
 use App\Models\CustomersContacts;
 use App\Models\Projects;
+use App\Models\ProjectsPositions;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +30,15 @@ class CustomersController extends Controller
         $request->contact && $customers = $customers->whereHas('contacts', function ($builder) use ($request,&$customers) {
             $builder->where('contact', 'like', "%{$request->contact}%");
         });
-        return new CustomersResources($customers->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize));
+        $customers = $customers->orderBy('id','desc')
+            ->paginate($request->pageSize ?? $request->pageSize);
+        foreach ($customers as $k => $v){
+            $v->project_count = Projects::where('customer_id',$v->id)->count();
+            //查询客户所有项目
+            $proList = Projects::where('customer_id',$v->id)->get(['id']);
+            $v->position_count = ProjectsPositions::whereIn('project_id',$proList)->count();
+        }
+        return new CustomersResources($customers);
     }
 
 
