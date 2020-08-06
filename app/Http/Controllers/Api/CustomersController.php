@@ -23,7 +23,7 @@ class CustomersController extends Controller
      */
     public function index(Customers $customers , Request $request)
     {
-        $customers = $customers->with(['contacts','logosFile']);
+        $customers = $customers->with(['contacts','logos']);
         $request->name && $customers = $customers->where(function($query) use ($request){
             $query->where('company_name','like',"%{$request->name}%")->orWhere('company_addr','like','%'.$request->name.'%');
         });

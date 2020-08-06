@@ -34,7 +34,7 @@ class Customers extends Model
      * 关联文件表
      * @return mixed
      */
-    public function logosFile(){
+    public function logos(){
         return $this->hasOne(Files::class, 'id', 'logo');
     }
 }
