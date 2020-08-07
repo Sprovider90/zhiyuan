@@ -75,11 +75,16 @@ class CustomersController extends Controller
      * @param $customer
      * @param Projects $projects
      * @param Request $request
-     * @return ProjectsResources
+     * @return ProjectsResourcesprojects
      */
     public function projects($customer,Projects $projects,Request $request){
-        $projects = $projects->where('customer_id',$customer);
-        return new ProjectsResources($projects->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize));
+        $projects = $projects->where('customer_id',$customer)
+            ->orderBy('id','desc')
+            ->paginate($request->pageSize ?? $request->pageSize);
+        foreach($projects as $k => $v){
+            $v->position_count = ProjectsPositions::where('project_id',$v->id)->count();
+        }
+        return new ProjectsResources($projects);
     }
 
     /**
