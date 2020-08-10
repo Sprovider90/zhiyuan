@@ -18,7 +18,9 @@ Route::prefix('v1')
             // 删除token
             Route::delete('authorizations/current', 'AuthorizationsController@destroy')
                 ->name('authorizations.destroy');
-
+            //监测点原始数据-导出
+            Route::get('/positiondatas/export', 'PositiondatasController@export')
+                ->name('PositiondatasController.export');
 
         
         Route::middleware('throttle:' . config('api.rate_limits.access'))
@@ -156,6 +158,7 @@ Route::prefix('v1')
                     //监测点原始数据
                     Route::get('/positiondatas', 'PositiondatasController@index')
                         ->name('PositiondatasController.index');
+
 
                     //故障排查
                     Route::get('breakdown','BreakdownController@index')
