@@ -153,6 +153,10 @@ Route::prefix('v1')
                         Route::get('devices','PublicController@devices')
                             ->name('public.devices');
                     });
+                    //监测点原始数据
+                    Route::get('/positiondatas', 'PositiondatasController@index')
+                        ->name('PositiondatasController.index');
+
                     //故障排查
                     Route::get('breakdown','BreakdownController@index')
                         ->name('breakdown.index');
