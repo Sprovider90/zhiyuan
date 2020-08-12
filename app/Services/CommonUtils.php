@@ -11,6 +11,10 @@ namespace App\Services;
 
 class CommonUtils
 {
+    public static function sendMessage()
+    {
+        return;
+    }
     /**
      * @param $url 请求网址
      * @param bool $params 请求参数

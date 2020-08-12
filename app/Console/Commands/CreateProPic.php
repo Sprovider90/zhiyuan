@@ -37,7 +37,7 @@ class CreateProPic extends Command
      */
     public function handle()
     {
-        $path="/home/vagrant/code/zhiyuan-queue/testpro/";
+        $path=config("javasource.kz.createpropic_address");
         $date=date("YmdHi",time());
         $dic=$path.substr($date,0,8);
         $filename=substr($date,0,11)."000";
@@ -49,6 +49,7 @@ class CreateProPic extends Command
         }
 
         file_put_contents($dic."/".$filename,json_encode($this->getKzData(),true));
+
         $this->info("ok");
     }
     protected function getKzData(){

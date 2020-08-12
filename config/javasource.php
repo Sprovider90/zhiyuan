@@ -10,6 +10,9 @@ return [
 
     'original'=>[
         'url' => env('ORIGINAL_URL', null),
+    ],
+    'kz'=>[
+        'createpropic_address' => env('PROPIC_ADDRESS', null),
     ]
 
 ];

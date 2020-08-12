@@ -34,6 +34,7 @@ class AuthorizationsController extends Controller
                 $queuedata["name"]=$request->username;
                 $queuedata["ip"]=$request->getClientIp();
                 $queuedata["type"]=2;
+
                 dispatch(new LoginLog($queuedata));
             }
         }else{

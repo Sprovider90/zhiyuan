@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
 
         //检测项目状态并修改
-        //\App\Console\Commands\checkProjectsStatus::class,
+        \App\Console\Commands\CreateProPic::class,
         \App\Console\Commands\UpdateProStage::class,
 
     ];
@@ -37,8 +37,8 @@ class Kernel extends ConsoleKernel
             ->timezone('Asia/Shanghai');
         //没十分钟生成系统中项目相关数据快照
         $schedule->command('zhiyuan:createpropic')
-            ->dailyAt('00:00')
-            ->timezone('Asia/Shanghai')->everyMinute();
+           // ->dailyAt('00:00')
+            ->timezone('Asia/Shanghai')->everyTenMinute();
 
     }
 
