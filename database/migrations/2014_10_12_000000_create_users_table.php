@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('phone')->unique();
             $table->string('truename');
             $table->string('password');
-            $table->integer('type')->unsigned()->default(1)->comment('账号类型');
+            $table->integer('type')->unsigned()->default(1)->comment('账号类型,1是数据中心2是客户平台');
             $table->integer('customer_id')->unsigned()->index()->comment('所属客户');
             $table->integer('status')->unsigned()->unsigned()->default(1)->comment('账号状态1正常0禁用');
             $table->rememberToken();
