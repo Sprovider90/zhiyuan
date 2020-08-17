@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\PositionsRequest;
 use App\Http\Resources\OrdersResources;
 use App\Http\Resources\PositionsResource;
+use App\Jobs\UpdateDevicesInfoJob;
 use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,6 +18,7 @@ class PositionsController extends Controller
     {
         $positions = $positions->create($request->all());
         $positions->location()->create($request->all());
+        $request->device_id && dispatch(new UpdateDevicesInfoJob(["device_id"=>$request->device_id]));
         return response(new PositionsResource($positions->load('location')));
     }
 
@@ -32,6 +34,7 @@ class PositionsController extends Controller
         $position->update($request->all());
         $position->location()->delete();
         $position->location()->create($request->all());
+        $request->device_id && dispatch(new UpdateDevicesInfoJob(["device_id"=>$request->device_id]));
         return response(new PositionsResource($position->load('location')));
     }
 
