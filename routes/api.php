@@ -8,7 +8,7 @@ Route::prefix('v1')
 
         Route::middleware('throttle:' . config('api.rate_limits.sign'))
             ->group(function () {
-            
+
             // 登录
             Route::post('authorizations', 'AuthorizationsController@store')
                 ->name('api.authorizations.store');
@@ -22,11 +22,11 @@ Route::prefix('v1')
             Route::get('/positiondatas/export', 'PositiondatasController@export')
                 ->name('PositiondatasController.export');
 
-        
+
         Route::middleware('throttle:' . config('api.rate_limits.access'))
             ->group(function () {
                 // 游客可以访问的接口
-                
+
                 Route::middleware('auth:api')->group(function() {
                     // 登录后可以访问的接口
                     // 用户新增

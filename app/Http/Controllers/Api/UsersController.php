@@ -24,7 +24,7 @@ class UsersController extends Controller
                     ->orWhere('phone','like','%'.$request['reuse_param'].'%')
                     ->orWhere('id',$request['reuse_param']);
          }
-    	
+
     	//\DB::connection()->enableQueryLog();
     	$usrs = QueryBuilder::for($query)
             ->allowedIncludes('customer','roles')
@@ -32,7 +32,7 @@ class UsersController extends Controller
             //var_dump(\DB::getQueryLog());exit;
         return UserResource::collection($usrs);
     }
-    
+
     public function store(UserRequest $request)
     {
     	\DB::beginTransaction();
@@ -44,7 +44,7 @@ class UsersController extends Controller
 	        if (isset($roles)) {
 	        	$roles=explode(',', $roles);
 	            foreach ($roles as $role) {
-	                $role_r = Role::where('id', '=', $role)->firstOrFail();            
+	                $role_r = Role::where('id', '=', $role)->firstOrFail();
 	                $user->assignRole($role_r); //Assigning role to user
 	            }
 	        }
@@ -61,19 +61,19 @@ class UsersController extends Controller
        	\DB::beginTransaction();
        	try{
 	        $attributes = $request->only(['truename', 'password','status']);
-	        
+
 	        if (isset($request->roles)) {
 
 	        	$roles=explode(',', $request->roles);
 	        	$r_all = Role::all();
 		        foreach ($r_all as $p) {
-		            $user->removeRole($p);     
+		            $user->removeRole($p);
 		        }
 	            foreach ($roles as $role) {
-	                $role_r = Role::where('id', '=', $role)->firstOrFail();            
+	                $role_r = Role::where('id', '=', $role)->firstOrFail();
 	                $user->assignRole($role_r); //Assigning role to user
 	            }
-		        
+
 	        }
 	        $user->update($attributes);
 	        \DB::commit();
@@ -83,5 +83,6 @@ class UsersController extends Controller
     	}
         return new UserResource($user);
     }
+
 
 }

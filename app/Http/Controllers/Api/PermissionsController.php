@@ -28,9 +28,9 @@ class PermissionsController extends Controller
     {
         $role = Role::findOrFail($id);
    		$permissions = $role->getAllPermissions();
-       
+
         PermissionResource::wrap('data');
         return PermissionResource::collection($permissions);
     }
-     
+
 }
