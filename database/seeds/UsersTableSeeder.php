@@ -38,10 +38,10 @@ class UsersTableSeeder extends Seeder
         User::insert($user_array);
 
          //单独处理第一个用户的数据
-//         $user = User::find(1);
-//         $user->name = 'zhansan';
-//         $user->phone = '17780510690';
-//         $user->save();
+         $user = User::find(1);
+         $user->name = 'zhansan';
+         $user->phone = '17780510690';
+         $user->save();
 //
 //         $user->assignRole('至源管理员');
 //
