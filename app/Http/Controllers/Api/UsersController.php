@@ -17,7 +17,7 @@ class UsersController extends Controller
 {
     public function me(Request $request)
     {
-        return (new UserResource($request->user()));
+        return (new UserResource($request->user()->with(["img"])->first()));
     }
 
 	public function index(UserRequest $request,User $user)
@@ -65,7 +65,7 @@ class UsersController extends Controller
     {
        	\DB::beginTransaction();
        	try{
-	        $attributes = $request->only(['truename', 'password','status']);
+	        $attributes = $request->only(['truename', 'password','status','img']);
 
 	        if (isset($request->roles)) {
 
