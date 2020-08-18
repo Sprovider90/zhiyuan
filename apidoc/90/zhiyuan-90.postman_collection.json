@@ -65,7 +65,7 @@
 									"type": "text"
 								},
 								{
-									"key": "belongs_customer",
+									"key": "customer_id",
 									"value": "1",
 									"description": "所属客户",
 									"type": "text"
@@ -115,19 +115,22 @@
 									"key": "truename",
 									"value": "张久林2",
 									"description": "",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "password",
 									"value": "123456",
 									"description": "",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "roles",
 									"value": "2",
 									"description": "角色id，逗号隔开",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "status",
@@ -316,6 +319,11 @@
 							{
 								"key": "Content-Type",
 								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "id",
+								"value": "1",
+								"disabled": true
 							}
 						],
 						"body": {
@@ -323,7 +331,7 @@
 							"urlencoded": [
 								{
 									"key": "name",
-									"value": "juese1",
+									"value": "角色3",
 									"description": "",
 									"type": "text"
 								},
@@ -350,7 +358,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "3"
+									"value": "1"
 								}
 							]
 						},
@@ -465,7 +473,7 @@
 			"response": []
 		},
 		{
-			"name": "当前登录用户信息",
+			"name": "当前登录用户权限信息",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -481,7 +489,7 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "http://{{host}}/api/v1/user/",
+					"raw": "http://{{host}}/api/v1/userpermissions/",
 					"protocol": "http",
 					"host": [
 						"{{host}}"
@@ -489,7 +497,7 @@
 					"path": [
 						"api",
 						"v1",
-						"user",
+						"userpermissions",
 						""
 					]
 				},
@@ -596,6 +604,219 @@
 							"value": "users",
 							"equals": true
 						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "故障排查列表",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_user1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{host}}/api/v1/breakdown?include=project&project_id=33&device_id=000000001d82",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"breakdown"
+					],
+					"query": [
+						{
+							"key": "include",
+							"value": "project",
+							"equals": true
+						},
+						{
+							"key": "project_id",
+							"value": "33",
+							"equals": true
+						},
+						{
+							"key": "device_id",
+							"value": "000000001d82",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "消息列表",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_user1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{host}}/api/v1/message",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"message"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "数据查询-原始数据",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_user1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{host}}/api/v1/positiondatas?monitorId=1&startTime=2020-08-03 18:51:00&endTime=2020-08-06 19:10:00",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"positiondatas"
+					],
+					"query": [
+						{
+							"key": "monitorId",
+							"value": "1",
+							"equals": true
+						},
+						{
+							"key": "startTime",
+							"value": "2020-08-03 18:51:00",
+							"equals": true
+						},
+						{
+							"key": "endTime",
+							"value": "2020-08-06 19:10:00",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "数据查询-原始数据-导出",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_user1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{host}}/api/v1/positiondatas/export?monitorId=1&startTime=2020-08-03 18:51:00&endTime=2020-08-06 19:10:00",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"positiondatas",
+						"export"
+					],
+					"query": [
+						{
+							"key": "monitorId",
+							"value": "1",
+							"equals": true
+						},
+						{
+							"key": "startTime",
+							"value": "2020-08-03 18:51:00",
+							"equals": true
+						},
+						{
+							"key": "endTime",
+							"value": "2020-08-06 19:10:00",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "当前登录用户信息",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_user1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{host}}/api/v1/user/",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						""
 					]
 				},
 				"description": ""

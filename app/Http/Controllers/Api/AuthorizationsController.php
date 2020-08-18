@@ -15,12 +15,15 @@ class AuthorizationsController extends Controller
 {
    public function store(AuthorizationRequest $request)
     {
-        
+
         $users = DB::table('users')->where('name', $request->username)
                     ->orWhere('phone', $request->username)->first();
-        
+
         if(isset($users)&&$users->id){
-            if(!Hash::check($request->input('password'), $users->password)){ 
+            if($users->status==0){
+                throw new AuthenticationException('账号被禁用');
+            }
+            if(!Hash::check($request->input('password'), $users->password)){
 
                 $queuedata=[];
                 $queuedata["name"]=$request->username;
@@ -43,7 +46,7 @@ class AuthorizationsController extends Controller
 
         $credentials['name'] = $users->name;
         $credentials['password'] = $request->password;
-        
+
         $token = \Auth::guard('api')->attempt($credentials);
 
         return $this->respondWithToken($token)->setStatusCode(201);

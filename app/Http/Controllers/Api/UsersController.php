@@ -15,6 +15,11 @@ use Spatie\QueryBuilder\AllowedFilter;
 
 class UsersController extends Controller
 {
+    public function me(Request $request)
+    {
+        return (new UserResource($request->user()));
+    }
+
 	public function index(UserRequest $request,User $user)
     {
     	$query = User::class;
@@ -51,7 +56,7 @@ class UsersController extends Controller
 	        \DB::commit();
         }catch(\Exception $e){
     		\DB::rollBack();
-    		abort(400, '内部错误');
+    		abort(400, $e->getMessage());
     	}
 
         return new UserResource($user);

@@ -33,6 +33,10 @@ Route::prefix('v1')
                     Route::resource('users', 'UsersController')->only([
                         'store', 'update', 'index'
                     ]);
+                    // 当前登录用户信息
+                    Route::get('user', 'UsersController@me')
+                        ->name('user.show');
+
                     //角色列表
                     Route::get('/role', 'RoleController@index')
                     ->name('role.index');
@@ -40,7 +44,7 @@ Route::prefix('v1')
                     Route::get('/permissions', 'PermissionsController@index')
                     ->name('permissions.index');
                      // 当前登录用户权限
-                    Route::get('user', 'PermissionsController@userIndex')
+                    Route::get('userpermissions', 'PermissionsController@userIndex')
                         ->name('user.permissions');
                     //角色的权限列表
                     Route::get('/role/{role}/permissions', 'PermissionsController@roleIndex')

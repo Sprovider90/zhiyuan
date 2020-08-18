@@ -20,7 +20,13 @@ class PermissionsController extends Controller
     }
     public function userIndex(Request $request)
     {
-        $permissions = $request->user()->getAllPermissions();
+        if($request->user()->id==1){
+            $permissions = Permission::all(); // 获取所有权限
+        }else{
+            $permissions = $request->user()->getAllPermissions();
+        }
+
+
         PermissionResource::wrap('data');
         return PermissionResource::collection($permissions);
     }

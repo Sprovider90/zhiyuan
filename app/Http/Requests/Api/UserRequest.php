@@ -27,7 +27,7 @@ class UserRequest extends FormRequest
 			            'truename' => 'required|string',
 			            'password' => 'required|alpha_dash|between:6,20',
 			            'type' => 'required|numeric',
-			            'roles' => 'required|string'            
+			            'roles' => 'required|string'
 			        ];
 		        }
                 break;
@@ -51,7 +51,7 @@ class UserRequest extends FormRequest
                 return [];
             };
         }
- 
+
         return $rules;
     }
     public function messages()
@@ -63,4 +63,4 @@ class UserRequest extends FormRequest
             'name.required' => '用户名不能为空',
         ];
     }
-}	
+}
