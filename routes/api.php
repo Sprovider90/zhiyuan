@@ -34,6 +34,9 @@ Route::prefix('v1')
                         'store', 'update', 'index'
                     ]);
                     // 当前登录用户信息
+                    Route::get('user/check', 'UsersController@check')
+                        ->name('user.check');
+                    // 当前登录用户信息
                     Route::get('user', 'UsersController@me')
                         ->name('user.show');
 

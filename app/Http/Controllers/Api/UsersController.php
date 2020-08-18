@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\Api\UserRequest;
+use App\Http\Requests\Api\UsercheckRequest;
 use Spatie\Permission\Models\Role;
 
 use Spatie\QueryBuilder\QueryBuilder;
@@ -37,7 +38,10 @@ class UsersController extends Controller
             //var_dump(\DB::getQueryLog());exit;
         return UserResource::collection($usrs);
     }
-
+    public function check(UsercheckRequest $request)
+    {
+        return response(null, 200);
+    }
     public function store(UserRequest $request)
     {
     	\DB::beginTransaction();
