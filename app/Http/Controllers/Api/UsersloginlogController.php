@@ -15,9 +15,9 @@ class UsersloginlogController extends Controller
     {
         $Loginlog = QueryBuilder::for(Loginlog::class)
             ->allowedIncludes('users')
-            ->paginate();
+            ->paginate($request->pageSize ?? $request->pageSize);
         return UsersloginlogResources::collection($Loginlog);
     }
-    
-    
+
+
 }

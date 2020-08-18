@@ -175,7 +175,10 @@ Route::prefix('v1')
                     Route::get('message','MessageController@index')
                         ->name('message.index');
 
-
+                    // 数据字典
+                    Route::resource('dictories', 'DictoriesController')->only([
+                        'update', 'index'
+                    ]);
 
 
                 });

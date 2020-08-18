@@ -16,6 +16,7 @@ class CreateDictoryTable extends Migration
         Schema::create('dictories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->unique();
+            $table->string('nameflag');
             $table->string('value');
             $table->timestamps();
         });

@@ -34,7 +34,7 @@ class UsersController extends Controller
     	//\DB::connection()->enableQueryLog();
     	$usrs = QueryBuilder::for($query)
             ->allowedIncludes('customer','roles')
-            ->paginate();
+            ->paginate($request->pageSize ?? $request->pageSize);
             //var_dump(\DB::getQueryLog());exit;
         return UserResource::collection($usrs);
     }

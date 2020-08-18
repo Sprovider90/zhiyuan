@@ -29,5 +29,13 @@ class UsercheckRequest extends FormRequest
 
         return $rules;
     }
-
+    public function messages()
+    {
+        return [
+            'name.unique' => '该用户名已被占用',
+            'name.regex' => '用户名为字母或字母和数字组合',
+            'name.between' => '用户名必须介于 6 - 20 个字符之间',
+            'name.required' => '用户名不能为空',
+        ];
+    }
 }
