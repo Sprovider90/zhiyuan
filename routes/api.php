@@ -137,6 +137,16 @@ Route::prefix('v1')
                     Route::get('finance/{finance}/financeLog', 'FinanceController@financeLog')
                         ->name('finance.financeLog');
 
+                    //设备统计
+                    Route::get('device/count','DeviceController@count')
+                        ->name('device/count');
+                    //收回
+                    Route::put('device/{device}/cancel','DeviceController@cancel')
+                        ->name('device/cancel');
+                    //设备管理
+                    Route::resource('device','DeviceController')->only([
+                        'index' , 'store' , 'update' , 'show'
+                    ]);
 
                     //订单列表 订单新增  订单编辑 订单更新 订单详情
                     Route::resource('finance', 'FinanceController')->only([

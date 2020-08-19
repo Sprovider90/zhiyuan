@@ -7,6 +7,7 @@ use App\Http\Requests\Api\OrdersDevicesRequest;
 use App\Http\Requests\Api\OrdersRequest;
 use App\Http\Resources\CustomersResources;
 use App\Http\Resources\OrdersResources;
+use App\Models\Device;
 use App\Models\FinanceLog;
 use App\Models\Orders;
 use Illuminate\Http\Request;
@@ -133,7 +134,12 @@ class OrdersController extends Controller
             $request['send_goods_status'] = 2;
             $order->update($request->all());
             $order->devices()->delete();
+            $data = json_decode($request->data,true);
             $order->devices()->createMany(json_decode($request->data,true));
+            //修改设备表中状态为 已出库
+            foreach ($data as $k => $v){
+                Device::where('device_number',$v['number'])->update(['store_status' => 2]);
+            }
         });
         return response(new OrdersResources($order->load('devices')),201);
     }

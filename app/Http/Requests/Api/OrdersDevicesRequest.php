@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api;
 
+use App\Models\Device;
 use Illuminate\Foundation\Http\FormRequest;
 
 class OrdersDevicesRequest extends FormRequest
@@ -39,6 +40,13 @@ class OrdersDevicesRequest extends FormRequest
                             if(!isset($v[$v1]) || empty($v[$v1])){
                                 return $fail('array['.$k.'] '.$v1.' is empty.');
                                 break;
+                            }
+                            if($v1 == 'number'){
+                                $count = Device::where('device_number',$v[$v1])->where('status',1)->whereNotNull('customer_id')->count();
+                                if(!$count){
+                                    return $fail('array['.$k.'] '.$v1.' is error.');
+                                    break;
+                                }
                             }
                         }
                     }
