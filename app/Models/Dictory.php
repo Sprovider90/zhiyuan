@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 class Dictory extends Model
 {
    protected $fillable = [
-        'name','value'
+        'name','value',"nameflag"
     ];
 }
