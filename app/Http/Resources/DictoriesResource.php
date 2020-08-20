@@ -15,7 +15,7 @@ class DictoriesResource extends JsonResource
     public function toArray($request)
     {
         $data=parent::toArray($request);
-        
+
         $data["value"]=json_decode($data["value"]);
         //$data["valuelook"]=implode(",",array_column(json_decode($data["value"]),"name"));
         return $data;

@@ -13,14 +13,14 @@ class UsersloginlogController extends Controller
 {
 	public function index(Request $request,Loginlog $Loginlog)
     {
-//        if(isset($request->reuse_param)&&!empty($request->reuse_param)){
-//            $query =$user->where('name','like','%'.$request['reuse_param'].'%')
-//                ->orWhere('truename','like','%'.$request['reuse_param'].'%')
-//                ->orWhere('phone','like','%'.$request['reuse_param'].'%')
-//                ->orWhere('id',$request['reuse_param']);
-//        }
+        $query=Loginlog::class;
+        if(isset($request->reuse_param)&&!empty($request->reuse_param)){
+            $query =$Loginlog->where('users_name','like','%'.$request['reuse_param'].'%')
+                ->orWhere('users_truename','like','%'.$request['reuse_param'].'%');
 
-        $Loginlog = QueryBuilder::for(Loginlog::class)
+        }
+
+        $Loginlog = QueryBuilder::for($query)
             ->allowedIncludes('users')
             ->paginate($request->pageSize ?? $request->pageSize);
         return UsersloginlogResources::collection($Loginlog);

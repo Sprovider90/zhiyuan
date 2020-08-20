@@ -17,6 +17,8 @@ class CreateUsersLoginLogTable extends Migration
             //
             $table->bigIncrements('id');
             $table->integer('users_id')->unsigned()->index()->comment('用户id');
+            $table->string('users_name');
+            $table->string('users_truename');
             $table->string('ip');
             $table->string('oncenotice')->comment('本次异常提示');
             $table->string('notice')->comment('异常提示');

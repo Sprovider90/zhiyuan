@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 class LoginLog implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    protected $credentials;   
+    protected $credentials;
     /**
      * Create a new job instance.
      *
@@ -32,17 +32,19 @@ class LoginLog implements ShouldQueue
         $users = DB::table('users')->where('name', $this->credentials["name"])
                     ->orWhere('phone', $this->credentials["name"])
                     ->limit(1)->get();
-        
+
         if(isset($users[0])&&$users[0]->id){
-           $this->createLoginLog($Loginlog,$users[0]->id);
+           $this->createLoginLog($Loginlog,$users[0]);
         }
-        
+
     }
-    private function createLoginLog($Loginlog,$users_id){
+    private function createLoginLog($Loginlog,$users){
 
         $oncenotice_hash=["1"=>"账号或者密码错误","2"=>"登录成功"];
         $data=[];
-        $data["users_id"]=$users_id;
+        $data["users_id"]=$users->id;
+        $data["users_name"]=$users->name;
+        $data["users_truename"]=$users->truename;
         $data["ip"]=$this->credentials["ip"];
         $data["oncenotice"]=$oncenotice_hash[$this->credentials["type"]];
         $data["notice"]=0;
@@ -50,7 +52,7 @@ class LoginLog implements ShouldQueue
     }
 
     private function updateLoginLog(){
-        
+
     }
-    
+
 }

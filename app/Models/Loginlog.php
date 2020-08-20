@@ -7,7 +7,7 @@ class Loginlog extends Model
 {
    protected $table = 'users_login_log';
    protected $fillable = [
-        'users_id','ip', 'oncenotice','notice'
+        'users_id','ip', 'oncenotice','notice',"users_name","users_truename"
     ];
    public function users()
     {
