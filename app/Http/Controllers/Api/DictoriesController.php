@@ -6,6 +6,7 @@ use App\Models\Dictories;
 use Illuminate\Http\Request;
 use App\Http\Resources\DictoriesResource;
 use Spatie\QueryBuilder\QueryBuilder;
+use App\Http\Requests\Api\DictoriesRequest;
 class DictoriesController extends Controller
 {
 
@@ -17,33 +18,25 @@ class DictoriesController extends Controller
         return DictoriesResource::collection($dictories);
     }
 
-//    public function update(UserRequest $request,User $user)
-//    {
-//       	\DB::beginTransaction();
-//       	try{
-//	        $attributes = $request->only(['truename', 'password','status','img']);
-//
-//	        if (isset($request->roles)) {
-//
-//	        	$roles=explode(',', $request->roles);
-//	        	$r_all = Role::all();
-//		        foreach ($r_all as $p) {
-//		            $user->removeRole($p);
-//		        }
-//	            foreach ($roles as $role) {
-//	                $role_r = Role::where('id', '=', $role)->firstOrFail();
-//	                $user->assignRole($role_r); //Assigning role to user
-//	            }
-//
-//	        }
-//	        $user->update($attributes);
-//	        \DB::commit();
-//        }catch(\Exception $e){
-//    		\DB::rollBack();
-//    		abort(400, '内部错误');
-//    	}
-//        return new UserResource($user);
-//    }
+    public function update(DictoriesRequest $request,$id)
+    {
+        $dictories = Dictories::findOrFail($id);
+        $sql_arr=array_column(json_decode($dictories["value"]),"id");
+
+        $attributes = $request->only(['value']);
+        //$attributes["id"]=$id;
+        $give_arr=array_column(json_decode($attributes["value"]),"id");
+        $differ=array_diff($sql_arr,$give_arr);
+        if(!empty($differ)){
+            abort(422, 'value里面的值不能删除');
+        }
+       	try{
+            $dictories->update($attributes);
+        }catch(\Exception $e){
+    		abort(400, '内部错误');
+    	}
+        return new DictoriesResource($dictories);
+    }
 
 
 }
