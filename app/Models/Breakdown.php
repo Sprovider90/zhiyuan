@@ -13,4 +13,9 @@ class Breakdown extends Model
     {
         return $this->belongsTo(Projects::class);
     }
+    public function devices()
+    {
+        return $this->hasOne(Device::class, 'device_number', 'device_id');
+    }
+
 }

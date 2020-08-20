@@ -27,7 +27,7 @@ class BreakdownController extends Controller
         }
         $query =$beackdown->where($where);
         $beackdowns = QueryBuilder::for($query)
-            ->allowedIncludes('project')
+            ->allowedIncludes('project','devices')
             ->paginate();
         return BreakdownResource::collection($beackdowns);
     }
