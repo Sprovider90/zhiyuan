@@ -16,6 +16,7 @@ class BreakdownController extends Controller
 	public function index(Request $request,Breakdown $beackdown)
     {
     	$query = Breakdown::class;
+        $where=[];
         if(isset($request->project_id)&&!empty($request->project_id)){
             $where=['project_id'=>$request['project_id']];
         }
