@@ -189,6 +189,10 @@ Route::prefix('v1')
                     Route::resource('dictories', 'DictoriesController')->only([
                         'update', 'index'
                     ]);
+                    // 标准阈值
+                    Route::resource('thresholds', 'ThresholdsController')->only([
+                        'store', 'update', 'index'
+                    ]);
 
 
                 });

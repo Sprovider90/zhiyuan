@@ -17,8 +17,8 @@ class CreateThresholdsTable extends Migration
 
             $table->bigIncrements('id');
             $table->string('name');
-            $table->tinyInteger('status')->comment('状态1启用0禁用');
-            $table->string('thresholdinfo')->comment('指标阀值,json数据如：{
+            $table->tinyInteger('status')->default(1)->comment('状态1启用0禁用');
+            $table->string('thresholdinfo')->default("")->comment('指标阀值,json数据如：{
                 "formaldehyde":"0.04~0.06",
                 "TVOC":"0.04~0.06"
             }');
