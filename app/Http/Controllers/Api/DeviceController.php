@@ -33,6 +33,7 @@ class DeviceController extends Controller
 
     public function index(Request $request,Device $device){
         $device = $device->with(['storehouse','customer']);
+        $request->device_number &&   $device->where('device_number','like',"%{$request->device_number}%");
         $request->run_count &&   $device->where('status',$request->run_count);
         $request->store_status && $device->where('store_status',$request->store_status);
         $device = $device->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
