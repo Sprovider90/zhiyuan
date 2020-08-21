@@ -13,10 +13,15 @@ class DataController extends Controller
     //
     public function index(Request $request,ProjectsPositions $position){
         $position = $position->with(['project']);
+        $request->user()->customer_id && $position->whereHas('project',function ($query) use ($request){
+            $query->where('customer_id',$request->user()->customer_id);
+        });
         $request->keyword && $position
-            ->orWhere('name','like',"%{$request->keyword}%")
-            ->orWhereHas('project',function ($query) use ($request) {
-                return $query->where('name','like',"%{$request->keyword}%");
+            ->where(function ($query) use ($request) {
+                $query->orWhere('name','like',"%{$request->keyword}%")
+                      ->orWhereHas('project',function ($query) use ($request) {
+                          $query->where('name','like',"%{$request->keyword}%");
+                      });
             });
         $position = $position->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
         return response(new PositionsResource($position));

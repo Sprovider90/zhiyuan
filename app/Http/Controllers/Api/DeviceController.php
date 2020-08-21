@@ -13,6 +13,8 @@ class DeviceController extends Controller
 {
     //
     public function count(Request $request,Device $device){
+        //增加客户登录
+        $request->user()->customer_id && $device = $device->where('customer_id',$request->user()->customer_id);
         $date = $this->returnDate($request->type ?? 2);
         //设备总数
         $all_count = $device->whereBetween('created_at',$date)->count();
@@ -33,6 +35,8 @@ class DeviceController extends Controller
 
     public function index(Request $request,Device $device){
         $device = $device->with(['storehouse','customer']);
+        //增加客户登录
+        $request->user()->customer_id && $device = $device->where('customer_id',$request->user()->customer_id);
         $request->device_number &&   $device->where('device_number','like',"%{$request->device_number}%");
         $request->run_count &&   $device->where('status',$request->run_count);
         $request->store_status && $device->where('store_status',$request->store_status);

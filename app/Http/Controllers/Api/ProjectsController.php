@@ -26,6 +26,7 @@ class ProjectsController extends Controller
      */
     public function count(Projects $projects,Request $request){
         $date = $this->returnDate($request->type ?? 2);
+        $request->user()->customer_id && $projects = $projects->where('customer_id',$request->user()->customer_id);
         //进行中 1暂停中 4施工中 5交付中 6维护中
         $ongoing_count   = $projects->whereBetween('created_at',$date)->whereIn('status',[1,4,5,6])->count();
         //已结束 2已结束
@@ -50,6 +51,7 @@ class ProjectsController extends Controller
     public function index(Request $request , Projects $projects)
     {
         $projects = $projects->with(['customs']);
+        $request->user()->customer_id && $projects = $projects->where('customer_id',$request->user()->customer_id);
         $request->status && $projects->where('status',$request->status);
         $request->name   && $projects->whereHas('customs',function($query) use ($request){
             $query->where('company_name','like',"%{$request->name}%")
