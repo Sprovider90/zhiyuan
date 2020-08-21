@@ -207,13 +207,16 @@ Route::prefix('v1')
                     Route::patch('projects/{project}/thresholds/{projectsthreshold}', 'ProjectsThresholdsController@update')
                         ->name('projects.thresholds.update');
 
-
                     // 设置项目的预警条件
                     Route::post('projects/{project}/waringsetting', 'ProjectsWaringSettingController@store')
                         ->name('projects.waringsetting.store');
                     // 修改项目的预警条件
                     Route::patch('projects/{project}/waringsetting/{waringsetting}', 'ProjectsWaringSettingController@update')
                         ->name('projects.waringsetting.update');
+
+                    //预警警报列表
+                    Route::get('warnigs','WarnigsController@index')
+                        ->name('warnigs.index');
 
 
 

@@ -22,7 +22,7 @@ class ProjectsWaringSettingController extends Controller
 
     public function update(Projects $project,ProjectsWaringSetting $waringsetting,ProjectsWaringSettingRequest $request)
     {
-    
+
         $waringsetting->update($request->all());
         return new ProjectsWaringSettingResource($waringsetting);
     }
