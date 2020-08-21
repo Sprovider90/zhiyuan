@@ -7,6 +7,7 @@ use App\Jobs\UpdateProStage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ProjectsRequest;
 use App\Http\Resources\ProjectsResources;
+use App\Models\Loginlog;
 use App\Models\Position;
 use App\Models\Projects;
 use App\Models\ProjectsAreas;
@@ -14,6 +15,8 @@ use App\Models\ProjectsPositions;
 use App\Models\ProjectsStages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\QueryBuilder;
+
 
 class ProjectsController extends Controller
 {
@@ -49,21 +52,26 @@ class ProjectsController extends Controller
      */
     public function index(Request $request , Projects $projects)
     {
-        $projects = $projects->with(['customs']);
-        $request->status && $projects->where('status',$request->status);
-        $request->name   && $projects->whereHas('customs',function($query) use ($request){
+        $projects_query=Projects::class;
+        $request->status && $projects_query=$projects->where('status',$request->status);
+        $request->name   && $projects_query=$projects->whereHas('customs',function($query) use ($request){
             $query->where('company_name','like',"%{$request->name}%")
                 ->orWhere('company_addr','like','%'.$request->name.'%')
                 ->orWhere('name','like',"%{$request->name}%")
                 ->orWhere('number','like',"%{$request->name}%");
         });
-        $projects = $projects->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
+        $projects = QueryBuilder::for($projects_query)
+            ->allowedIncludes('customs','thresholds')
+            ->orderBy('id','desc')
+            ->paginate($request->pageSize ?? $request->pageSize);
+
+       // $projects = $projects->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
         foreach ($projects as $k => $v){
             $v->position_count = Position::where('project_id',$v->id)->count();
             //设备数 ??
             $v->device_count = Position::where('project_id',$v->id)->whereNotNull('device_id')->count();
         }
-        return response(new ProjectsResources($projects));
+        return ProjectsResources::collection($projects);
     }
 
 

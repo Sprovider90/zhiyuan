@@ -14,6 +14,10 @@ class ProjectsResources extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $data=parent::toArray($request);
+        $data['customs'] = new CustomersResources($this->whenLoaded('customs'));
+        $data['thresholds'] = new ProjectsThresholdsResource($this->whenLoaded('thresholds'));
+
+        return $data;
     }
 }

@@ -194,6 +194,12 @@ Route::prefix('v1')
                         'store', 'update', 'index'
                     ]);
 
+                    // 设置项目的阈值
+                    Route::post('projects/{project}/thresholds', 'ProjectsThresholdsController@store')
+                        ->name('projects.thresholds.store');
+                    // 修改项目阶段阈值
+                    Route::patch('projects/{project}/thresholds/{projectsthreshold}', 'ProjectsThresholdsController@update')
+                        ->name('projects.thresholds.update');
 
                 });
             });
