@@ -18,13 +18,14 @@ class FinanceController extends Controller
 {
     //
 
-    public function count(Request $request){
+    public function count(Request $request,Orders $orders){
         $date = $this->returnDate($request->type ?? 2);
+        $request->user()->customer_id && $orders = $orders->where('cid',$request->user()->customer_id);
         //订单总金额
-        $order_money_count = Orders::whereNotIn('order_status',[1,2,3])->whereBetween('created_at',$date)->sum('money');
+        $order_money_count = $orders->whereNotIn('order_status',[1,2,3])->whereBetween('created_at',$date)->sum('money');
         //已收款
-        $receive_money_count  = Orders::whereNotIn('order_status',[1])->whereBetween('created_at',$date)->sum('money');
-        $ok_order = Orders::whereNotIn('order_status',[2])->whereBetween('created_at',$date)->get();
+        $receive_money_count  = $orders->whereNotIn('order_status',[1])->whereBetween('created_at',$date)->sum('money');
+        $ok_order = $orders->whereNotIn('order_status',[2])->whereBetween('created_at',$date)->get();
         foreach ($ok_order as $k => $v){
             $receive_money_count+=FinanceLog::where('order_id',$v->id)->sum('money');
             $receive_money_count+=FinanceLog::where('order_id',$v->id)->where('type',1)->sum('money');
@@ -32,7 +33,7 @@ class FinanceController extends Controller
         //待收款
         $wait_money_count = $order_money_count - $receive_money_count;
         //已退款
-        $exit_money_count = Orders::whereNotIn('order_status',[4])->whereBetween('created_at',$date)->sum('money');
+        $exit_money_count = $orders->whereNotIn('order_status',[4])->whereBetween('created_at',$date)->sum('money');
         return response()->json([
             'order_money_count'     => $order_money_count,
             'receive_money_count'   => $receive_money_count,
@@ -49,6 +50,7 @@ class FinanceController extends Controller
     public function index(Finance $finance , Request $request)
     {
         $finance = $finance->with('customs');
+        $request->user()->customer_id && $finance = $finance->where('cid',$request->user()->customer_id);
         if($request->money){
             $arr = explode('-',$request->money);
             if(count($arr) == 1){

@@ -18,18 +18,10 @@ class ProjectsThresholdsController extends Controller
         return new ProjectsThresholdsResource($ProjectsThresholds);
     }
 
-    public function update(Projects $project,ProjectsThresholds $projectsthreshold)
+    public function update(Projects $project,ProjectsThresholds $projectsthreshold,ProjectsThresholdsRequest $request)
     {
-       // echo $project->id;exit;
-        echo $projectsthreshold->id;exit;
-//        $Thresholds = Thresholds::findOrFail($id);
-//        $attributes = $request->only(['thresholdinfo',"status"]);
-//        try{
-//            $Thresholds->update($attributes);
-//        }catch(\Exception $e){
-//            abort(400, '内部错误');
-//        }
 
-        return new ThresholdsResource($Thresholds);
+        $projectsthreshold->update($request->all());
+        return new ProjectsThresholdsResource($projectsthreshold);
     }
 }

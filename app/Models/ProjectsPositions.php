@@ -38,4 +38,12 @@ class ProjectsPositions extends Model
         return $this->hasOne(Location::class, 'id', 'position_id');
     }
 
+    /**
+     * 关联点位坐标表
+     * @return mixed
+     */
+    public function project(){
+        return $this->hasOne(Projects::class, 'id', 'project_id');
+    }
+
 }

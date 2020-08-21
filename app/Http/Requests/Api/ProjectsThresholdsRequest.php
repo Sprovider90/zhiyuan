@@ -37,9 +37,7 @@ class ProjectsThresholdsRequest extends FormRequest
             }
             case 'PATCH':{
                 $rules=[
-                    'project_id' => 'numeric',
-                    'stage_id' => 'numeric',
-                    'thresholdinfo' => 'string',
+                    'thresholdinfo' => 'required|string',
                 ];
                 break;
             }
