@@ -153,6 +153,12 @@ Route::prefix('v1')
                         'index','update','show'
                     ]);
 
+                    //数据报表
+                    Route::resource('data','DataController')->only([
+                        'index'
+                    ]);
+
+
                     //公共接口
                     Route::group(['prefix' => 'public'],function () {
                         //文件上传
