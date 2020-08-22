@@ -19,6 +19,7 @@ class WarnigsController extends Controller
         }
 
         $Warnigs = QueryBuilder::for($query)
+            ->allowedIncludes('customer','roles')
             ->paginate();
         return WarnigsResource::collection($Warnigs);
     }

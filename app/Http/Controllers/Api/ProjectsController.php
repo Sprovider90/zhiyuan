@@ -64,7 +64,7 @@ class ProjectsController extends Controller
                 ->orWhere('number','like',"%{$request->name}%");
         });
         $projects = QueryBuilder::for($projects_query)
-            ->allowedIncludes('customs','thresholds')
+            ->allowedIncludes('customs','thresholds','waringsetting')
             ->orderBy('id','desc')
             ->paginate($request->pageSize ?? $request->pageSize);
 
