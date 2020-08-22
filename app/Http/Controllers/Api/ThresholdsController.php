@@ -41,4 +41,8 @@ class ThresholdsController extends Controller
 
         return new ThresholdsResource($Thresholds);
     }
+    public function show(Thresholds $threshold)
+    {
+        return new ThresholdsResource($threshold);
+    }
 }

@@ -197,7 +197,7 @@ Route::prefix('v1')
                     ]);
                     // 标准阈值
                     Route::resource('thresholds', 'ThresholdsController')->only([
-                        'store', 'update', 'index'
+                        'store', 'update', 'index','show'
                     ]);
 
                     // 设置项目的阈值
