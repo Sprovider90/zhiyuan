@@ -14,12 +14,12 @@ class WarnigsController extends Controller
     {
 
         $query = Warnigs::class;
-        if(isset($request->type)&&!empty($request->type)){
-            $query =$Warnigs->where('type',$request['type']);
-        }
+//        if(isset($request->type)&&!empty($request->type)){
+//            $query =$Warnigs->where('type',$request['type']);
+//        }
 
         $Warnigs = QueryBuilder::for($query)
-            ->allowedIncludes('customer','roles')
+            ->allowedIncludes('project','projectsPositions')
             ->paginate();
         return WarnigsResource::collection($Warnigs);
     }

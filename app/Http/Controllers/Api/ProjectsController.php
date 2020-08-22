@@ -16,7 +16,7 @@ use App\Models\ProjectsStages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
-
+use App\Models\ProjectsThresholds;
 
 class ProjectsController extends Controller
 {
@@ -103,10 +103,22 @@ class ProjectsController extends Controller
      */
     public function show(Projects $project,ProjectsStages $projectsStages)
     {
+
         $data = $project->load(['stages','stages.thresholds'])->load(['position','position.areas'])->load('customs')->load('areas','areas.file');
         $date = $projectsStages->where('project_id',$project->id);
         $data['start_time'] = $date->min('start_date');
         $data['end_time']   = $date->max('end_date');
+        //项目自定义阈值覆盖标准阈值
+        foreach ($data["stages"] as $k => &$v) {
+            $rs=ProjectsThresholds::where(["project_id"=>$v["project_id"],"stage_id"=>$v["id"]])->get();
+            if(isset($rs[0])){
+                  $v["thresholds"]["thresholdinfo"]=$rs[0]->thresholdinfo;
+                  $v["thresholds"]["project_replace"]=1;
+            }else{
+                  $v["thresholds"]["project_replace"]=0;
+            }
+
+        }
         return new ProjectsResources($data);
     }
 

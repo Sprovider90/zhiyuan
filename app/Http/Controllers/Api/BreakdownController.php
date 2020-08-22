@@ -15,7 +15,6 @@ class BreakdownController extends Controller
 {
 	public function index(Request $request,Breakdown $beackdown)
     {
-        var_dump($request->user()->customer_id);exit;
     	$query = Breakdown::class;
         $where=[];
         if(isset($request->project_id)&&!empty($request->project_id)){
