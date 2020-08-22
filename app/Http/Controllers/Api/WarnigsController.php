@@ -19,4 +19,15 @@ class WarnigsController extends Controller
         }
         return new WarnigsResource($data);
     }
+    public function show(Request $request,Warnigs $warnig)
+    {
+
+        $data = $warnig->load(['project','project.customs']);
+        $data["originaldata_name"]="";
+        if(isset($data["originaldata"]) && $originaldata_arr=json_decode($data["originaldata"])){
+            $data["originaldata_name"]=$originaldata_arr["name"];
+        }
+
+        return new WarnigsResource($data);
+    }
 }

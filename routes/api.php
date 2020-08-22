@@ -217,6 +217,9 @@ Route::prefix('v1')
                     //预警警报列表
                     Route::get('warnigs','WarnigsController@index')
                         ->name('warnigs.index');
+                    //预警警报详情
+                    Route::get('warnigs/{warnig}','WarnigsController@show')
+                        ->name('warnigs.show');
 
                     // 预警警报用户消息列表
                     Route::resource('warnigssms', 'WarnigsSmsController')->only([

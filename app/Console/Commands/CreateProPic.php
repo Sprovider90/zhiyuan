@@ -57,6 +57,7 @@ class CreateProPic extends Command
         $sql="SELECT
                 a.id as project_id,
                 a.stage_id,
+                c.`name`,
                 CASE WHEN d.thresholdinfo IS NULL THEN
                 \"thresholds\"
                 ELSE
