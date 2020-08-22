@@ -37,8 +37,8 @@ class UpdateDevicesInfoJob implements ShouldQueue
             $where=" and b.id=".$this->credentials["device_id"];
         }
         $sql="SELECT
-            a.project_id AS projectId,
-            a.id AS monitorId,
+            CONCAT(a.project_id,'') AS projectId,
+            CONCAT(a.id,'') AS monitorId,
             b.device_number AS deviceId,
             a.STATUS as status
         FROM
