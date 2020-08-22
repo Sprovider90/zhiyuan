@@ -40,7 +40,7 @@ class UpdateDevicesInfoJob implements ShouldQueue
             a.project_id AS projectId,
             a.id AS monitorId,
             b.device_number AS deviceId,
-            a.STATUS
+            a.STATUS as status
         FROM
             `projects_positions` a
             LEFT JOIN devices b ON a.device_id = b.id
@@ -51,9 +51,9 @@ class UpdateDevicesInfoJob implements ShouldQueue
 
         if(!empty($rs)){
             foreach ($rs as $k=>$v) {
-                Redis::hset("zhiyuanv2:air:devices:tags",$v->deviceId,json_encode($v));
+                Redis::hset("air:devices:tags",$v->deviceId,json_encode($v));
                 $stat=$v->status==2?0:1;
-                Redis::hset("zhiyuanv2:iot:auth:client",$v->deviceId,$stat);
+                Redis::hset("iot:auth:client",$v->deviceId,$stat);
             }
         }
     }
