@@ -113,9 +113,9 @@ class ProjectsController extends Controller
             $rs=ProjectsThresholds::where(["project_id"=>$v["project_id"],"stage_id"=>$v["id"]])->get();
             if(isset($rs[0])){
                   $v["thresholds"]["thresholdinfo"]=$rs[0]->thresholdinfo;
-                  $v["thresholds"]["project_replace"]=1;
+                  $v["thresholds"]["thresholds_id"]=$rs[0]->id;
             }else{
-                  $v["thresholds"]["project_replace"]=0;
+                  $v["thresholds"]["thresholds_id"]=0;
             }
 
         }
