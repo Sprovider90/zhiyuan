@@ -218,6 +218,17 @@ Route::prefix('v1')
                     Route::get('warnigs','WarnigsController@index')
                         ->name('warnigs.index');
 
+                    // 预警警报用户消息列表
+                    Route::resource('warnigssms', 'WarnigsSmsController')->only([
+                        'index'
+                    ]);
+                    // 发送预警警报的消息
+                    Route::post('warnigs/{warnigs}/warnigssms', 'WarnigsSmsController@store')
+                        ->name('warnigs.warnigssms.store');
+                    // 修改预警警报消息
+                    Route::patch('warnigs/{warnigs}/warnigssms/{warnigssms}', 'WarnigsSmsController@update')
+                        ->name('warnigs.warnigssms.update');
+
 
 
                 });

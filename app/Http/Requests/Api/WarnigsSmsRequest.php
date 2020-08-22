@@ -13,7 +13,7 @@ class WarnigsSmsRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,38 @@ class WarnigsSmsRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        switch($this->method())
+        {
+            // CREATE
+            case 'POST':{
+                $rules=[
+                    'content' => 'required|string',
+                    'pics' => 'required|string',
+                ];
+                break;
+            }
+            case 'PATCH':{
+                $rules=[
+                    'content' => 'string',
+                    'pics' => 'string'
+                ];
+                break;
+            }
+            // UPDATE
+            case 'PUT':
+            case 'GET': {
+                $rules=[
+                    'warnig_id' => 'required'
+                ];
+                break;
+            }
+            case 'DELETE':
+            default:
+                {
+                    return [];
+                };
+        }
+
+        return $rules;
     }
 }
