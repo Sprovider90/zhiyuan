@@ -15,6 +15,7 @@ class CreateWarnigsSms extends Migration
     {
         Schema::create('warnigs_sms', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('warnig_id')->comment('预警id');
             $table->integer('send_id')->comment('发送者账号id');
             $table->integer('customer_id')->comment('客户id');
             $table->string('content')->comment('内容');

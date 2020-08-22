@@ -6,21 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\WarnigsResource;
 use App\Models\Warnigs;
 use Illuminate\Http\Request;
-use Spatie\QueryBuilder\QueryBuilder;
+use App\Models\WarnigsSms;
 
 class WarnigsController extends Controller
 {
     public function index(Request $request,Warnigs $Warnigs)
     {
-
-        $query = Warnigs::class;
-//        if(isset($request->type)&&!empty($request->type)){
-//            $query =$Warnigs->where('type',$request['type']);
-//        }
-
-        $Warnigs = QueryBuilder::for($query)
-            ->allowedIncludes('project','projectsPositions')
-            ->paginate();
-        return WarnigsResource::collection($Warnigs);
+        $data = $Warnigs->with(['project','project.customs','projectsPositions','projectsPositions.area'])->paginate();
+        foreach ($data as $k => $v){
+            $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
+            $v->isnew=1;
+        }
+        return new WarnigsResource($data);
     }
 }
