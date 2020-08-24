@@ -12,7 +12,20 @@ class WarnigsController extends Controller
 {
     public function index(Request $request,Warnigs $Warnigs)
     {
+        if($request->user()->customer_id){
+            $projects=array_column($request->user()->with(["customer","customer.projects"])->first()->customer->projects->toArray(),"id");
+            $Warnigs = $Warnigs->whereIn('project_id',$projects);
+        }
+        $request->time      && $Warnigs = $Warnigs->whereDate('created_at',$request->time);
+
+        $request->threshold_keys      && $Warnigs = $Warnigs->where('threshold_keys','like',"%{$request->threshold_keys},%");
+
+        $request->reuseparam      && $Warnigs = $Warnigs->whereHas('project',function($query) use ($request){
+            $query->where('name','like',"%{$request->reuseparam}%");
+        });
+
         $data = $Warnigs->with(['project','project.customs','projectsPositions','projectsPositions.area'])->paginate();
+
         foreach ($data as $k => $v){
             $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
             $v->isnew=1;
