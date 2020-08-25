@@ -7,6 +7,7 @@ use App\Jobs\UpdateProStage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ProjectsRequest;
 use App\Http\Resources\ProjectsResources;
+use App\Models\Loginlog;
 use App\Models\Position;
 use App\Models\Projects;
 use App\Models\ProjectsAreas;
@@ -14,6 +15,8 @@ use App\Models\ProjectsPositions;
 use App\Models\ProjectsStages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\QueryBuilder;
+use App\Models\ProjectsThresholds;
 
 class ProjectsController extends Controller
 {
@@ -50,22 +53,28 @@ class ProjectsController extends Controller
      */
     public function index(Request $request , Projects $projects)
     {
-        $projects = $projects->with(['customs']);
-        $request->user()->customer_id && $projects = $projects->where('customer_id',$request->user()->customer_id);
-        $request->status && $projects->where('status',$request->status);
-        $request->name   && $projects->whereHas('customs',function($query) use ($request){
+
+        $projects_query=Projects::class;
+        $request->status && $projects_query=$projects->where('status',$request->status);
+        $request->name   && $projects_query=$projects->whereHas('customs',function($query) use ($request){
+
             $query->where('company_name','like',"%{$request->name}%")
                 ->orWhere('company_addr','like','%'.$request->name.'%')
                 ->orWhere('name','like',"%{$request->name}%")
                 ->orWhere('number','like',"%{$request->name}%");
         });
-        $projects = $projects->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
+        $projects = QueryBuilder::for($projects_query)
+            ->allowedIncludes('customs','thresholds','waringsetting')
+            ->orderBy('id','desc')
+            ->paginate($request->pageSize ?? $request->pageSize);
+
+       // $projects = $projects->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
         foreach ($projects as $k => $v){
             $v->position_count = Position::where('project_id',$v->id)->count();
             //设备数 ??
             $v->device_count = Position::where('project_id',$v->id)->whereNotNull('device_id')->count();
         }
-        return response(new ProjectsResources($projects));
+        return ProjectsResources::collection($projects);
     }
 
 
@@ -94,10 +103,22 @@ class ProjectsController extends Controller
      */
     public function show(Projects $project,ProjectsStages $projectsStages)
     {
+
         $data = $project->load(['stages','stages.thresholds'])->load(['position','position.areas'])->load('customs')->load('areas','areas.file');
         $date = $projectsStages->where('project_id',$project->id);
         $data['start_time'] = $date->min('start_date');
         $data['end_time']   = $date->max('end_date');
+        //项目自定义阈值覆盖标准阈值
+        foreach ($data["stages"] as $k => &$v) {
+            $rs=ProjectsThresholds::where(["project_id"=>$v["project_id"],"stage_id"=>$v["id"]])->get();
+            if(isset($rs[0])){
+                  $v["thresholds"]["thresholdinfo"]=$rs[0]->thresholdinfo;
+                  $v["thresholds"]["thresholds_id"]=$rs[0]->id;
+            }else{
+                  $v["thresholds"]["thresholds_id"]=0;
+            }
+
+        }
         return new ProjectsResources($data);
     }
 

@@ -197,8 +197,41 @@ Route::prefix('v1')
                     ]);
                     // 标准阈值
                     Route::resource('thresholds', 'ThresholdsController')->only([
-                        'store', 'update', 'index'
+                        'store', 'update', 'index','show'
                     ]);
+
+                    // 设置项目的阈值
+                    Route::post('projects/{project}/thresholds', 'ProjectsThresholdsController@store')
+                        ->name('projects.thresholds.store');
+                    // 修改项目阶段阈值
+                    Route::patch('projects/{project}/thresholds/{projectsthreshold}', 'ProjectsThresholdsController@update')
+                        ->name('projects.thresholds.update');
+
+                    // 设置项目的预警条件
+                    Route::post('projects/{project}/waringsetting', 'ProjectsWaringSettingController@store')
+                        ->name('projects.waringsetting.store');
+                    // 修改项目的预警条件
+                    Route::patch('projects/{project}/waringsetting/{waringsetting}', 'ProjectsWaringSettingController@update')
+                        ->name('projects.waringsetting.update');
+
+                    //预警警报列表
+                    Route::get('warnigs','WarnigsController@index')
+                        ->name('warnigs.index');
+                    //预警警报详情
+                    Route::get('warnigs/{warnig}','WarnigsController@show')
+                        ->name('warnigs.show');
+
+                    // 预警警报用户消息列表
+                    Route::resource('warnigssms', 'WarnigsSmsController')->only([
+                        'index'
+                    ]);
+                    // 发送预警警报的消息
+                    Route::post('warnigs/{warnigs}/warnigssms', 'WarnigsSmsController@store')
+                        ->name('warnigs.warnigssms.store');
+                    // 修改预警警报消息
+                    Route::patch('warnigs/{warnigs}/warnigssms/{warnigssms}', 'WarnigsSmsController@update')
+                        ->name('warnigs.warnigssms.update');
+
 
 
                 });

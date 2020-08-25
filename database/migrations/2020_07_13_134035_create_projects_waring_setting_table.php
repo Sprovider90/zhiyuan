@@ -22,6 +22,7 @@ class CreateProjectsWaringSettingTable extends Migration
             $table->integer('notice_end_time')->unsigned()->comment('允许通知的结束时间（XXXX格式如1500）');
             $table->string('notice_phone')->comment("通知的手机号（多个逗号隔开）");
             $table->unique("project_id");
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -73,4 +73,22 @@ class Projects extends Model
     public function position(){
         return $this->hasMany(Position::class, 'project_id', 'id');
     }
+
+    /**
+     * 关联预警阈值表
+     * @return mixed
+     */
+    public function thresholds(){
+        return $this->hasMany(ProjectsThresholds::class, 'project_id', 'id');
+    }
+    /**
+     * 关联预警阈值表
+     * @return mixed
+     */
+    public function waringsetting(){
+        return $this->hasMany(ProjectsWaringSetting::class, 'project_id', 'id');
+    }
+
+
+
 }

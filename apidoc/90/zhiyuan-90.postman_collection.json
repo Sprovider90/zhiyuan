@@ -1,14 +1,13 @@
 {
 	"info": {
 		"name": "zhiyuan-90",
-		"_postman_id": "8ffe1d1f-eda6-25f7-168e-fbeafd2be6ef",
+		"_postman_id": "f6c8d998-435f-655a-66de-c548b04d2ed8",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "用户管理",
-			"description": "",
 			"item": [
 				{
 					"name": "新增用户",
@@ -30,7 +29,7 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "zhangsan9",
+									"value": "zhangsan",
 									"description": "用户名",
 									"type": "text"
 								},
@@ -38,37 +37,43 @@
 									"key": "phone",
 									"value": "17780510600",
 									"description": "手机号码",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "password",
 									"value": "123456",
 									"description": "密码",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "roles",
 									"value": "1",
 									"description": "角色，多个用逗号隔开",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "truename",
 									"value": "张久林",
 									"description": "姓名",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "type",
 									"value": "2",
 									"description": "账号类型",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "customer_id",
 									"value": "1",
 									"description": "所属客户",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								}
 							]
 						},
@@ -83,8 +88,7 @@
 								"v1",
 								"users"
 							]
-						},
-						"description": ""
+						}
 					},
 					"response": []
 				},
@@ -114,14 +118,12 @@
 								{
 									"key": "truename",
 									"value": "张久林2",
-									"description": "",
 									"type": "text",
 									"disabled": true
 								},
 								{
 									"key": "password",
 									"value": "123456",
-									"description": "",
 									"type": "text",
 									"disabled": true
 								},
@@ -136,6 +138,12 @@
 									"key": "status",
 									"value": "0",
 									"description": "0禁用 1启用",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "img",
+									"value": "2",
 									"type": "text"
 								}
 							]
@@ -155,11 +163,10 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "2"
+									"value": "1"
 								}
 							]
-						},
-						"description": ""
+						}
 					},
 					"response": []
 				},
@@ -178,7 +185,10 @@
 						},
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "http://{{host}}/api/v1/users?include=customer,roles&reuse_param=10",
 							"protocol": "http",
@@ -193,18 +203,56 @@
 							"query": [
 								{
 									"key": "include",
-									"value": "customer,roles",
-									"equals": true
+									"value": "customer,roles"
 								},
 								{
 									"key": "reuse_param",
 									"value": "10",
-									"equals": true,
 									"description": "查询条件"
 								}
 							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增用户时检查用户名规则是否正确",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_user1}}",
+									"type": "string"
+								}
+							]
 						},
-						"description": ""
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{host}}/api/v1/user/check?name=zhansan",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"check"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "zhansan"
+								}
+							]
+						}
 					},
 					"response": []
 				}
@@ -212,7 +260,6 @@
 		},
 		{
 			"name": "角色管理",
-			"description": "",
 			"item": [
 				{
 					"name": "新增角色",
@@ -235,13 +282,11 @@
 								{
 									"key": "name",
 									"value": "角色3",
-									"description": "",
 									"type": "text"
 								},
 								{
 									"key": "permissions",
 									"value": "1",
-									"description": "",
 									"type": "text"
 								},
 								{
@@ -264,8 +309,7 @@
 								"role",
 								""
 							]
-						},
-						"description": ""
+						}
 					},
 					"response": []
 				},
@@ -284,7 +328,10 @@
 						},
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "http://{{host}}/api/v1/role",
 							"protocol": "http",
@@ -296,8 +343,7 @@
 								"v1",
 								"role"
 							]
-						},
-						"description": ""
+						}
 					},
 					"response": []
 				},
@@ -332,13 +378,11 @@
 								{
 									"key": "name",
 									"value": "角色3",
-									"description": "",
 									"type": "text"
 								},
 								{
 									"key": "permissions",
 									"value": "2",
-									"description": "",
 									"type": "text"
 								}
 							]
@@ -361,8 +405,7 @@
 									"value": "1"
 								}
 							]
-						},
-						"description": ""
+						}
 					},
 					"response": []
 				}
@@ -378,14 +421,13 @@
 					"formdata": [
 						{
 							"key": "username",
-							"value": "neque66",
+							"value": "resse",
 							"description": "用户名或者手机号",
 							"type": "text"
 						},
 						{
 							"key": "password",
 							"value": "secret",
-							"description": "",
 							"type": "text"
 						}
 					]
@@ -401,8 +443,7 @@
 						"v1",
 						"authorizations"
 					]
-				},
-				"description": ""
+				}
 			},
 			"response": []
 		},
@@ -421,7 +462,10 @@
 				},
 				"method": "PUT",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://{{host}}/api/v1/authorizations/current",
 					"protocol": "http",
@@ -454,7 +498,10 @@
 				},
 				"method": "DELETE",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://{{host}}/api/v1/authorizations/current",
 					"protocol": "http",
@@ -487,7 +534,10 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://{{host}}/api/v1/userpermissions/",
 					"protocol": "http",
@@ -500,8 +550,7 @@
 						"userpermissions",
 						""
 					]
-				},
-				"description": ""
+				}
 			},
 			"response": []
 		},
@@ -520,7 +569,10 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://{{host}}/api/v1/permissions",
 					"protocol": "http",
@@ -532,8 +584,7 @@
 						"v1",
 						"permissions"
 					]
-				},
-				"description": ""
+				}
 			},
 			"response": []
 		},
@@ -552,7 +603,10 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://{{host}}/api/v1/role/1/permissions",
 					"protocol": "http",
@@ -566,8 +620,7 @@
 						"1",
 						"permissions"
 					]
-				},
-				"description": ""
+				}
 			},
 			"response": []
 		},
@@ -586,9 +639,12 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
-					"raw": "http://{{host}}/api/v1/usersloginlog?include=users",
+					"raw": "http://{{host}}/api/v1/usersloginlog?include=users&pageSize=1&reuse_param=ssss",
 					"protocol": "http",
 					"host": [
 						"{{host}}"
@@ -601,12 +657,18 @@
 					"query": [
 						{
 							"key": "include",
-							"value": "users",
-							"equals": true
+							"value": "users"
+						},
+						{
+							"key": "pageSize",
+							"value": "1"
+						},
+						{
+							"key": "reuse_param",
+							"value": "ssss"
 						}
 					]
-				},
-				"description": ""
+				}
 			},
 			"response": []
 		},
@@ -625,7 +687,10 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://{{host}}/api/v1/breakdown?include=project&project_id=33&device_id=000000001d82",
 					"protocol": "http",
@@ -640,22 +705,18 @@
 					"query": [
 						{
 							"key": "include",
-							"value": "project",
-							"equals": true
+							"value": "project"
 						},
 						{
 							"key": "project_id",
-							"value": "33",
-							"equals": true
+							"value": "33"
 						},
 						{
 							"key": "device_id",
-							"value": "000000001d82",
-							"equals": true
+							"value": "000000001d82"
 						}
 					]
-				},
-				"description": ""
+				}
 			},
 			"response": []
 		},
@@ -674,7 +735,10 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://{{host}}/api/v1/message",
 					"protocol": "http",
@@ -686,8 +750,7 @@
 						"v1",
 						"message"
 					]
-				},
-				"description": ""
+				}
 			},
 			"response": []
 		},
@@ -706,7 +769,10 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://{{host}}/api/v1/positiondatas?monitorId=1&startTime=2020-08-03 18:51:00&endTime=2020-08-06 19:10:00",
 					"protocol": "http",
@@ -721,22 +787,18 @@
 					"query": [
 						{
 							"key": "monitorId",
-							"value": "1",
-							"equals": true
+							"value": "1"
 						},
 						{
 							"key": "startTime",
-							"value": "2020-08-03 18:51:00",
-							"equals": true
+							"value": "2020-08-03 18:51:00"
 						},
 						{
 							"key": "endTime",
-							"value": "2020-08-06 19:10:00",
-							"equals": true
+							"value": "2020-08-06 19:10:00"
 						}
 					]
-				},
-				"description": ""
+				}
 			},
 			"response": []
 		},
@@ -755,7 +817,10 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://{{host}}/api/v1/positiondatas/export?monitorId=1&startTime=2020-08-03 18:51:00&endTime=2020-08-06 19:10:00",
 					"protocol": "http",
@@ -771,22 +836,18 @@
 					"query": [
 						{
 							"key": "monitorId",
-							"value": "1",
-							"equals": true
+							"value": "1"
 						},
 						{
 							"key": "startTime",
-							"value": "2020-08-03 18:51:00",
-							"equals": true
+							"value": "2020-08-03 18:51:00"
 						},
 						{
 							"key": "endTime",
-							"value": "2020-08-06 19:10:00",
-							"equals": true
+							"value": "2020-08-06 19:10:00"
 						}
 					]
-				},
-				"description": ""
+				}
 			},
 			"response": []
 		},
@@ -805,7 +866,10 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://{{host}}/api/v1/user/",
 					"protocol": "http",
@@ -817,6 +881,558 @@
 						"v1",
 						"user",
 						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "数据字典列表",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_user1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{host}}/api/v1/dictories",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"dictories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "修改数据字典",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_user1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "value",
+							"value": "[{\"id\":1,\"name\":\"\\u6240\\u5c5e\\u578b\\u53f71\"},{\"id\":2,\"name\":\"\\u6240\\u5c5e\\u578b\\u53f72\"},{\"id\":3,\"name\":\"\\u6240\\u5c5e\\u578b\\u53f73\"}]",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{host}}/api/v1/dictories/:id",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"dictories",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "标准阈值列表",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_user1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{host}}/api/v1/thresholds?name=仲涛",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"thresholds"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "仲涛",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "新增标准阈值",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_user1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "test11",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{host}}/api/v1/thresholds",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"thresholds"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "编辑标准阈值",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_user1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "status",
+							"value": "1",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "thresholdinfo",
+							"value": "1111",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{host}}/api/v1/thresholds/:id",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"thresholds",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "12"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "项目列表",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_user1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{host}}/api/v1/projects?pageSize=20&page=1&include=customs,thresholds",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"projects"
+					],
+					"query": [
+						{
+							"key": "pageSize",
+							"value": "20",
+							"equals": true,
+							"description": "每页条数"
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"equals": true,
+							"description": "页数"
+						},
+						{
+							"key": "status",
+							"value": "6",
+							"description": "状态 1未开始 2施工中 3交付中 4维护中 5暂停 已结束",
+							"disabled": true
+						},
+						{
+							"key": "name",
+							"value": "项目",
+							"disabled": true
+						},
+						{
+							"key": "include",
+							"value": "customs,thresholds",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "新增项目阈值",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_user1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "thresholdinfo",
+							"value": "111",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "stage_id",
+							"value": "1",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{host}}/api/v1/projects/:id/thresholds",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"projects",
+						":id",
+						"thresholds"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "7"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "修改项目预警阀值",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_user1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "thresholdinfo",
+							"value": "111111",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{host}}/api/v1/projects/7/thresholds/1",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"projects",
+						"7",
+						"thresholds",
+						"1"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "设置项目预警",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_user1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "remind_time",
+							"value": "1",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "percentage",
+							"value": "2",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "notice_start_time",
+							"value": "900",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "notice_end_time",
+							"value": "1500",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "notice_phone",
+							"value": "1778050690,111111",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{host}}/api/v1/projects/:id/waringsetting",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"projects",
+						":id",
+						"waringsetting"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "8"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "修改项目预警",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_user1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "notice_phone",
+							"value": "111111111111",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{host}}/api/v1/projects/7/waringsetting/1",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"projects",
+						"7",
+						"waringsetting",
+						"1"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "预警警报列表",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_user1}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{host}}/api/v1/warnigs",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"warnigs"
 					]
 				},
 				"description": ""

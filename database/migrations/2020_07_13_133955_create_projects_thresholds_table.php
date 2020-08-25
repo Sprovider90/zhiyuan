@@ -21,6 +21,7 @@ class CreateProjectsThresholdsTable extends Migration
                 "formaldehyde":"0.04~0.06",
             "TVOC":"0.04~0.06"
             }');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

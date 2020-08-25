@@ -20,6 +20,7 @@
         "tymon/jwt-auth": "1.0.0-rc.5"
     },
     "require-dev": {
+        "evan766/laravel-debugbar": "^3.3",
         "facade/ignition": "^1.4",
         "fzaninotto/faker": "^1.9.1",
         "mockery/mockery": "^1.0",
@@ -40,6 +41,9 @@
         "psr-4": {
             "App\\": "app/"
         },
+        "files":[
+            "app/Helper/functions.php"
+        ],
         "classmap": [
             "database/seeds",
             "database/factories"

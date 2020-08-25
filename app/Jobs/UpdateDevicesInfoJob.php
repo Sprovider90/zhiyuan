@@ -34,17 +34,26 @@ class UpdateDevicesInfoJob implements ShouldQueue
 
         $where="";
         if(isset($this->credentials)&&!empty($this->credentials["device_id"])){
-            $where=" where device_id=".$this->credentials["device_id"];
+            $where=" and b.id=".$this->credentials["device_id"];
         }
-        $sql="SELECT project_id as projectId,id as monitorId,device_id as deviceId,status FROM `projects_positions` ".$where;
+        $sql="SELECT
+            CONCAT(a.project_id,'') AS projectId,
+            CONCAT(a.id,'') AS monitorId,
+            b.device_number AS deviceId,
+            a.STATUS as status
+        FROM
+            `projects_positions` a
+            LEFT JOIN devices b ON a.device_id = b.id
+        WHERE
+            b.device_number IS NOT NULL ".$where;
 
         $rs=DB::select($sql);
 
         if(!empty($rs)){
             foreach ($rs as $k=>$v) {
-                Redis::hset("zhiyuanv2:air:devices:tags",$v->deviceId,json_encode($v));
+                Redis::hset("air:devices:tags",$v->deviceId,json_encode($v));
                 $stat=$v->status==2?0:1;
-                Redis::hset("zhiyuanv2:iot:auth:client",$v->deviceId,$stat);
+                Redis::hset("iot:auth:client",$v->deviceId,$stat);
             }
         }
     }

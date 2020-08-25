@@ -16,7 +16,8 @@ class PositiondatasController extends Controller
     public function index(PositiondatasRequest $request)
     {
         $params=[];
-        $params["currPage"]=$request->currPage?$request->currPage:1;
+
+        $params["page"]=$request->page?$request->page:1;
         $params["pageSize"]=$request->pageSize?$request->pageSize:3;
         $params["startTime"]=$request->startTime;
         $params["endTime"]=$request->endTime;

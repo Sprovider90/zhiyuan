@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ThresholdsResources extends JsonResource
+class WarnigsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,6 +14,9 @@ class ThresholdsResources extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $data=parent::toArray($request);
+//        /$data['project'] = ProjectsResources::make($this->whenLoaded('project'));
+
+        return $data;
     }
 }
