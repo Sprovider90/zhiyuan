@@ -13,20 +13,34 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class MessageController extends Controller
 {
+    public function noread(Request $request,Message $message)
+    {
+
+        //$this->authorize('list',$message);
+
+        $messages =$message->where('user_id',$request->user()->id)->where("is_read",0)->count();
+
+        return response()->json([
+            'noread'       => $messages,
+        ]);
+
+    }
+
 	public function index(Request $request,Message $message)
     {
 
-        $this->authorize('list',$message);
+        //$this->authorize('list',$message);
 
-    	$query = Message::class;
+    	$query =$message->where('user_id',$request->user()->id);
+        $query->where('user_id',$request->user()->id)->update(['is_read' => 1]);
         if(isset($request->type)&&!empty($request->type)){
-        	$query =$message->where('type',$request['type']);
+        	$query =$query->where('type',$request['type']);
         }
 
         $messages = QueryBuilder::for($query)
             ->paginate();
         return MessageResource::collection($messages);
     }
-    
+
 
 }
