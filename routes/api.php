@@ -190,6 +190,9 @@ Route::prefix('v1')
                     //消息列表
                     Route::get('message','MessageController@index')
                         ->name('message.index');
+                    //消息删除
+                    Route::delete('message/{message}','MessageController@destroy')
+                        ->name('message.destroy');
                     //消息未读总条数
                     Route::get('message/noreadcount','MessageController@noread')
                         ->name('message.noreadcount');

@@ -41,6 +41,10 @@ class MessageController extends Controller
             ->paginate();
         return MessageResource::collection($messages);
     }
-
+    public function destroy(Message $message)
+    {
+        $message->delete();
+        return response(null, 204);
+    }
 
 }
