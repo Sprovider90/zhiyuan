@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\DeviceRequest;
 use App\Http\Resources\DeviceResource;
 use App\Http\Resources\StorehousesResource;
+use App\Imports\DeviceImport;
 use App\Models\Device;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DeviceController extends Controller
 {
@@ -64,4 +67,48 @@ class DeviceController extends Controller
         return response(new DeviceResource($device),201);
     }
 
+
+    public function import(Request $request,Excel $excel){
+        $file = $request->file('file');
+        if(!$file){
+            return response()->json(['message' => '请选择要导入的Excel文件'],404);
+        }
+        $data = Excel::toArray(new DeviceImport(), $file);
+        unset($data[0][0]);
+        try{
+            DB::beginTransaction();
+            foreach ($data[0] as $row) {
+                $number_flg = Device::where('device_number',$row[0])->count();
+                if($number_flg){
+                    DB::rollBack();
+                    return response()->json(['message' => '插入失败,设备ID:'.$row[0].'已存在'],403);
+                }
+                $model = new Device();
+                $flg = $model->create(
+                    $data[] = [
+                        'good_id'           => 1,
+                        'device_number'     => $row[0],
+                        'come_date'         => date("Y-m-d",@intval(($row[1] - 25569) * 3600 * 24)),
+                        'model'             => $row[2],
+                        'manufacturer'      => $row[3],
+                        'storehouse_id'     => $row[4],
+                        'customer_id'       => $row[5],
+                        'check_data'        => $row[6],
+                        'status'            => $row[7],
+                    ]
+                );
+                if(!$flg){
+                    DB::rollBack();
+                    return $this->errorResponse(500,'系统错误');
+                }
+            }
+            DB::commit();
+            return response('',201);
+        }catch (\Exception $e){
+            DB::rollBack();
+            return $this->errorResponse(500,$e->getMessage());
+        }
+
+
+    }
 }

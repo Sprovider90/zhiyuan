@@ -137,6 +137,9 @@ Route::prefix('v1')
                     Route::get('finance/{finance}/financeLog', 'FinanceController@financeLog')
                         ->name('finance.financeLog');
 
+                    //设备导入
+                    Route::post('device/import','DeviceController@import')
+                        ->name('device/import');
                     //设备统计
                     Route::get('device/count','DeviceController@count')
                         ->name('device/count');
