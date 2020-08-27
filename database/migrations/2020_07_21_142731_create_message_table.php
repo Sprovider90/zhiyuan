@@ -17,7 +17,9 @@ class CreateMessageTable extends Migration
             $table->bigIncrements('id');
             $table->tinyInteger('type')->default(1)->comment('消息类型 1系统消息 2预警消息');
             $table->string('content')->comment('消息内容');
-            $table->text('rev_users')->comment('接收的账号id');
+            $table->text('rev_users')->comment('接收的账号ids');
+            $table->integer('user_id')->comment('接收的账号id');
+            $table->tinyInteger('is_read')->default(0)->comment('0未读1已读');
             $table->timestampTz('send_time',0)->nullable()->comment('消息触发的时候时间');
             $table->timestamps();
         });
