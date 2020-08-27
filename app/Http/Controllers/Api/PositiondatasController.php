@@ -18,7 +18,8 @@ class PositiondatasController extends Controller
         $params=[];
 
         $params["page"]=$request->page?$request->page:1;
-        $params["pageSize"]=$request->pageSize?$request->pageSize:3;
+        $params["pageSize"]=$request->pageSize?$request->pageSize:100;
+        $params["type"]=$request->type?$request->type:1;
         $params["startTime"]=$request->startTime;
         $params["endTime"]=$request->endTime;
         $params["monitorId"]=$request->monitorId;
@@ -29,8 +30,9 @@ class PositiondatasController extends Controller
     public function export(PositiondatasRequest $request)
     {
         $params=[];
-        $params["currPage"]=$request->currPage?$request->currPage:1;
-        $params["pageSize"]=$request->pageSize?$request->pageSize:10000;
+        $params["page"]=$request->page?$request->page:1;
+        $params["pageSize"]=$request->pageSize?$request->pageSize:100;
+        $params["type"]=$request->type?$request->type:1;
         $params["startTime"]=$request->startTime;
         $params["endTime"]=$request->endTime;
         $params["monitorId"]=$request->monitorId;

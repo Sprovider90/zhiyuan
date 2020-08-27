@@ -52,7 +52,7 @@ class UpdateDevicesInfoJob implements ShouldQueue
         if(!empty($rs)){
             foreach ($rs as $k=>$v) {
                 Redis::hset("air:devices:tags",$v->deviceId,json_encode($v));
-                $stat=$v->status==2?0:1;
+                $stat=$v->status==2?"0":"1";
                 Redis::hset("iot:auth:client",$v->deviceId,$stat);
             }
         }
