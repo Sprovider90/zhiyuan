@@ -1,0 +1,81 @@
+<?php
+/**
+ * 快照change程序
+ * Enter description here ...
+ * @author Administrator
+ *
+ */
+class kzchangeControl {
+
+    public function workOp()
+    {
+
+        $doeds = array();
+        $dirpath = "/data/hqdata/kzchange/sh/";
+        $dirpath .= date('Ymd');
+
+        while (true) {
+
+            if (!is_dir($dirpath)) {
+                echo "当前目录下，目录 " . $dirpath . " 不存在 线程休眠100毫秒";exit;
+
+                usleep(1000 * 100);
+                continue;
+
+            }
+
+            $allfiles = scandir($dirpath);
+
+            $files = array_diff($allfiles, $doeds);//差集
+            $doeds = $allfiles;
+            $catchUpStop=Model('upstop');
+
+            foreach ($files as $file) {
+                $filepath = $dirpath . '/' . $file;
+                if (is_file($filepath) && strpos($file, '_arr') !== false) {
+                    if (substr($file, 10, -10) < "0930") {
+                        echo $dirpath."time not in!";
+                        echo "\n";
+                        continue;
+                    }
+                    if (substr($file, 10, -10) > "1500") {
+                        echo $dirpath."_deal over!";
+                        echo "\n";
+                        return;
+                    }
+                    $start_time = microtime(true);
+
+
+                    $stock_arr=unserialize(file_get_contents($filepath);
+                    $catchUpStop->catch($stock_arr);
+
+                    // $HqkzChangeData = HqkzChangeData::get($filepath);
+
+                    // $HqkzChangeData = array_chunk($HqkzChangeData, 200);
+
+                    // if (empty($HqkzChangeData)) {
+                    //     echo $filepath . "--no HqkzChangeData";
+                    //     echo "\n";
+                    //     continue;
+                    // }
+                    // foreach ($HqkzChangeData as $key => $stockinfo) {
+                    //     # code...
+                    //     PhpAmqpLibFactory::say($queue_key, ['filepath' => $filepath, 'stockinfo' => $stockinfo]);
+                    //    // CliHelper::cliEcho( $filepath . "_".$key);
+
+                    // }
+                    $endTime = microtime(true);
+                    $runTime = round($endTime - $start_time,6) * 1000;
+                    echo "runtime-".$runTime;
+                    echo "\n";
+                }
+
+            }
+            echo "no new file come";
+            echo "\n";
+            usleep(1000 * 100);
+        }
+    }
+
+
+}
