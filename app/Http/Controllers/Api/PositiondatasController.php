@@ -18,7 +18,7 @@ class PositiondatasController extends Controller
         $params=[];
 
         $params["page"]=$request->page?$request->page:1;
-        $params["pageSize"]=$request->pageSize?$request->pageSize:100;
+        $params["pageSize"]=$request->pageSize;
         $params["type"]=$request->type?$request->type:1;
         $params["startTime"]=$request->startTime;
         $params["endTime"]=$request->endTime;
@@ -31,7 +31,7 @@ class PositiondatasController extends Controller
     {
         $params=[];
         $params["page"]=$request->page?$request->page:1;
-        $params["pageSize"]=$request->pageSize?$request->pageSize:100;
+        $params["pageSize"]=$request->pageSize;
         $params["type"]=$request->type?$request->type:1;
         $params["startTime"]=$request->startTime;
         $params["endTime"]=$request->endTime;
