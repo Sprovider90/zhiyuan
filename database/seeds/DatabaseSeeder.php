@@ -24,11 +24,13 @@ class DatabaseSeeder extends Seeder
         //生成订单发货设备信息
         //$this->call(OrdersDevicesTableSeeder::class);
         //生成仓库
-        //$this->call(StorehousesTableSeeder::class);
+        $this->call(StorehousesTableSeeder::class);
         $this->call(ProjectsWaringSettingTableSeeder::class);
         $this->call(ProjectsPositionsTableSeeder::class);
         $this->call(FileTableSeeder::class);
         $this->call(LocationTableSeeder::class);
+
+        $this->call(DevicesTableSeeder::class);
 
     }
 }

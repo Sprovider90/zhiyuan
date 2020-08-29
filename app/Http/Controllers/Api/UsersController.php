@@ -67,6 +67,7 @@ class UsersController extends Controller
     }
     public function update(UserRequest $request,User $user)
     {
+        $this->authorize('update', $user);
        	\DB::beginTransaction();
        	try{
 	        $attributes = $request->only(['truename', 'password','status','img']);
