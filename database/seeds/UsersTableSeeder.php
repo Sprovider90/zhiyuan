@@ -41,6 +41,7 @@ class UsersTableSeeder extends Seeder
          $user = User::find(1);
          $user->name = 'zhansan';
          $user->phone = '17780510690';
+         $user->customer_id =0;
          $user->save();
 //
 //         $user->assignRole('至源管理员');
