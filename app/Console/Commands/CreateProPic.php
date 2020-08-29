@@ -48,7 +48,7 @@ class CreateProPic extends Command
             }
         }
 
-        file_put_contents($dic."/".$filename,json_encode($this->getKzData(),true));
+        file_put_contents($dic."/".$filename.".txt",json_encode($this->getKzData(),true));
 
         $this->info("ok");
     }
