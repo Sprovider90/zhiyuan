@@ -138,9 +138,9 @@ class OrdersController extends Controller
             $order->devices()->delete();
             $data = json_decode($request->data,true);
             $order->devices()->createMany(json_decode($request->data,true));
-            //修改设备表中状态为 已出库
+            //修改设备表中状态为 已出库 同时绑定客户关系 8-31沟通
             foreach ($data as $k => $v){
-                Device::where('device_number',$v['number'])->update(['store_status' => 2]);
+                Device::where('device_number',$v['number'])->update(['store_status' => 2,'customer_id' => $order->cid ]);
             }
         });
         return response(new OrdersResources($order->load('devices')),201);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api;
 
+use App\Models\Position;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PositionsRequest extends FormRequest
@@ -27,10 +28,15 @@ class PositionsRequest extends FormRequest
             'project_id'    => 'required',
             'number'        => 'required',
             'name'          => 'required',
-//            'device_id'     => 'required',
             'area_id'       => 'required',
-//            'left'          =>  'required',
-//            'top'           =>  'required',
+            'device_id'     => ['required',
+                function ($attribute, $value, $fail) {
+                    $flg = Position::where('device_id',$value)->where('status',1)->first();
+                    if($flg){
+                        return $fail('点位已存在,请无重复添加');
+                    }
+                }
+            ]
         ];
     }
 }

@@ -42,9 +42,9 @@ class OrdersDevicesRequest extends FormRequest
                                 break;
                             }
                             if($v1 == 'number'){
-                                $count = Device::where('device_number',$v[$v1])->where('status',1)->whereNotNull('customer_id')->count();
-                                if(!$count){
-                                    return $fail('array['.$k.'] '.$v1.' is error.');
+                                $flg = Device::where('device_number',$v[$v1])->where('status',1)->whereNull('customer_id')->whereNull('deleted_at')->first();
+                                if(!$flg){
+                                    return $fail('array['.$k.'] '.$v1.' 设备不存在');
                                     break;
                                 }
                             }

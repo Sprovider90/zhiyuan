@@ -78,7 +78,7 @@ Route::prefix('v1')
                         ->name('position.status');
                     //点位新增 点位编辑 点位更新 点位删除
                     Route::resource('position', 'PositionsController')->only([
-                        'store', 'update','destroy'
+                        'store', 'update'
                     ]);
                     //获取该区域坐标
                     Route::get('projects/{project}/area/{area}/location', 'LocationController@location')

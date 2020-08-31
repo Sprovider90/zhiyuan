@@ -11,6 +11,7 @@ use App\Http\Resources\ProjectsAreasResource;
 use App\Http\Resources\ProjectsResources;
 use App\Http\Resources\ThresholdsResources;
 use App\Models\Customers;
+use App\Models\Device;
 use App\Models\Files;
 use App\Models\OrdersDevices;
 use App\Models\Projects;
@@ -23,10 +24,10 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class PublicController extends Controller
 {
     //对应项目设备列表
-    public function devices(Request $request,OrdersDevices $ordersDevices){
+    public function devices(Request $request,Device $device){
         $customer_id = $request->get('customer_id','');
-        $customer_id && $ordersDevices = $ordersDevices->where('customer_id',$customer_id);
-        return new OrdersResources($ordersDevices->orderBy('id','desc')->get());
+        $customer_id && $device = $device->where('customer_id',$customer_id)->where('status',1);
+        return new OrdersResources($device->orderBy('id','desc')->get());
     }
 
     //对应项目区域列表
