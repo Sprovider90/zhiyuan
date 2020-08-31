@@ -33,7 +33,7 @@ class PositionsRequest extends FormRequest
                 function ($attribute, $value, $fail) {
                     $flg = Position::where('device_id',$value)->where('status',1)->first();
                     if($flg){
-                        return $fail('点位已存在,请无重复添加');
+                        return $fail('点位已存在');
                     }
                 }
             ]
