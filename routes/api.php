@@ -162,6 +162,15 @@ Route::prefix('v1')
                     ]);
 
 
+                    //预评估导入
+                    Route::post('preinstall/{project}/import','PreinstallController@import')
+                        ->name('preinstall/import');
+                    //预评估管理
+                    Route::resource('preinstall','PreinstallController')->only([
+                        'index' , 'show'
+                    ]);
+
+
                     //公共接口
                     Route::group(['prefix' => 'public'],function () {
                         //文件上传
