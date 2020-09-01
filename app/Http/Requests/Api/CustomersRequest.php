@@ -38,7 +38,7 @@ class CustomersRequest extends FormRequest
                 foreach ($data as $k => $v){
                     foreach ($arr as $k1 => $v1){
                         if(!isset($v[$v1]) || empty($v[$v1])){
-                            return $fail($arr1[$v1].' 不能为空');
+                            return $fail($arr1[$k1].' 不能为空');
                             break;
                         }
                     }
