@@ -34,7 +34,7 @@ class CustomersRequest extends FormRequest
                     return $fail('联系人数据无效');
                 }
                 $arr = ['contact','contact_phone','job'];
-                $arr1 = ['contact' => '联系人','contact_phone' => '联系人电话','job' => '联系人职位'];
+                $arr1 = ['联系人','联系人电话','联系人职位'];
                 foreach ($data as $k => $v){
                     foreach ($arr as $k1 => $v1){
                         if(!isset($v[$v1]) || empty($v[$v1])){
