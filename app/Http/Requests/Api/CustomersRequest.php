@@ -36,9 +36,11 @@ class CustomersRequest extends FormRequest
                 $arr = ['contact','contact_phone','job'];
                 $arr1 = ['联系人','联系电话','职位'];
                 foreach ($data as $k => $v){
+                    $index = 0 ;
                     foreach ($arr as $k1 => $v1){
                         if(!isset($v[$v1]) || empty($v[$v1])){
-                            return $fail($arr1[$k1].' 不能为空');
+                            return $fail($arr1[$index].' 不能为空');
+                            $index++;
                             break;
                         }
                     }
