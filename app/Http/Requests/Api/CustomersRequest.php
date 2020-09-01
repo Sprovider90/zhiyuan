@@ -34,13 +34,11 @@ class CustomersRequest extends FormRequest
                     return $fail('联系人数据无效');
                 }
                 $arr = ['contact','contact_phone','job'];
-                $arr1 = ['联系人','联系电话','职位'];
+                $arr1 = ['contact' => '联系人','contact_phone' => '联系人电话','job' => '联系人职位'];
                 foreach ($data as $k => $v){
-                    $index = 0 ;
                     foreach ($arr as $k1 => $v1){
                         if(!isset($v[$v1]) || empty($v[$v1])){
-                            return $fail($arr1[$index].' 不能为空');
-                            $index++;
+                            return $fail('array['.$k.']中'.$arr1[$k1].'不能为空');
                             break;
                         }
                     }
