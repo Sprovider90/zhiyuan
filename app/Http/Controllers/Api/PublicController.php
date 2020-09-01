@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FilesRequest;
 use App\Http\Resources\CustomersResources;
+use App\Http\Resources\DeviceResource;
 use App\Http\Resources\FilesResource;
 use App\Http\Resources\OrdersResources;
 use App\Http\Resources\ProjectsAreasResource;
@@ -23,11 +24,16 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PublicController extends Controller
 {
+    //获取所有 状态 正常  已停止 没有绑定客户的列表
+    public function getAllNoCustomerDevicesList(Request $request,Device $device){
+        return new DeviceResource($device->whereNull('customer_id')->where('status',1)->orderBy('id','desc')->get());
+    }
+
     //对应项目设备列表
     public function devices(Request $request,Device $device){
         $customer_id = $request->get('customer_id','');
-        $customer_id && $device = $device->where('customer_id',$customer_id)->where('status',1);
-        return new OrdersResources($device->orderBy('id','desc')->get());
+        $customer_id && $device = $device->where('customer_id',$customer_id);
+        return new OrdersResources($device->where('status',1)->orderBy('id','desc')->get());
     }
 
     //对应项目区域列表

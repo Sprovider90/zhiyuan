@@ -189,6 +189,9 @@ Route::prefix('v1')
                         //项目对应设备列表
                         Route::get('devices','PublicController@devices')
                             ->name('public.devices');
+                        //获取所有正常未绑定客户的设备列表
+                        Route::get('getAllNoCustomerDevicesList','PublicController@getAllNoCustomerDevicesList')
+                            ->name('public.getAllNoCustomerDevicesList');
                     });
                     //监测点原始数据
                     Route::get('/positiondatas', 'PositiondatasController@index')
