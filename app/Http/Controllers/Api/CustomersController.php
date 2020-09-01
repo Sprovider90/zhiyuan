@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CustomersRequest;
 use App\Http\Resources\CustomersResources;
+use App\Http\Resources\ProjectsPositionsResource;
 use App\Http\Resources\ProjectsResources;
 use App\Models\Customers;
 use App\Models\CustomersContacts;
@@ -84,9 +85,9 @@ class CustomersController extends Controller
             ->orderBy('id','desc')
             ->paginate($request->pageSize ?? $request->pageSize);
         foreach($projects as $k => $v){
-            $v->position_count = ProjectsPositions::where('project_id',$v->id)->count();
+            $v->position_count = ProjectsPositions::where('project_id',$v->id)->whereNull('deleted_at')->count();
         }
-        return new ProjectsResources($projects);
+        return new ProjectsPositionsResource($projects);
     }
 
     /**
