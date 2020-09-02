@@ -61,7 +61,7 @@ class PositionsController extends Controller
     public function status(Request $request,Position $position,Device $device){
         $position->update(['status' => $request->status]);
         //同时修改设备 已停止状态
-        $device->where('id',$position->device_id)->update(['run_status' => 2]);
+        $device->where('id',$position->device_id)->update(['run_status' =>  $request->status == 1 ? 1 : 2]);
         return response(new PositionsResource($position),201);
     }
 
