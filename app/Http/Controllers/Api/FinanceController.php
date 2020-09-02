@@ -28,7 +28,7 @@ class FinanceController extends Controller
         $order_pay = $orders->whereIn('order_status',[2,3,4])->whereBetween('created_at',$date)->get();
         if($order_pay){
             foreach ($order_pay as $k => $v){
-                if($v->status == 2){
+                if($v->order_status == 2){
                     $receive_money_count += $v->money;
                 }else{
                     $log = FinanceLog::where("order_id",$v->id)->get();
@@ -48,7 +48,7 @@ class FinanceController extends Controller
         if($order_no_pay_money){
             foreach ($order_no_pay_money as $k => $v){
                 $wait_money_count  +=  $v->money;
-                if($v->status == 3){
+                if($v->order_status == 3){
                     $log = FinanceLog::where("order_id",$v->id)->get();
                     foreach ($log as $k1 => $v1){
                         $wait_money_count -= $v1->money;
