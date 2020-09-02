@@ -37,7 +37,7 @@ class OrdersController extends Controller
         $order_money_count = $orders->whereBetween('created_at',$date)->sum('money');
         //已付订单总金额
         $order_pay_money_count = 0;
-        $order_pay = $orders->whereIn('order_status',[2,3])->whereBetween('created_at',$date)->get();
+        $order_pay = $orders->whereIn('order_status',[2,3,4])->whereBetween('created_at',$date)->get();
         if($order_pay){
             foreach ($order_pay as $k => $v){
                 if($v->status == 2){
@@ -45,8 +45,13 @@ class OrdersController extends Controller
                 }else{
                     $log = FinanceLog::where("order_id",$v->id)->get();
                     foreach ($log as $k1 => $v1){
-                        $order_pay_money_count +=  $v1->money;
+                        if($v1->type == 1){
+                            $order_pay_money_count +=  $v1->money;
+                        }else{
+                            $order_pay_money_count -=  $v1->money;
+                        }
                     }
+
                 }
             }
         }
