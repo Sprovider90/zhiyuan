@@ -58,7 +58,7 @@ class FinanceController extends Controller
         }
         //已退款
         $exit_money_count = 0;
-        $exit_money_order = $orders->whereNotIn('order_status',[4])->whereBetween('created_at',$date)->get();
+        $exit_money_order = $orders->whereIn('order_status',[4])->whereBetween('created_at',$date)->get();
         foreach ($exit_money_order as $k => $v){
                 $log = FinanceLog::where("order_id",$v->id)->where('type',2)->get();
                 foreach ($log as $k1 => $v1){
@@ -154,7 +154,6 @@ class FinanceController extends Controller
                     }
                 }
                 $finance->update(['order_status' => $order_status]);
-                $request['type'] = 2;
                 $finance->logs()->create($request->all());
             }else{
                 return $this->errorResponse('400','type 参数错误');
