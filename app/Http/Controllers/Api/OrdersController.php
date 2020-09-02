@@ -8,6 +8,7 @@ use App\Http\Requests\Api\OrdersRequest;
 use App\Http\Resources\CustomersResources;
 use App\Http\Resources\OrdersResources;
 use App\Models\Device;
+use App\Models\Finance;
 use App\Models\FinanceLog;
 use App\Models\Orders;
 use Illuminate\Http\Request;
@@ -27,18 +28,42 @@ class OrdersController extends Controller
         $request->user()->customer_id && $orders = $orders->where('cid',$request->user()->customer_id);
         $date = $this->returnDate($request->type ?? 2);
         //订单总数
-        $order_count = $orders->whereNotIn('order_status',[1,2,3])->whereBetween('created_at',$date)->count();
+        $order_count = $orders->whereBetween('created_at',$date)->count();
         //已付款订单数
         $order_pay_count = $orders->where('order_status',2)->whereBetween('created_at',$date)->count();
         //待付款订单数
-        $order_no_pay_count = $order_count - $order_pay_count;
+        $order_no_pay_count = $orders->whereIn('order_status',[1,3])->whereBetween('created_at',$date)->count();
         //订单总金额
-        $order_money_count = $orders->whereNotIn('order_status',[1,2,3])->whereBetween('created_at',$date)->sum('money');
+        $order_money_count = $orders->whereBetween('created_at',$date)->sum('money');
         //已付订单总金额
-        $order_pay_money_count = $orders->where('order_status',2)->whereBetween('created_at',$date)->sum('money');
+        $order_pay_money_count = 0;
+        $order_pay = $orders->whereIn('order_status',[2,3])->whereBetween('created_at',$date)->get();
+        if($order_pay){
+            foreach ($order_pay as $k => $v){
+                if($v->status == 2){
+                    $order_pay_money_count +=$v->moeny;
+                }else{
+                    $log = Finance::where("order_id",$v->id)->get();
+                    foreach ($log as $k1 => $v1){
+                        $order_money_count+=$v1->money;
+                    }
+                }
+            }
+        }
         //待付订单总金额
-        $order_no_pay_money_count = $order_money_count - $order_pay_money_count;
-
+        $order_no_pay_money_count = 0;
+        $order_no_pay_money = $orders->whereIn('order_status',[1,3])->whereBetween('created_at',$date)->get();;
+        if($order_no_pay_money_count){
+            foreach ($order_no_pay_money as $k => $v){
+                $order_no_pay_money_count +=$v->moeny;
+                if($v->status == 3){
+                    $log = Finance::where("order_id",$v->id)->get();
+                    foreach ($log as $k1 => $v1){
+                        $order_no_pay_money_count -=$v1->money;
+                    }
+                }
+            }
+        }
         return response()->json([
                 'order_count'           => $order_count,
                 'order_pay_count'       => $order_pay_count,

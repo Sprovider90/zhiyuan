@@ -22,7 +22,7 @@ class FinanceController extends Controller
         $date = $this->returnDate($request->type ?? 2);
         $request->user()->customer_id && $orders = $orders->where('cid',$request->user()->customer_id);
         //订单总金额
-        $order_money_count = $orders->whereNotIn('order_status',[1,2,3])->whereBetween('created_at',$date)->sum('money');
+        $order_money_count = $orders->whereBetween('created_at',$date)->sum('money');
         //已收款
         $receive_money_count  = $orders->whereNotIn('order_status',[1])->whereBetween('created_at',$date)->sum('money');
         $ok_order = $orders->whereNotIn('order_status',[2])->whereBetween('created_at',$date)->get();
