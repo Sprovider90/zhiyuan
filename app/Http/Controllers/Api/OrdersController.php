@@ -64,7 +64,6 @@ class OrdersController extends Controller
                 }
             }
         }
-        echo $order_no_pay_money_count;exit;
         return response()->json([
                 'order_count'           => $order_count,
                 'order_pay_count'       => $order_pay_count,
