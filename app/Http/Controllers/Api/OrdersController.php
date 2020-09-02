@@ -43,7 +43,7 @@ class OrdersController extends Controller
                 if($v->status == 2){
                     $order_pay_money_count +=$v->moeny;
                 }else{
-                    $log = Finance::where("order_id",$v->id)->get();
+                    $log = FinanceLog::where("order_id",$v->id)->get();
                     foreach ($log as $k1 => $v1){
                         $order_money_count+=$v1->money;
                     }
@@ -57,7 +57,7 @@ class OrdersController extends Controller
             foreach ($order_no_pay_money as $k => $v){
                 $order_no_pay_money_count +=$v->moeny;
                 if($v->status == 3){
-                    $log = Finance::where("order_id",$v->id)->get();
+                    $log = FinanceLog::where("order_id",$v->id)->get();
                     foreach ($log as $k1 => $v1){
                         $order_no_pay_money_count -=$v1->money;
                     }
