@@ -13,7 +13,7 @@ class Device extends Model
     protected  $table = 'devices';
 
     protected $fillable = [
-        'good_id','device_number', 'come_date','model','manufacturer','storehouse_id','customer_id','check_data','status'
+        'good_id','device_number', 'come_date','model','manufacturer','run_status','store_status','storehouse_id','customer_id','check_data','status'
     ];
 
     /**
