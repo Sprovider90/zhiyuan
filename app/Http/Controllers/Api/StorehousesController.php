@@ -19,7 +19,7 @@ class StorehousesController extends Controller
         }
         $storehouses = $storehouses->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
         foreach ($storehouses as $k => $v){
-            $v->store_count = Device::where("storehouse_id",$v->id)->where('store_status',1)->whereNull('deleted_at')->count();
+            $v->store_count = Device::where("storehouse_id",$v->id)->where('store_status',1)->count();
         }
         return new StorehousesResource($storehouses);
     }
