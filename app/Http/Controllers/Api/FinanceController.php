@@ -116,8 +116,8 @@ class FinanceController extends Controller
                     $order = Orders::find($finance->id);
                     //已收
                     $order_money_count = FinanceLog::where('order_id',$finance->id)->where('type',1)->sum('money');
-                    if($order_money_count != $request->money){
-                        return $this->errorResponse('400','退款金额必须等于收款金额');
+                    if($order_money_count < $request->money){
+                        return $this->errorResponse('400','退款金额必须小于已收款金额');
                     }else{
                         $order_status = 4;
                     }
