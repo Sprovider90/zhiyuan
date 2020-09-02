@@ -30,7 +30,7 @@ class OrdersController extends Controller
         //订单总数
         $order_count = $orders->whereBetween('created_at',$date)->count();
         //已付款订单数
-        $order_pay_count = $orders->whereIn('order_status',[2,3])->whereBetween('created_at',$date)->count();
+        $order_pay_count = $orders->whereIN('order_status',[2,3])->whereBetween('created_at',$date)->count();
         //待付款订单数
         $order_no_pay_count = $orders->where('order_status',1)->whereBetween('created_at',$date)->count();
         //订单总金额
