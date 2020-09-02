@@ -24,16 +24,47 @@ class FinanceController extends Controller
         //订单总金额
         $order_money_count = $orders->whereBetween('created_at',$date)->sum('money');
         //已收款
-        $receive_money_count  = $orders->whereNotIn('order_status',[1])->whereBetween('created_at',$date)->sum('money');
-        $ok_order = $orders->whereNotIn('order_status',[2])->whereBetween('created_at',$date)->get();
-        foreach ($ok_order as $k => $v){
-            $receive_money_count+=FinanceLog::where('order_id',$v->id)->sum('money');
-            $receive_money_count+=FinanceLog::where('order_id',$v->id)->where('type',1)->sum('money');
+        $receive_money_count = 0;
+        $order_pay = $orders->whereIn('order_status',[2,3,4])->whereBetween('created_at',$date)->get();
+        if($order_pay){
+            foreach ($order_pay as $k => $v){
+                if($v->status == 2){
+                    $receive_money_count += $v->money;
+                }else{
+                    $log = FinanceLog::where("order_id",$v->id)->get();
+                    foreach ($log as $k1 => $v1){
+                        if($v1->type == 1){
+                            $receive_money_count+= $v1->money;
+                        }else{
+                            $receive_money_count-= $v1->money;
+                        }
+                    }
+                }
+            }
         }
         //待收款
-        $wait_money_count = $order_money_count - $receive_money_count;
+        $wait_money_count = 0;
+        $order_no_pay_money = $orders->whereIn('order_status',[1,3])->whereBetween('created_at',$date)->get();
+        if($order_no_pay_money){
+            foreach ($order_no_pay_money as $k => $v){
+                $wait_money_count  +=  $v->money;
+                if($v->status == 3){
+                    $log = FinanceLog::where("order_id",$v->id)->get();
+                    foreach ($log as $k1 => $v1){
+                        $wait_money_count -= $v1->money;
+                    }
+                }
+            }
+        }
         //已退款
-        $exit_money_count = $orders->whereNotIn('order_status',[4])->whereBetween('created_at',$date)->sum('money');
+        $exit_money_count = 0;
+        $exit_money_order = $orders->whereNotIn('order_status',[4])->whereBetween('created_at',$date)->get();
+        foreach ($exit_money_order as $k => $v){
+                $log = FinanceLog::where("order_id",$v->id)->where('type',2)->get();
+                foreach ($log as $k1 => $v1){
+                    $exit_money_count += $v1->money;
+                }
+        }
         return response()->json([
             'order_money_count'     => $order_money_count,
             'receive_money_count'   => $receive_money_count,
