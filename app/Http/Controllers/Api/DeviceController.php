@@ -48,14 +48,16 @@ class DeviceController extends Controller
     }
 
     public function store(DeviceRequest $request,Device $device){
-        $request['store_status'] = $request->customer_id ? 2 : 1 ;
-        $device = $device->create($request->all());
+        $data = $request->all();
+        $data['store_status'] = $request->customer_id ? 2 : 1 ;
+        $device = $device->create($data);
         return response(new DeviceResource($device),201);
     }
 
     public function update(Device $device,DeviceRequest $request){
-        $request['store_status'] = $request->customer_id ? 2 : 1 ;
-        $device->update($request->all());
+        $data = $request->all();
+        $data['store_status'] = $request->customer_id ? 2 : 1 ;
+        $device->update($data);
         return response(new DeviceResource($device),201);
     }
 
