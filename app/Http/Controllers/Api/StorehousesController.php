@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StorehousesRequest;
 use App\Http\Resources\StorehousesResource;
+use App\Models\Device;
 use App\Models\Storehouses;
 use Illuminate\Http\Request;
 
@@ -16,7 +17,11 @@ class StorehousesController extends Controller
         if($request->name){
             $storehouses = $storehouses->where('name', 'like', '%' . $request->name. '%');
         }
-        return new StorehousesResource($storehouses->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize));
+        $storehouses = $storehouses->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
+        foreach ($storehouses as $k => $v){
+            $v->store_count = Device::where("storehouse_id",$v->id)->where('store_status',1)->whereNull('deleted_at')->count();
+        }
+        return new StorehousesResource($storehouses);
     }
 
     // 仓库新增
