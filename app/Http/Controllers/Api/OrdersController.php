@@ -45,7 +45,7 @@ class OrdersController extends Controller
                 }else{
                     $log = FinanceLog::where("order_id",$v->id)->get();
                     foreach ($log as $k1 => $v1){
-                        $order_money_count+=$v1->money;
+                        $order_pay_money_count+=$v1->money;
                     }
                 }
             }
