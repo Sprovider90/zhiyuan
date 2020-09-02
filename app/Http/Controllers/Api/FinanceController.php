@@ -154,6 +154,7 @@ class FinanceController extends Controller
                     }
                 }
                 $finance->update(['order_status' => $order_status]);
+                $request['type'] = 2;
                 $finance->logs()->create($request->all());
             }else{
                 return $this->errorResponse('400','type 参数错误');
