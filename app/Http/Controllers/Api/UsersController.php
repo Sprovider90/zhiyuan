@@ -16,9 +16,11 @@ use Spatie\QueryBuilder\AllowedFilter;
 
 class UsersController extends Controller
 {
-    public function me(Request $request)
+    public function me(Request $request,User $user)
     {
-        return (new UserResource($request->user()->with(["img"])->first()));
+
+        $user=$user->where("id",$request->user()->id)->with(["img","customer","customer.logos"])->first();
+        return (new UserResource($user));
     }
 
 	public function index(UserRequest $request,User $user)
