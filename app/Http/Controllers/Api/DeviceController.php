@@ -40,9 +40,9 @@ class DeviceController extends Controller
         $device = $device->with(['storehouse','customer']);
         //增加客户登录
         $request->user()->customer_id && $device = $device->where('customer_id',$request->user()->customer_id);
-        $request->device_number &&   $device->where('device_number','like',"%{$request->device_number}%");
-        $request->run_count &&   $device->where('status',$request->run_count);
-        $request->store_status && $device->where('store_status',$request->store_status);
+        $request->device_number &&   $device = $device->where('device_number','like',"%{$request->device_number}%");
+        $request->run_status &&   $device = $device->where('run_status',$request->run_status);
+        $request->store_status && $device = $device->where('store_status',$request->store_status);
         $device = $device->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
         return response(new DeviceResource($device));
     }
