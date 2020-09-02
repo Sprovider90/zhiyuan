@@ -60,11 +60,17 @@ class OrdersController extends Controller
         $order_no_pay_money = $orders->whereIn('order_status',[1,3])->whereBetween('created_at',$date)->get();
         if($order_no_pay_money){
             foreach ($order_no_pay_money as $k => $v){
-                $order_no_pay_money_count  +=  $v->money;
-                if($v->status == 3){
+                if($v->status == 1){
+                    $order_no_pay_money_count  +=  $v->money;
+                }else if($v->status == 3){
+                    $order_no_pay_money_count  +=  $v->money;
                     $log = FinanceLog::where("order_id",$v->id)->get();
                     foreach ($log as $k1 => $v1){
-                        $order_no_pay_money_count -= $v1->money;
+                        if($v1->type == 1){
+                            $order_no_pay_money_count -= $v1->money;
+                        }else{
+                            $order_no_pay_money_count += $v1->money;
+                        }
                     }
                 }
             }
