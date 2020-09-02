@@ -57,7 +57,7 @@ class OrdersController extends Controller
         }
         //待付订单总金额
         $order_no_pay_money_count = 0;
-        $order_no_pay_money = $orders->whereIn('order_status',[1,3])->whereBetween('created_at',$date)->get();
+        $order_no_pay_money = $orders->whereIN('order_status',[1,3])->whereBetween('created_at',$date)->get();
         if($order_no_pay_money){
             foreach ($order_no_pay_money as $k => $v){
                 $order_no_pay_money_count  +=  $v->money;
