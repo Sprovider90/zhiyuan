@@ -66,10 +66,10 @@ class FinanceController extends Controller
                 }
         }
         return response()->json([
-            'order_money_count'     => sprintf("%.2f",$order_money_count),
-            'receive_money_count'   => sprintf("%.2f",$receive_money_count),
-            'wait_money_count'      => sprintf("%.2f",$wait_money_count),
-            'exit_money_count'      => sprintf("%.2f",$exit_money_count),
+            'order_money_count'     => $order_money_count,
+            'receive_money_count'   => $receive_money_count,
+            'wait_money_count'      => $wait_money_count,
+            'exit_money_count'      => $exit_money_count,
         ]);
     }
 

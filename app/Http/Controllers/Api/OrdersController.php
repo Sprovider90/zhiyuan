@@ -70,9 +70,9 @@ class OrdersController extends Controller
             }
         }
         return response()->json([
-                'order_count'           => sprintf("%.2f",$order_count),
-                'order_pay_count'       => sprintf("%.2f",$order_pay_count),
-                'order_no_pay_count'    => sprintf("%.2f",$order_no_pay_count),
+                'order_count'           => $order_count,
+                'order_pay_count'       => $order_pay_count,
+                'order_no_pay_count'    => $order_no_pay_count,
                 'order_money_count'         => sprintf("%.2f",$order_money_count),
                 'order_pay_money_count'     => sprintf("%.2f",$order_pay_money_count),
                 'order_no_pay_money_count'  => sprintf("%.2f",$order_no_pay_money_count),
