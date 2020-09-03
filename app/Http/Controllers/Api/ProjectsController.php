@@ -37,7 +37,7 @@ class ProjectsController extends Controller
         //未开始 0未开始
         $not_started_count   = $projects->whereBetween('created_at',$date)->where('status',0)->count();
         //项目总数量
-        $all_count  = $projects->whereBetween('created_at',$date)->whereIn('status',[0,1,2,4,5,6])->count();
+        $all_count  = $projects->whereBetween('created_at',$date)->count();
         return response()->json([
             'not_started_count'     => $not_started_count,
             'over_count'            => $over_count,
