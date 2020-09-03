@@ -39,7 +39,7 @@ class PositionsController extends Controller
         //校验区域是否改变
         if($position->area_id  != $request->area_id){
              //查询坐标
-            $location = Location::where('position_id',$request->$position->id)->first();
+            $location = Location::where('position_id',$position->id)->first();
             if($location){
                 if($location->left == $request->left && $location->top == $request->top){
                     throw new HttpException(403, '请修改点位坐标');
