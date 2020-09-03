@@ -30,8 +30,8 @@ class PositionsRequest extends FormRequest
             'number'        => 'required',
             'name'          => 'required',
             'area_id'       => 'required',
-            'left'          => 'required',
-            'top'           => 'top',
+            //'left'          => 'required',
+            //'top'           => 'top',
             'device_id'     => ['required',
                 function ($attribute, $value, $fail) use($id) {
                     $flg = Position::where('id','<>',$id)->where('device_id',$value)->where('status',1)->first();

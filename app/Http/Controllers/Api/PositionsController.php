@@ -36,14 +36,16 @@ class PositionsController extends Controller
      */
     public function update(PositionsRequest $request,Position $position,Device $device)
     {
+
         //校验区域是否改变
         if($position->area_id  != $request->area_id){
+            if(!isset($location->left) && !isset($request->top)){
+                throw new HttpException(403, '请修改点位坐标');
+            }
              //查询坐标
             $location = Location::where('position_id',$position->id)->first();
             if($location){
                 if($location->left == $request->left && $location->top == $request->top){
-                    throw new HttpException(403, '请修改点位坐标');
-                }elseif(!isset($location->left) && !isset($request->top)){
                     throw new HttpException(403, '请修改点位坐标');
                 }
             }
