@@ -31,7 +31,7 @@ class PositionsRequest extends FormRequest
             'area_id'       => 'required',
             'device_id'     => ['required',
                 function ($attribute, $value, $fail) {
-                    $flg = Position::where('device_id',$value)->where('status',1)->where('run_status',1)->first();
+                    $flg = Position::where('device_id',$value)->where('status',1)->first();
                     if($flg){
                         return $fail('点位已存在');
                     }
