@@ -18,7 +18,7 @@ class CreateOrdersDevicesTable extends Migration
             $table->integer('order_id')->comment('订单ID');
             $table->integer('customer_id')->comment('客户ID');
             $table->integer('good_id')->default(1)->comment('产品id 默认1');
-            $table->string('number')->comment('设备编号');
+            $table->integer('device_id')->comment('设备表ID');
             $table->softDeletes();
             $table->timestamps();
         });
