@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 //use App\Console\Commands\UpdateProStage;
+use App\Http\Resources\PorjectsAreasResource;
 use App\Jobs\UpdateProStage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ProjectsRequest;
@@ -184,7 +185,7 @@ class ProjectsController extends Controller
     public function area($project,ProjectsPositions $positions,Request $request){
         $positions = $positions->with(['area','area.file']);
         $positions = $positions->where('project_id',$project);
-        return new ProjectsResources($positions->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize));
+        return new PorjectsAreasResource($positions->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize));
     }
 
 }
