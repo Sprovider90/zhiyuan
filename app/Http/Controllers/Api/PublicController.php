@@ -10,7 +10,7 @@ use App\Http\Resources\FilesResource;
 use App\Http\Resources\OrdersResources;
 use App\Http\Resources\ProjectsAreasResource;
 use App\Http\Resources\ProjectsResources;
-use App\Http\Resources\ThresholdsResources;
+use App\Http\Resources\ThresholdsResource;
 use App\Models\Customers;
 use App\Models\Device;
 use App\Models\Files;
@@ -45,7 +45,7 @@ class PublicController extends Controller
 
     //监测标准列表
     public function thresholds(Thresholds $thresholds){
-        return new ThresholdsResources($thresholds->where('status',1)->orderBy('id','desc')->get(['id','name','status','thresholdinfo']));
+        return new ThresholdsResource($thresholds->where('status',1)->orderBy('id','desc')->get(['id','name','status','thresholdinfo']));
     }
 
     //客户列表
