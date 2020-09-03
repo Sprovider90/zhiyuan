@@ -24,20 +24,21 @@ class OrdersController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function count(Request $request,Orders $orders){
-        $request->user()->customer_id && $orders = $orders->where('cid',$request->user()->customer_id);
+    public function count(Request $request){
         $date = $this->returnDate($request->type ?? 2);
-        //订单总数
-        $order_count = $orders->whereBetween('created_at',$date)->count();
+        $where = [];
+        $request->user()->customer_id && $where[] = ['cid',$request->user()->customer_id];
         //已付款订单数
-        $order_pay_count = $orders->whereIN('order_status',[2,3])->whereBetween('created_at',$date)->count();
+        $order_pay_count = Orders::where($where)->whereBetween('created_at',$date)->where('order_status',2)->count();
         //待付款订单数
-        $order_no_pay_count = $orders->where('order_status',1)->whereBetween('created_at',$date)->count();
+        $order_no_pay_count = Orders::where($where)->whereBetween('created_at',$date)->where('order_status',1)->count();
         //订单总金额
-        $order_money_count = $orders->whereBetween('created_at',$date)->sum('money');
+        $order_money_count = Orders::where($where)->whereBetween('created_at',$date)->sum('money');
+        //订单总数
+        $order_count = Orders::where($where)->whereBetween('created_at',$date)->count();
         //已付订单总金额
         $order_pay_money_count = 0;
-        $order_pay = $orders->whereIN('order_status',[2,3,4])->whereBetween('created_at',$date)->get();
+        $order_pay = Orders::where($where)->whereBetween('created_at',$date)->whereIn('order_status',[2,3,4])->get();
         if($order_pay){
             foreach ($order_pay as $k => $v){
                 if($v->order_status == 2){
@@ -57,7 +58,7 @@ class OrdersController extends Controller
         }
         //待付订单总金额
         $order_no_pay_money_count = 0;
-        $order_no_pay_money = $orders->whereIN('order_status',[1,3])->whereBetween('created_at',$date)->get();
+        $order_no_pay_money = Orders::where($where)->whereBetween('created_at',$date)->whereIN('order_status',[1,3])->whereBetween('created_at',$date)->get();
         if($order_no_pay_money){
             foreach ($order_no_pay_money as $k => $v){
                 $order_no_pay_money_count  +=  $v->money;
