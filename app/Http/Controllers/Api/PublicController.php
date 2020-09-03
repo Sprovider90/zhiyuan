@@ -37,7 +37,7 @@ class PublicController extends Controller
     //对应项目区域列表
     public function areas(Request $request,ProjectsAreas $projectsAreas){
         $project_id = $request->get('project_id','');
-        $project_id && $projectsAreas = $projectsAreas->where('project_id',$project_id);
+        $project_id && $projectsAreas = $projectsAreas->where('project_id',$project_id)->where('file','>',0);
         return new ProjectsAreasResource($projectsAreas->orderBy('id','desc')->get());
     }
 
