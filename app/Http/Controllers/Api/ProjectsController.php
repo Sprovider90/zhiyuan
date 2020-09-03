@@ -122,10 +122,8 @@ class ProjectsController extends Controller
         }
         foreach ($data['areas'] as $k => $v){
             $flg = ProjectsPositions::where('area_id',$v->id)->where('project_id',$project->id)->count();
-            $v->edit_flg = true;
-            if($flg){
-                $v->edit_flg = false;
-            }
+            $v['edit_flg'] = true;
+            $flg && $v['edit_flg'];
         }
         return new ProjectsResources($data);
     }
