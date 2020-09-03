@@ -62,7 +62,7 @@ class PositionsController extends Controller
     public function status(Request $request,Position $position,Device $device){
         //查询是否已经在运行
         $device1 = Device::where('id',$position->device_id)->where('run_status',1)->first();
-        if($device1){
+        if($device1 && $request->status == 2){
             throw new HttpException(403, '设备在其他点位运行,请勿重复添加');
         }
         $position->update(['status' => $request->status]);
