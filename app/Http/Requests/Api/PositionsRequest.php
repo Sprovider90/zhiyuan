@@ -24,7 +24,7 @@ class PositionsRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->route('poistion') ?  $this->route('poistion')->id : 0;
+        $id = $this->route('position') ?  $this->route('position')->id : 0;
         return [
             'project_id'    => 'required',
             'number'        => 'required',
