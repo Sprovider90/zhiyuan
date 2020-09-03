@@ -13,7 +13,7 @@ class OrdersDevices extends Model
 
 
     protected $fillable = [
-        'good_id','order_id', 'number','customer_id'
+        'good_id','order_id', 'device_id','customer_id'
     ];
 
 
