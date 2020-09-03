@@ -37,8 +37,8 @@ class PublicController extends Controller
     //对应项目区域列表
     public function areas(Request $request,ProjectsAreas $projectsAreas){
         $project_id = $request->get('project_id','');
-        $project_id && $projectsAreas = $projectsAreas->where('project_id',$project_id)->where('file','>',0);
-        return new ProjectsAreasResource($projectsAreas->orderBy('id','desc')->get());
+        $project_id && $projectsAreas = $projectsAreas->where('project_id',$project_id);
+        return new ProjectsAreasResource($projectsAreas->where('file','>',0)->orderBy('id','desc')->get());
     }
 
     //监测标准列表
