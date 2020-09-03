@@ -50,7 +50,7 @@ return [
     /**
      * 上传图片扩展 默认['jpg','png','jepg','gif']
      */
-    'UPLOAD_IMAGE_EXT' => env('UPLOAD_IMAGE_EXT', 'jpg,png,jpeg,gif,png'),
+    'UPLOAD_IMAGE_EXT' => env('UPLOAD_IMAGE_EXT', 'jpg,png,jpeg,gif,png,bmp'),
 
     /**
      * 上传视频最大限制 默认50M
