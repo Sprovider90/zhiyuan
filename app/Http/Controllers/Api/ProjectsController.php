@@ -31,7 +31,7 @@ class ProjectsController extends Controller
         $date = $this->returnDate($request->type ?? 2);
         $request->user()->customer_id && $projects = $projects->where('customer_id',$request->user()->customer_id);
         //进行中 1暂停中 4施工中 5交付中 6维护中
-        $ongoing_count   = $projects->whereBetween('created_at',$date)->whereIn('status',[1,4,5,6])->count();
+        $ongoing_count   = $projects->whereBetween('created_at',$date)->whereIN('status',[1,4,5,6])->count();
         //已结束 2已结束
         $over_count  = $projects->whereBetween('created_at',$date)->where('status',2)->count();
         //未开始 0未开始
