@@ -76,7 +76,7 @@ class PublicController extends Controller
         if(round($fileSize/1024/1024,2) > $configFileMaxSize){
             throw new HttpException(403, '文件最大不超过'.$configFileMaxSize.'M');
         }
-        if(!in_array($fileExt,explode(',',$configFileExt))){
+        if(!in_array(strtolower($fileExt),explode(',',$configFileExt))){
             throw new HttpException(403, '文件不在允许的'.$configFileExt.'扩展中');
         }
         $clientName = $file->getClientOriginalName();
