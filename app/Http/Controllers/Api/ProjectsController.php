@@ -62,7 +62,7 @@ class ProjectsController extends Controller
                 ->orWhere('name','like',"%{$request->name}%")
                 ->orWhere('number','like',"%{$request->name}%");
         });
-        $request->user()->customer_id && $projects_query = $projects->where('customer_id',$request->user()->customer_id);
+        $request->user()->customer_id && $projects_query = $projects_query->where('customer_id',$request->user()->customer_id);
         $projects = QueryBuilder::for($projects_query)
             ->allowedIncludes('customs','thresholds','waringsetting')
             ->orderBy('id','desc')
