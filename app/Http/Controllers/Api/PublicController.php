@@ -16,6 +16,7 @@ use App\Models\Files;
 use App\Models\ProjectsAreas;
 use App\Models\Thresholds;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
