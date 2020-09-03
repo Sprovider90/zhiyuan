@@ -45,6 +45,17 @@ class ProjectsRequest extends FormRequest
                                 break;
                             }
                         }
+                        //开始时间要小于结束时间
+                        if($v['start_date'] >= $v['end_date']){
+                            return $fail('阶段'.$k.'阶段开始时间不能小于结束时间,请选择正确时间段');
+                        }
+                        //阶段开始时间要大于上个阶段时间
+                        if($k > 0){
+                            if($v['start_date']<=$data[$k-1]['end_date']){
+                                return $fail('阶段'.($k-1).'与'.($k).'两阶段时间不能重叠,请选择正确时间段');
+                            }
+                        }
+
                     }
                 }
             ],
