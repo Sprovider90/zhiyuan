@@ -54,7 +54,7 @@ class ProjectsRequest extends FormRequest
                     if(!is_array($data)){
                         return $fail($attribute.' is invalid.');
                     }
-                    $arr = ['area_name','file'];
+                    $arr = ['area_name'];
                     foreach ($data as $k => $v){
                         foreach ($arr as $k1 => $v1){
                             if(!isset($v[$v1]) || empty($v[$v1])){
