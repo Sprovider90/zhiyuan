@@ -31,7 +31,7 @@ class PublicController extends Controller
     public function devices(Request $request,Device $device){
         $customer_id = $request->get('customer_id','');
         $customer_id && $device = $device->where('customer_id',$customer_id);
-        return new OrdersResources($device->where('status',1)->orderBy('id','desc')->get());
+        return new OrdersResources($device->where('status',1)->where('run_status',2)->orderBy('id','desc')->get());
     }
 
     //对应项目区域列表
