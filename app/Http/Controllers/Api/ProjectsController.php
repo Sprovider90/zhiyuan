@@ -123,7 +123,7 @@ class ProjectsController extends Controller
         foreach ($data['areas'] as $k => $v){
             $flg = ProjectsPositions::where('area_id',$v->id)->where('project_id',$project->id)->count();
             $v['edit_flg'] = true;
-            $flg && $v['edit_flg'];
+            $flg && $v['edit_flg']=false;
         }
         return new ProjectsResources($data);
     }
