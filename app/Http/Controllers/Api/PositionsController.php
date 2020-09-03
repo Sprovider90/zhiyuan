@@ -8,6 +8,7 @@ use App\Http\Resources\OrdersResources;
 use App\Http\Resources\PositionsResource;
 use App\Jobs\UpdateDevicesInfoJob;
 use App\Models\Device;
+use App\Models\Location;
 use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +23,6 @@ class PositionsController extends Controller
         $positions->location()->create($request->all());
         //同时修改设备：运行中
         $device->where('id',$positions->device_id)->update(['run_status' => 1]);
-
         $request->device_id && dispatch(new UpdateDevicesInfoJob(["device_id"=>$request->device_id]));
         return response(new PositionsResource($positions->load('location')));
     }
@@ -36,6 +36,16 @@ class PositionsController extends Controller
      */
     public function update(PositionsRequest $request,Position $position,Device $device)
     {
+        //校验区域是否改变
+        if($position->area_id  != $request->area_id){
+             //查询坐标
+            $location = Location::where('position_id',$request->$position->id)->first();
+            if($location){
+                if($location->left == $request->left && $location->top == $request->top){
+                    throw new HttpException(403, '请修改点位坐标');
+                }
+            }
+        }
         //原设备 已停止状态
         $device->where('id',$position->device_id)->update(['run_status' => 2]);
         $position->update($request->all());
