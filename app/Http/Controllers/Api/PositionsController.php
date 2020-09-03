@@ -43,7 +43,7 @@ class PositionsController extends Controller
             if($location){
                 if($location->left == $request->left && $location->top == $request->top){
                     throw new HttpException(403, '请修改点位坐标');
-                }elseif(isset($location->left) && isset($request->top)){
+                }elseif(!isset($location->left) && !isset($request->top)){
                     throw new HttpException(403, '请修改点位坐标');
                 }
             }
