@@ -84,6 +84,7 @@ LEFT JOIN (
 		max(end_date) AS max_end_date
 	FROM
 		projects_stages
+	WHERE deleted_at IS NULL
 	GROUP BY
 		project_id
 ) c ON a.id = c.project_id ".$where;
