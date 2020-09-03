@@ -55,7 +55,6 @@ class ProjectsController extends Controller
     {
 
         $projects_query=Projects::class;
-        $request->user()->customer_id && $projects = $projects->where('customer_id',$request->user()->customer_id);
         $request->status && $projects_query=$projects->where('status',$request->status);
         $request->name   && $projects_query=$projects->whereHas('customs',function($query) use ($request){
             $query->where('company_name','like',"%{$request->name}%")
@@ -63,6 +62,7 @@ class ProjectsController extends Controller
                 ->orWhere('name','like',"%{$request->name}%")
                 ->orWhere('number','like',"%{$request->name}%");
         });
+        $request->user()->customer_id && $projects = $projects->where('customer_id',$request->user()->customer_id);
         $projects = QueryBuilder::for($projects_query)
             ->allowedIncludes('customs','thresholds','waringsetting')
             ->orderBy('id','desc')
