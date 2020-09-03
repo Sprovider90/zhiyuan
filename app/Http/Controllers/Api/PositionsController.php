@@ -36,7 +36,6 @@ class PositionsController extends Controller
      */
     public function update(PositionsRequest $request,Position $position,Device $device)
     {
-
         //校验区域是否改变
         if($position->area_id  != $request->area_id){
             if(!isset($location->left) && !isset($request->top)){
