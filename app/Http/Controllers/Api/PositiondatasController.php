@@ -11,6 +11,7 @@ use App\Facades\Common;
 use App\Http\Requests\Api\PositiondatasRequest;
 use Excel;
 use App\Exports\BaseExport;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 class PositiondatasController extends Controller
 {
     public function index(PositiondatasRequest $request)
@@ -45,7 +46,9 @@ class PositiondatasController extends Controller
             foreach ($arr["body"]["list"] as $k=>$v){
                 $export_data[]=[$v["timestamp"],$v["formaldehyde"],$v["pm25"],$v["tvoc"],$v["co2"],$v["temperature"],$v["humidity"]];
             }
+
             $export = new BaseExport($export_data);
+
             return Excel::download($export, $arr["body"]["list"][0]["monitorId"].'.xlsx');
         }else{
             return new HttpException(400, '无数据');
