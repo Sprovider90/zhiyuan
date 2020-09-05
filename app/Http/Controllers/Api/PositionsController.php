@@ -81,6 +81,8 @@ class PositionsController extends Controller
         $position->update(['status' => $request->status]);
         //同时修改设备 已停止状态
         $device->where('id',$position->device_id)->update(['run_status' =>  $request->status == 1 ? 1 : 2]);
+        dispatch(new UpdateDevicesInfoJob(["device_id"=>$position->device_id]));
+
         return response(new PositionsResource($position),201);
     }
 

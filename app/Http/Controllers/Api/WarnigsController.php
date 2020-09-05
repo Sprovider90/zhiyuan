@@ -38,7 +38,7 @@ class WarnigsController extends Controller
         $data = $warnig->load(['project','project.customs']);
         $data["originaldata_name"]="";
         if(isset($data["originaldata"]) && $originaldata_arr=json_decode($data["originaldata"])){
-            $data["originaldata_name"]=$originaldata_arr["name"];
+            $data["originaldata_name"]=isset($originaldata_arr["name"])?$originaldata_arr["name"]:"";
         }
 
         return new WarnigsResource($data);
