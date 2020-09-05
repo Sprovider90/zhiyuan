@@ -36,6 +36,11 @@ Route::prefix('v1')
                     // 当前登录用户信息
                     Route::get('user/check', 'UsersController@check')
                         ->name('user.check');
+
+                    Route::get('user/checkpassword', 'UsersController@checkpassword')
+                        ->name('user.checkpassword');
+
+
                     // 当前登录用户信息
                     Route::get('user', 'UsersController@me')
                         ->name('user.show');

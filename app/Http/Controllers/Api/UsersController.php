@@ -7,11 +7,12 @@ use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\Api\UserRequest;
 use App\Http\Requests\Api\UsercheckRequest;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
-
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 
 class UsersController extends Controller
@@ -42,6 +43,14 @@ class UsersController extends Controller
     }
     public function check(UsercheckRequest $request)
     {
+        return response(null, 200);
+    }
+    public function checkpassword(Request $request)
+    {
+        if(!Hash::check($request->input('password'), $request->user()->password)){
+            throw new HttpException(403, '密码错误');
+        }
+
         return response(null, 200);
     }
     public function store(UserRequest $request)
