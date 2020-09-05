@@ -56,7 +56,7 @@ class PositionsController extends Controller
         $position->location()->create($request->all());
         //同时修改设备 运行中状态
         $device->where('id',$request->device_id)->update(['run_status' => 1]);
-        $request->device_id && dispatch(new UpdateDevicesInfoJob(["device_id"=>$request->device_id]));
+        $request->device_id && dispatch(new UpdateDevicesInfoJob(["device_id"=>$request->device_id])) && dispatch(new UpdateDevicesInfoJob(["device_id"=>$position->device_id]));
         return response(new PositionsResource($position->load('location')));
     }
 
