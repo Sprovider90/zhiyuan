@@ -51,12 +51,14 @@ class PositionsController extends Controller
         }
         //原设备 已停止状态
         $device->where('id',$position->device_id)->update(['run_status' => 2]);
+        dispatch(new UpdateDevicesInfoJob(["device_id"=>$position->device_id]));
         $position->update($request->all());
         $position->location()->delete();
         $position->location()->create($request->all());
         //同时修改设备 运行中状态
         $device->where('id',$request->device_id)->update(['run_status' => 1]);
-        $request->device_id && dispatch(new UpdateDevicesInfoJob(["device_id"=>$request->device_id])) && dispatch(new UpdateDevicesInfoJob(["device_id"=>$position->device_id]));
+        $request->device_id && dispatch(new UpdateDevicesInfoJob(["device_id"=>$request->device_id])) ;
+
         return response(new PositionsResource($position->load('location')));
     }
 
