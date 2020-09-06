@@ -58,10 +58,10 @@ class UpdateDevicesInfoJob implements ShouldQueue
         }
 
         $sql="SELECT
-            device_number AS deviceId,
-            run_status as status
+            b.device_number AS deviceId,
+            b.run_status as status
         FROM
-            `devices`
+            `devices` b
         WHERE
             1=1 ".$where;
 
