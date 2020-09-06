@@ -15,7 +15,13 @@ class WarnigsResource extends JsonResource
     public function toArray($request)
     {
         $data=parent::toArray($request);
-//        /$data['project'] = ProjectsResources::make($this->whenLoaded('project'));
+//        if(isset($data["threshold_keys"])&&!empty($data["threshold_keys"])){
+//            $arr=explode(",",$data["threshold_keys"]);
+//            foreach ($arr as $k=>$v){
+//
+//            }
+//        }
+//        $data['threshold_keys'] = ProjectsResources::make($this->whenLoaded('project'));
 
         return $data;
     }

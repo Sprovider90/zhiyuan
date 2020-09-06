@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Api;
 use App\Facades\Common;
 use App\Http\Requests\Api\PositiondatasRequest;
+use App\Models\Projects;
 use App\Models\ProThresholdsLog;
 use Excel;
 use App\Exports\BaseExport;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class PositiondatasController extends Controller
 {
     static $proThresholdsLog = [];
+    static $proInfo = [];
     public function index(PositiondatasRequest $request)
     {
         $params=[];
@@ -37,11 +39,24 @@ class PositiondatasController extends Controller
                 foreach ($tmp["body"]["list"] as $k=>&$v){
                     //判断指标是否污染
                     $v["red"]=$this->getRed($v);
+                    list($v["project_tvoc"],$v["project_hcho"])=$this->getPro($v["projectId"]);
+
                 }
                 $result=json_encode($tmp);
             }
         }
         return $result;
+    }
+
+    protected function getPro($projectId)
+    {
+        if(!empty(self::$proInfo)){
+            return self::$proInfo;
+        }
+
+        $rs=Projects::find($projectId,["tvoc","hcho"]);
+        self::$proInfo=[$rs->tvoc,$rs->hcho];
+        return self::$proInfo;
     }
     protected function getRed($positiondata)
     {
@@ -49,15 +64,18 @@ class PositiondatasController extends Controller
         $proinfo=$this->getProThresholds($positiondata["projectId"]);
         if(!empty($proinfo)){
             $pipei_data=$proinfo->last();
-            foreach ($proinfo as $k=>$v){
-                if($positiondata["timestamp"]>=$v->created_at){
-                    $pipei_data=$v;
+            if(!empty($pipei_data)){
+                foreach ($proinfo as $k=>$v){
+                    if($positiondata["timestamp"]>=$v->created_at){
+                        $pipei_data=$v;
+                    }
                 }
-            }
-            foreach ($pipei_data->thresholdinfo as $k=>$v){
-                $zhibiao=explode("~",$v);
-                if($zhibiao[1]<=$positiondata[strtolower($k)]){
-                    $result[]=strtolower($k);
+
+                foreach ($pipei_data->thresholdinfo as $k=>$v){
+                    $zhibiao=explode("~",$v);
+                    if($zhibiao[1]<=$positiondata[strtolower($k)]){
+                        $result[]=strtolower($k);
+                    }
                 }
             }
         }
