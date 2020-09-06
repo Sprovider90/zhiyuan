@@ -54,7 +54,21 @@ class UpdateDevicesInfoJob implements ShouldQueue
                 if($v->status==1){
                     Redis::hset("air:devices:tags",$v->deviceId,json_encode($v));
                 }
+            }
+        }
 
+        $sql="SELECT
+            device_number AS deviceId,
+            run_status as status
+        FROM
+            `devices`
+        WHERE
+            1=1 ".$where;
+
+        $rs=DB::select($sql);
+
+        if(!empty($rs)){
+            foreach ($rs as $k=>$v) {
                 $stat=$v->status==2?"0":"1";
                 Redis::hset("iot:auth:client",$v->deviceId,$stat);
             }
