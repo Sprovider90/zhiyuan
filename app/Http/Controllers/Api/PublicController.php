@@ -14,6 +14,7 @@ use App\Models\Customers;
 use App\Models\Device;
 use App\Models\Files;
 use App\Models\ProjectsAreas;
+use App\Models\ProjectsPositions;
 use App\Models\Thresholds;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -30,8 +31,15 @@ class PublicController extends Controller
     //对应项目设备列表
     public function devices(Request $request,Device $device){
         $customer_id = $request->get('customer_id','');
-        $device_id = $request->get('device_id','');
+//        $device_id = $request->get('device_id','');
         $customer_id && $device->where('customer_id',$customer_id);
+        foreach ($device as $k => $v){
+            $flg = ProjectsPositions::where('device_id',$v->id)->count();
+            $v->position_flg = 0;
+            if($flg){
+                $v->position_flg = 1;
+            }
+        }
         /*$device->where(function ($query) use ($customer_id,$device_id) {
             $query->where(function ($query1) use ($customer_id) {
                 $customer_id && $query1->where('customer_id',$customer_id);
