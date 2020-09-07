@@ -27,7 +27,7 @@ class ProjectsPositions extends Model
      * @return mixed
      */
     public function device(){
-        return $this->hasOne(OrdersDevices::class, 'id', 'device_id');
+        return $this->hasOne(Device::class, 'id', 'device_id');
     }
 
     /**
