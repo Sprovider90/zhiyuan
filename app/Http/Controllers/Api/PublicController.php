@@ -13,12 +13,14 @@ use App\Http\Resources\ThresholdsResource;
 use App\Models\Customers;
 use App\Models\Device;
 use App\Models\Files;
+use App\Models\FinanceLog;
 use App\Models\Orders;
 use App\Models\Projects;
 use App\Models\ProjectsAreas;
 use App\Models\ProjectsPositions;
 use App\Models\Thresholds;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -27,6 +29,13 @@ class PublicController extends Controller
 {
     //首页 项目总数 点位总数  设备总数
     public function getIndexCount(Request $request){
+        $order_start = $request->get('order_start','');
+        $order_end   = $request->get('order_end','');
+
+        $pro_start  = $request->get('pro_start','');
+        $pro_end    = $request->get('pro_end','');
+        $type       = $request->get('type',1);
+
         $where = [];
         $request->user()->customer_id && $where[] = ['customer_id',$request->user()->customer_id];
         //项目总数
@@ -42,10 +51,58 @@ class PublicController extends Controller
         $device_count = Device::where($where)->count();
         //运行设备
         $run_device_count = Device::where($where)->where('run_status',1)->count();
-        //销售额
-//        $date = $this->returnDate(2);
-//        $order_list = Orders::whereBetween('created_at',$date)->selectRaw('date(created_at) as')->groupBy('date')->get();
-//        var_dump(json_encode($order_list));exit;
+
+        if($request->user()->customer_id){
+            $dateList = [];
+        }else{
+            //销售额 默认本月
+            $date = $this->returnDate(2);
+            if(($order_start && $order_end) && (strtotime($order_start) < strtotime($order_end))){
+                $date = [$order_start,$order_end];
+                $dateList = $this->returnMonthList($date[0],$date[1]);
+                foreach ($dateList as $k => $v){
+                    $dateList[$k]['money'] = 0;
+                    $dateList[$k]['order_count'] = 0;
+                    $s = FinanceLog::where('type',1)->whereRaw('left(date,7)="'.$v['date'].'"')->sum('money');
+                    $t = FinanceLog::where('type',2)->whereRaw('left(date,7)="'.$v['date'].'"')->sum('money');
+                    $dateList[$k]['money'] = $s-$t;
+                    $count = Orders::whereRaw('left(created_at,7)="'.$v['date'].'"')->count();
+                    $dateList[$k]['order_count'] = $count ?? 0;
+                }
+            }else{
+                if(($order_start && $order_end)){
+                    $date = [$order_start,$order_end];
+                }
+                $dateList = $this->returnDateList(substr($date[0],0,10),substr($date[1],0,10));
+                foreach ($dateList as $k => $v){
+                    $dateList[$k]['money'] = 0;
+                    $dateList[$k]['order_count'] = 0;
+                    $s = FinanceLog::where('type',1)->where('date',$v['date'])->sum('money');
+                    $t = FinanceLog::where('type',2)->where('date',$v['date'])->sum('money');
+                    $dateList[$k]['money'] = $s-$t;
+                    $count = Orders::whereRaw('left(created_at,10)="'.$v['date'].'"')->count();
+                    $dateList[$k]['order_count'] = $count ?? 0;
+                }
+            }
+        }
+
+        //本周项目总数
+        $bz_date = $this->returnDate(1);
+        $bz_pro_count = Projects::where($where)->whereBetween('created_at',$bz_date)->count();
+        //项目数据表
+        if($request->user()->customer_id){
+            $proDateList = [];
+        }else {
+            if(($pro_start && $pro_end) && (strtotime($pro_start) < strtotime($pro_end))){
+                $proDateList = $this->returnDateList($pro_start,$pro_end);
+            }else{
+                $pro_date = $this->returnDate($type);
+                $proDateList = $this->returnDateList(substr($pro_date[0], 0, 10), substr($pro_date[1], 0, 10));
+            }
+            foreach ($proDateList as $k => $v) {
+                $proDateList[$k]['count'] = Projects::whereRaw('left(created_at,10)="' . $v['date'] . '"')->count() ?? 0;
+            }
+        }
 
         return response()->json(array(
                 //项目总数 点位总数 设备总数 运行设备数
@@ -55,12 +112,14 @@ class PublicController extends Controller
                     'device_count'      => $device_count,
                     'run_device_count'  => $run_device_count,
                 ),
-                //销售额
-
-                //订单数
-
-                //项目情况
-
+                //销售额 订单数
+                'order_count_list'  => $dateList,
+                //项目累计
+                'project_count' => $project_count,
+                //项目本周新增
+                'project_week_count'    => $bz_pro_count,
+                //项目
+                'project_count_list'      => $proDateList,
                 //预警方案/解决方案
          ));
     }

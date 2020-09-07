@@ -53,11 +53,30 @@ class Controller extends BaseController
      */
     function returnDateList($start_date,$end_date){
         $arr = [];
+        $start_date = strtotime($start_date);
+        $end_date = strtotime($end_date);
         if($start_date > $end_date) return [];
         while ($end_date >= $start_date) {
-            $arr[] = date('Y-m-d', $start_date);
+            $arr[] = array('date' =>  date('Y-m-d', $start_date));
             $start_date = strtotime('+1 day', $start_date);
         }
         return $arr;
+    }
+
+    /**
+     * 返回两个日期所有月
+     * @param $start_date
+     * @param $end_date
+     * @return array
+     */
+    function returnMonthList($start_date,$end_date){
+        $monarr = array();
+        $monarr[] = ['date' => $start_date];
+        $start_date	= strtotime($start_date);
+        $end_date 	= strtotime($end_date);
+        while( ($start_date =  strtotime('+1 month', $start_date)) <= $end_date){
+            $monarr[] = array('date' =>  date('Y-m', $start_date));
+        }
+        return $monarr;
     }
 }
