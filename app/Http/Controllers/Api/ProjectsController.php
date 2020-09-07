@@ -152,13 +152,63 @@ class ProjectsController extends Controller
      */
     public function update(ProjectsRequest $request,Projects $project)
     {
-        DB::transaction(function() use ($request, &$project){
+       /* DB::transaction(function() use ($request, &$project){
             $project->update($request->all());
             $project->areas()->delete();
             $project->stages()->delete();
             $project->areas()->createMany(json_decode($request->areas,true));
             $project->stages()->createMany(json_decode($request->stages,true));
-        });
+        });*/
+        DB::beginTransaction();
+        try {
+            $project->update($request->all());
+            //阶段处理 要求不变更阶段id
+            $stages_data = json_decode($request->stages,true);
+            foreach ($stages_data as $k => $v){
+                $id = '';
+                if(isset($v['id'])){
+                    $id = $v['id'] ;
+                    unset($v['id']);
+                }
+                if($id > 0){
+                    ProjectsStages::where('id',$id)->update($v);
+                }else{
+                    $v['project_id'] = $project['id'];
+                    ProjectsStages::create($v);
+                }
+            }
+            //阶段删除处理
+            $del_stages = $request->stages_del;
+            if($del_stages){
+                ProjectsStages::where('project_id',$project['id'])->whereIN('id',explode(',',$del_stages))->delete();
+            }
+            //区域处理
+            $areas_data = json_decode($request->areas,true);
+            foreach ($areas_data as $k => $v){
+                $id = '';
+                if(isset($v['id'])){
+                    $id = $v['id'] ;
+                    unset($v['id']);
+                }
+                if($id > 0){
+                    ProjectsAreas::where('id',$id)->update($v);
+                }else{
+                    $v['project_id'] = $project['id'];
+                    ProjectsAreas::create($v);
+                }
+            }
+            //区域删除处理
+            $del_areas = $request->areas_del;
+            if($del_areas){
+                ProjectsAreas::where('project_id',$project['id'])->whereIN('id',explode(',',$del_areas))->delete();
+            }
+            DB::commit();
+            dispatch(new UpdateProStage(["project_id"=>$project->id]));
+            return response(new ProjectsResources($project->load('areas')->load('stages')),201);
+        }catch (\Exception $e){
+            DB::rollback();
+            throw new HttpException(403, $e->getMessage());
+        }
         dispatch(new UpdateProStage(["project_id"=>$project->id]));
         return response(new ProjectsResources($project->load('areas')->load('stages')),201);
     }
