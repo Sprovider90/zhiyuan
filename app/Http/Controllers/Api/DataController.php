@@ -12,7 +12,7 @@ class DataController extends Controller
 {
     //
     public function index(Request $request,ProjectsPositions $position){
-        $position = $position->with(['project']);
+        $position = $position->with(['project','area','device']);
         $request->user()->customer_id && $position->whereHas('project',function ($query) use ($request){
             $query->where('customer_id',$request->user()->customer_id);
         });
