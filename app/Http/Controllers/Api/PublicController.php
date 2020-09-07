@@ -32,8 +32,8 @@ class PublicController extends Controller
     public function devices(Request $request,Device $device){
         $customer_id = $request->get('customer_id','');
 //        $device_id = $request->get('device_id','');
-        $customer_id && $device->where('customer_id',$customer_id);
-        $device->where('status',1)->orderBy('id','desc')->get();
+        $customer_id && $device =  $device->where('customer_id',$customer_id);
+        $device = $device->where('status',1)->orderBy('id','desc')->get();
         foreach ($device as $k => $v){
             $flg = ProjectsPositions::where('device_id',$v->id)->count();
             $v->position_flg = 0;
