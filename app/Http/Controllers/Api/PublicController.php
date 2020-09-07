@@ -13,6 +13,7 @@ use App\Http\Resources\ThresholdsResource;
 use App\Models\Customers;
 use App\Models\Device;
 use App\Models\Files;
+use App\Models\Orders;
 use App\Models\Projects;
 use App\Models\ProjectsAreas;
 use App\Models\ProjectsPositions;
@@ -28,19 +29,40 @@ class PublicController extends Controller
     public function getIndexCount(Request $request){
         $where = [];
         $request->user()->customer_id && $where[] = ['customer_id',$request->user()->customer_id];
+        //项目总数
         $project_count = Projects::where($where)->count();
+        //点位总数
         if(!$request->user()->customer_id){
             $position_count = ProjectsPositions::count();
         }else{
             $project = Projects::where($where)->get(['id']);
             $position_count = ProjectsPositions::whereIN('project_id',$project)->count();
         }
+        //设备总数
         $device_count = Device::where($where)->count();
-        return response()->json([
-            'project_count'     => $project_count,
-            'position_count'    => $position_count,
-            'device_count'      => $device_count,
-        ]);
+        //运行设备
+        $run_device_count = Device::where($where)->where('run_status',1)->count();
+        //销售额
+//        $date = $this->returnDate(2);
+//        $order_list = Orders::whereBetween('created_at',$date)->selectRaw('date(created_at) as')->groupBy('date')->get();
+//        var_dump(json_encode($order_list));exit;
+
+        return response()->json(array(
+                //项目总数 点位总数 设备总数 运行设备数
+                'count' => array(
+                    'project_count'     => $project_count,
+                    'position_count'    => $position_count,
+                    'device_count'      => $device_count,
+                    'run_device_count'  => $run_device_count,
+                ),
+                //销售额
+
+                //订单数
+
+                //项目情况
+
+                //预警方案/解决方案
+         ));
     }
 
     //获取所有 状态 正常  已停止 没有绑定客户的列表

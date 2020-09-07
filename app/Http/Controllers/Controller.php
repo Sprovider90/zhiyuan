@@ -44,4 +44,20 @@ class Controller extends BaseController
         }
         return [$start,$end];
     }
+
+    /**
+     * 返回两个日期中所有日期
+     * @param $start_date
+     * @param $end_date
+     * @return array
+     */
+    function returnDateList($start_date,$end_date){
+        $arr = [];
+        if($start_date > $end_date) return [];
+        while ($end_date >= $start_date) {
+            $arr[] = date('Y-m-d', $start_date);
+            $start_date = strtotime('+1 day', $start_date);
+        }
+        return $arr;
+    }
 }
