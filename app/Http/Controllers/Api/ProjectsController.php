@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Models\ProjectsThresholds;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ProjectsController extends Controller
 {
@@ -207,7 +208,7 @@ class ProjectsController extends Controller
             return response(new ProjectsResources($project->load('areas')->load('stages')),201);
         }catch (\Exception $e){
             DB::rollback();
-            throw new \HttpException(403, $e->getMessage());
+            throw new HttpException(403, $e->getMessage());
         }
         dispatch(new UpdateProStage(["project_id"=>$project->id]));
         return response(new ProjectsResources($project->load('areas')->load('stages')),201);
