@@ -13,6 +13,7 @@ use App\Http\Resources\ThresholdsResource;
 use App\Models\Customers;
 use App\Models\Device;
 use App\Models\Files;
+use App\Models\Projects;
 use App\Models\ProjectsAreas;
 use App\Models\ProjectsPositions;
 use App\Models\Thresholds;
@@ -23,6 +24,25 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PublicController extends Controller
 {
+    //首页 项目总数 点位总数  设备总数
+    public function getIndexCount(Request $request){
+        $where = [];
+        $request->user()->customer_id && $where[] = ['customer_id',$request->user()->customer_id];
+        $project_count = Projects::where($where)->count();
+        if(!$request->user()->customer_id){
+            $position_count = ProjectsPositions::count();
+        }else{
+            $project = Projects::where($where)->get(['id']);
+            $position_count = ProjectsPositions::whereIN('project_id',$project)->count();
+        }
+        $device_count = Device::where($where)->count();
+        return response()->json([
+            'project_count'     => $project_count,
+            'position_count'    => $position_count,
+            'device_count'      => $device_count,
+        ]);
+    }
+
     //获取所有 状态 正常  已停止 没有绑定客户的列表
     public function getAllNoCustomerDevicesList(Request $request,Device $device){
         return new DeviceResource($device->whereNull('customer_id')->where('status',1)->orderBy('id','desc')->get());

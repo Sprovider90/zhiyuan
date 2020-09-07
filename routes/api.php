@@ -178,6 +178,9 @@ Route::prefix('v1')
 
                     //公共接口
                     Route::group(['prefix' => 'public'],function () {
+                        //首页数据统计 项目总数 点位总数 设备总数
+                        Route::get('getIndexCount','PublicController@getIndexCount')
+                            ->name('public.getIndexCount');
                         //文件上传
                         Route::resource('file', 'PublicController')->only([
                             'store'
