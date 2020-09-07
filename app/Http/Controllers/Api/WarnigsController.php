@@ -13,8 +13,14 @@ class WarnigsController extends Controller
     public function index(Request $request,Warnigs $Warnigs)
     {
         if($request->user()->customer_id){
-            $projects=array_column($request->user()->with(["customer","customer.projects"])->first()->customer->projects->toArray(),"id");
-            $Warnigs = $Warnigs->whereIn('project_id',$projects);
+            $projects=optional($request->user()->with(["customer","customer.projects"])->first()->customer)->projects;
+            if(!empty($projects)){
+                $projects=array_column($projects->toArray(),"id");
+                $Warnigs = $Warnigs->whereIn('project_id',$projects);
+            }else{
+                $Warnigs = $Warnigs->whereIn('project_id',[]);
+            }
+
         }
         $request->time      && $Warnigs = $Warnigs->whereDate('created_at',$request->time);
 
