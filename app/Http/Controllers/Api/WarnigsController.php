@@ -30,7 +30,8 @@ class WarnigsController extends Controller
             $query->where('name','like',"%{$request->reuseparam}%");
         });
 
-        $data = $Warnigs->with(['project','project.customs','projectsPositions','projectsPositions.area'])->paginate();
+        $data = $Warnigs->with(['project','project.customs','projectsPositions'])->with(['projectsPositions.area'=>function($query){
+            $query->withTrashed();}])->paginate();
 
         foreach ($data as $k => $v){
             $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
