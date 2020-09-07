@@ -33,6 +33,7 @@ class PublicController extends Controller
         $customer_id = $request->get('customer_id','');
 //        $device_id = $request->get('device_id','');
         $customer_id && $device->where('customer_id',$customer_id);
+        $device->where('status',1)->orderBy('id','desc')->get()
         foreach ($device as $k => $v){
             $flg = ProjectsPositions::where('device_id',$v->id)->count();
             $v->position_flg = 0;
@@ -49,7 +50,7 @@ class PublicController extends Controller
                    $device_id &&  $query1->where('id',$device_id);
             });
         });*/
-        return new OrdersResources($device->where('status',1)->orderBy('id','desc')->get());
+        return new OrdersResources($device);
     }
 
     //对应项目区域列表
