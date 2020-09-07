@@ -22,6 +22,8 @@ class WarnigsController extends Controller
             }
 
         }
+        $Warnigs = $Warnigs->where('threshold_keys', '!=' , "");
+
         $request->time      && $Warnigs = $Warnigs->whereDate('created_at',$request->time);
 
         $request->threshold_keys      && $Warnigs = $Warnigs->where('threshold_keys','like',"%{$request->threshold_keys},%");
@@ -31,7 +33,7 @@ class WarnigsController extends Controller
         });
 
         $data = $Warnigs->with(['project','project.customs','projectsPositions'])->with(['projectsPositions.area'=>function($query){
-            $query->withTrashed();}])->paginate();
+            $query->withTrashed();}])->orderBy('id','desc')->paginate();
 
         foreach ($data as $k => $v){
             $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
