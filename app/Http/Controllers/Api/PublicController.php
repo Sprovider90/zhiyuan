@@ -31,9 +31,18 @@ class PublicController extends Controller
     //对应项目设备列表
     public function devices(Request $request,Device $device){
         $customer_id = $request->get('customer_id','');
-//        $device_id = $request->get('device_id','');
+        $device_id = $request->get('device_id','');
         $customer_id && $device =  $device->where('customer_id',$customer_id);
-        $device = $device->where('status',1)->orderBy('id','desc')->get();
+        $device = $device->where(function ($query) use ($customer_id,$device_id) {
+            $query->where(function ($query1) use ($customer_id) {
+                $customer_id && $query1->where('customer_id',$customer_id);
+                $query1->where('status',1);
+            });
+            $device_id && $query->orWhere(function ($query1) use ($device_id){
+                   $device_id &&  $query1->where('id',$device_id);
+            });
+        });
+        $device = $device->orderBy('id','desc')->get();
         foreach ($device as $k => $v){
             $flg = ProjectsPositions::where('device_id',$v->id)->count();
             $v->position_flg = 0;
@@ -41,15 +50,6 @@ class PublicController extends Controller
                 $v->position_flg = 1;
             }
         }
-        /*$device->where(function ($query) use ($customer_id,$device_id) {
-            $query->where(function ($query1) use ($customer_id) {
-                $customer_id && $query1->where('customer_id',$customer_id);
-                $query1->where('status',1);
-            });
-            $query->orWhere(function ($query1) use ($device_id){
-                   $device_id &&  $query1->where('id',$device_id);
-            });
-        });*/
         return new OrdersResources($device);
     }
 
