@@ -125,7 +125,7 @@ class PublicController extends Controller
             }
         }else{
             //解决方案
-            $msg_list = WarnigsSms::with(['projectsPositions.area'=>function($query){
+            $msg_list = WarnigsSms::with(['warnings','warnings.projectsPositions.area'=>function($query){
                 $query->withTrashed();
             }
             ])->orderBy('id','desc')->limit(5)->get();

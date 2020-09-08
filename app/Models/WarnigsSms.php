@@ -17,4 +17,8 @@ class WarnigsSms extends Model
         return $this->hasOne(User::class, 'id', 'send_id');
     }
 
+    public function warnings(){
+        return $this->hasOne(Warnigs::class, 'id', 'warnig_id');
+    }
+
 }
