@@ -22,17 +22,11 @@ class PreinstallController extends Controller
         $request->user()->customer_id && $projects = $projects->where('customer_id',$request->user()->customer_id);
         //状态0未开始1暂停中2已结束3项目错误4施工中5交付中6维护中7项目大阶段错误
         $request->status && $projects = $projects->where('status',$request->status);
+        $request->setting_flg && $projects = $projects->where('setting_flg',$request->setting_flg);
         $request->name   && $projects = $projects->where('name','like',"%{$request->name}%");
         $projects = $projects
             ->orderBy('id','desc')
             ->paginate($request->pageSize ?? $request->pageSize);
-        foreach ($projects as $k => $v){
-            $v->setting_flg = 0;//未设置
-            $setting_flg = Preinstall::where('project_id',$v->id)->first();
-            if($setting_flg){
-                $v->setting_flg = 1;//已设置
-            }
-        }
         return ProjectsResources::collection($projects);
     }
 
@@ -64,6 +58,8 @@ class PreinstallController extends Controller
                     DB::rollBack();
                     return $this->errorResponse(500,'系统错误');
                 }
+                //更新项目表setting_flg=1
+                Projects::where('id',$project->id)->update(['setting_flg'=>1]);
             }
             DB::commit();
             return response('',201);
