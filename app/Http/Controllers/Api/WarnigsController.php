@@ -61,6 +61,6 @@ class WarnigsController extends Controller
             $data["originaldata_name"]=isset($originaldata_arr["name"])?$originaldata_arr["name"]:"";
         }
 
-        return WarnigsResource::collection($data);
+        return new WarnigsResource($data);
     }
 }
