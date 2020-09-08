@@ -27,7 +27,7 @@ class WarnigsSmsController extends Controller
             $query->where('warnig_id', $warnig_id);
         }
 
-        $WarnigsSms = $query->with("user")->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
+        $WarnigsSms = $query->with(["user","user.img"])->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
 
         foreach ($WarnigsSms as $k => $v){
             $v->pics_img ==[];
