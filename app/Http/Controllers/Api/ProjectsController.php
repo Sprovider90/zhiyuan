@@ -58,10 +58,8 @@ class ProjectsController extends Controller
     {
 
         $projects_query=Projects::class;
-        var_dump($request->status);
-        var_dump($request->name);
-        isset($request->status) && $request->status !=='' && $projects_query=$projects->where('status',$request->status);
-        $request->name   && $projects_query=$projects->whereHas('customs',function($query) use ($request){
+        isset($request->status) && $request->status !=='' && $projects=$projects->where('status',$request->status);
+        $request->name   && $projects=$projects->whereHas('customs',function($query) use ($request){
             $query->where('company_name','like',"%{$request->name}%")
                 ->orWhere('company_addr','like','%'.$request->name.'%')
                 ->orWhere('name','like',"%{$request->name}%")
