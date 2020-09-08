@@ -18,7 +18,7 @@ class CreateWarnigsSms extends Migration
             $table->integer('warnig_id')->comment('预警id');
             $table->integer('send_id')->comment('发送者账号id');
             $table->integer('customer_id')->comment('客户id');
-            $table->string('content')->comment('内容');
+            $table->text('content')->comment('内容');
             $table->string('pics')->comment('图片');
             $table->softDeletes();
             $table->timestamps();
