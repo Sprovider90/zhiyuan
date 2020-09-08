@@ -125,14 +125,23 @@ class PublicController extends Controller
             }
         }else{
             //解决方案
-            $msg_list = WarnigsSms::with(['warnings','warnings.projectsPositions.area'=>function($query){
+            $sms_id_list = WarnigsSms::orderBy('id','desc')->limit(5)->get(['warnig_id']);
+            $msg_list = Warnigs::with(['projectsPositions.area'=>function($query){
+                $query->withTrashed();
+            }
+            ])->whereIN('id',$sms_id_list)->orderBy('id','desc')->get();
+            foreach ($msg_list as $k => $v){
+                $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
+                $v->isnew=1;
+            }
+            /*$msg_list = WarnigsSms::with(['warnings','warnings.projectsPositions.area'=>function($query){
                 $query->withTrashed();
             }
             ])->orderBy('id','desc')->limit(5)->get();
             foreach ($msg_list as $k => $v){
                 $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
                 $v->isnew=1;
-            }
+            }*/
         }
         return response()->json(array(
                 //项目总数 点位总数 设备总数 运行设备数
