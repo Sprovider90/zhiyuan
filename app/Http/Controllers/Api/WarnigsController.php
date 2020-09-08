@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\WarnigsResource;
+use App\Models\Projects;
 use App\Models\Warnigs;
 use Illuminate\Http\Request;
 use App\Models\WarnigsSms;
@@ -13,15 +14,15 @@ class WarnigsController extends Controller
     public function index(Request $request,Warnigs $Warnigs)
     {
         if($request->user()->customer_id){
-            $projects=optional($request->user()->with(["customer","customer.projects"])->first()->customer)->projects;
+            $projects=Projects::where("customer_id",$request->user()->customer_id)->pluck("id")->toArray();
             if(!empty($projects)){
-                $projects=array_column($projects->toArray(),"id");
                 $Warnigs = $Warnigs->whereIn('project_id',$projects);
             }else{
                 $Warnigs = $Warnigs->whereIn('project_id',[]);
             }
 
         }
+
         $Warnigs = $Warnigs->where('threshold_keys', '!=' , "");
 
         $request->time      && $Warnigs = $Warnigs->whereDate('created_at',$request->time);
