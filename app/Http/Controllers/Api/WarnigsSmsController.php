@@ -14,12 +14,21 @@ class WarnigsSmsController extends Controller
     public function index(WarnigsSmsRequest $request, WarnigsSms $WarnigsSms)
     {
         $query = $WarnigsSms->query();
-
+        //设置数据已读
+        $updatefeid="nocustomerred";
+        if($request->user()->customer_id){
+            $updatefeid="customerred";
+        }
+        $wherered=["warnig_id"=>$request->warnig_id,$updatefeid=>0];
+        WarnigsSms::where($wherered)->update([$updatefeid=>1]);
+        //end
+        //if($request->user()->customer_id)
         if ($warnig_id = $request->warnig_id) {
             $query->where('warnig_id', $warnig_id);
         }
 
-        $WarnigsSms = $query->with("user")->paginate($request->pageSize ?? $request->pageSize);
+        $WarnigsSms = $query->with("user")->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
+
         foreach ($WarnigsSms as $k => $v){
             $v->pics_img ==[];
             if(isset($v->pics) && !empty($v->pics)){

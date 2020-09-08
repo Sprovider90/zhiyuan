@@ -36,9 +36,19 @@ class WarnigsController extends Controller
         $data = $Warnigs->with(['project','project.customs','projectsPositions'])->with(['projectsPositions.area'=>function($query){
             $query->withTrashed();}])->orderBy('id','desc')->paginate();
 
+
+        $updatefeid="nocustomerred";
+        if($request->user()->customer_id){
+            $updatefeid="customerred";
+        }
+
+
         foreach ($data as $k => $v){
             $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
-            $v->isnew=1;
+
+            $fis=WarnigsSms::where(['warnig_id'=>$v->id,$updatefeid=>0])->first(["id"]);
+
+            $v->isnew=isset($fis->id)?1:0;
         }
         return new WarnigsResource($data);
     }

@@ -73,7 +73,7 @@ class PositiondatasController extends Controller
                         break;
                     }
                 }
-                
+
                 foreach ($pipei_data->thresholdinfo as $k=>$v){
                     $zhibiao=explode("~",$v);
                     if($zhibiao[1]<=$positiondata[strtolower($k)]){
