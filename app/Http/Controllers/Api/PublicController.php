@@ -19,6 +19,8 @@ use App\Models\Projects;
 use App\Models\ProjectsAreas;
 use App\Models\ProjectsPositions;
 use App\Models\Thresholds;
+use App\Models\Warnigs;
+use App\Models\WarnigsSms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -103,7 +105,35 @@ class PublicController extends Controller
                 $proDateList[$k]['count'] = Projects::whereRaw('left(created_at,10)="' . $v['date'] . '"')->count() ?? 0;
             }
         }
+        //预警警报
+        if($request->user()->customer_id){
+            $projects=optional($request->user()->with(["customer","customer.projects"])->first()->customer)->projects;
+            if(!empty($projects)){
+                $projects=array_column($projects->toArray(),"id");
+                $Warnigs = Warnigs::whereIn('project_id',$projects);
+            }else{
+                $Warnigs = Warnigs::whereIn('project_id',[]);
+            }
 
+            $msg_list = $Warnigs->with(['projectsPositions.area'=>function($query){
+                $query->withTrashed();
+            }
+            ])->orderBy('id','desc')->limit(5)->get();
+            foreach ($msg_list as $k => $v){
+                $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
+                $v->isnew=1;
+            }
+        }else{
+            //解决方案
+            $msg_list = WarnigsSms::with(['projectsPositions.area'=>function($query){
+                $query->withTrashed();
+            }
+            ])->orderBy('id','desc')->limit(5)->get();
+            foreach ($msg_list as $k => $v){
+                $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
+                $v->isnew=1;
+            }
+        }
         return response()->json(array(
                 //项目总数 点位总数 设备总数 运行设备数
                 'count' => array(
@@ -113,14 +143,15 @@ class PublicController extends Controller
                     'run_device_count'  => $run_device_count,
                 ),
                 //销售额 订单数
-                'order_count_list'  => $dateList,
+                'order_count_list'      => $dateList,
                 //项目累计
-                'project_count' => $project_count,
+                'project_count'         => $project_count,
                 //项目本周新增
                 'project_week_count'    => $bz_pro_count,
                 //项目
-                'project_count_list'      => $proDateList,
+                'project_count_list'    => $proDateList,
                 //预警方案/解决方案
+                'msg_list'              => $msg_list
          ));
     }
 
