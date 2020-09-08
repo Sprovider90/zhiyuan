@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PositionsResource;
 use App\Http\Resources\ProjectsResources;
 use App\Models\ProjectsPositions;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class DataController extends Controller
@@ -24,6 +25,10 @@ class DataController extends Controller
                       });
             });
         $position = $position->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
+        foreach ($position as $k => $v){
+            $tag = Tag::where('model_type',3)->where('model_id',$v->id)->first();
+            $v->tag = $tag->air_quality;
+        }
         return response(new PositionsResource($position));
     }
 }
