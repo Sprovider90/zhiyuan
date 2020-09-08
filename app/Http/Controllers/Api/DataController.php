@@ -27,7 +27,12 @@ class DataController extends Controller
         $position = $position->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
         foreach ($position as $k => $v){
             $tag = Tag::where('model_type',3)->where('model_id',$v->id)->first();
-            $v->tag = $tag->air_quality;
+            if($tag){
+                $v->tag = $tag->air_quality;
+            }else{
+                $v->tag = '';
+            }
+
         }
         return response(new PositionsResource($position));
     }
