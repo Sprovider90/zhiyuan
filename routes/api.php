@@ -181,6 +181,12 @@ Route::prefix('v1')
                         //首页数据统计 项目总数 点位总数 设备总数
                         Route::get('getIndexCount','PublicController@getIndexCount')
                             ->name('public.getIndexCount');
+                        //首页大屏右侧项目列表
+                        Route::get('getIndexProjectList','PublicController@getIndexProjectList')
+                            ->name('public.getIndexProjectList');
+                        //首页大屏右侧项目某个区域的列表
+                        Route::get('getIndexProjectAreaList','PublicController@getIndexProjectAreaList')
+                            ->name('public.getIndexProjectAreaList');
                         //文件上传
                         Route::resource('file', 'PublicController')->only([
                             'store'

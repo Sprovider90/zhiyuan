@@ -18,6 +18,7 @@ use App\Models\Orders;
 use App\Models\Projects;
 use App\Models\ProjectsAreas;
 use App\Models\ProjectsPositions;
+use App\Models\Tag;
 use App\Models\Thresholds;
 use App\Models\Warnigs;
 use App\Models\WarnigsSms;
@@ -29,6 +30,41 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PublicController extends Controller
 {
+    //获取所有项目列表 首页大屏使用
+    public function getIndexProjectList(Request $request,Projects $projects){
+        $projects = $projects->with(['areas','areas.file','thresholds']);
+        $request->user()->customer_id && $projects->where('customer_id',$request->user()->customer_id);
+        $request->user()->show_project_id && $projects = $projects->selectRaw('*,if(id='.$request->user()->show_project_id.',1,0) as order_num')->orderBy('order_num','desc');
+        $projects = $projects->orderBy('created_at','desc')->get();
+        if($projects[0]['areas']){
+            foreach ($projects[0]['areas'] as $k => $v){
+                $tag = Tag::where('model_type',2)->where('model_id',$v->id)->orderBy('created_at','desc')->first();
+                $v['tag'] =  null;
+                if($tag){
+                    $v['tag'] = $tag->air_quality;
+                }
+            }
+        }
+        return response()->json($projects);
+    }
+
+    //通过项目ID获取 项目 区域 空气质量列表
+    public function getIndexProjectAreaList(Request $request,Projects $projects)
+    {
+        $projects = $projects->with(['areas','areas.file','thresholds'])->where($request->project_id);
+        $request->user()->customer_id && $projects->where('customer_id',$request->user()->customer_id);
+        $projects = $projects->first();
+        if($projects){
+            foreach ($projects['areas'] as $k => $v){
+                $tag = Tag::where('model_type',2)->where('model_id',$v->id)->orderBy('created_at','desc')->first();
+                $v['tag'] =  null;
+                if($tag){
+                    $v['tag'] = $tag->air_quality;
+                }
+            }
+        }
+    }
+
     //首页 项目总数 点位总数  设备总数
     public function getIndexCount(Request $request){
         $order_start = $request->get('order_start','');
