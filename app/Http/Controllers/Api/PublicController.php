@@ -118,14 +118,14 @@ class PublicController extends Controller
             $msg_list = $Warnigs->with(['projectsPositions.area'=>function($query){
                 $query->withTrashed();
             }
-            ])->orderBy('id','desc')->limit(5)->get();
+            ])->orderBy('id','desc')->limit(10)->get();
             foreach ($msg_list as $k => $v){
                 $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
                 $v->isnew=1;
             }
         }else{
             //解决方案
-            $sms_id_list = WarnigsSms::orderBy('id','desc')->limit(5)->get(['warnig_id']);
+            $sms_id_list = WarnigsSms::orderBy('id','desc')->limit(10)->get(['warnig_id']);
             $msg_list = Warnigs::with(['projectsPositions.area'=>function($query){
                 $query->withTrashed();
             }
