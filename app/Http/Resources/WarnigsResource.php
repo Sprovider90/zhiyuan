@@ -15,13 +15,15 @@ class WarnigsResource extends JsonResource
     public function toArray($request)
     {
         $data=parent::toArray($request);
-//        if(isset($data["threshold_keys"])&&!empty($data["threshold_keys"])){
-//            $arr=explode(",",$data["threshold_keys"]);
-//            foreach ($arr as $k=>$v){
-//
-//            }
-//        }
-//        $data['threshold_keys'] = ProjectsResources::make($this->whenLoaded('project'));
+        $zhibaos=["humidity"=>"湿度","temperature"=>"温度","formaldehyde"=>"甲醛","PM25"=>"PM25","CO2"=>"CO2","TVOC"=>"TVOC"];
+        if(isset($data["threshold_keys"])&&!empty($data["threshold_keys"])){
+            $arr=explode(",",$data["threshold_keys"]);
+            foreach ($arr as $k=>&$v){
+                $v=$zhibaos[$v];
+            }
+            $data['threshold_keys'] = implode(',',$arr);
+        }
+
 
         return $data;
     }

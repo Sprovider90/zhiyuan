@@ -50,7 +50,7 @@ class WarnigsController extends Controller
 
             $v->isnew=isset($fis->id)?1:0;
         }
-        return new WarnigsResource($data);
+        return WarnigsResource::collection($data);
     }
     public function show(Request $request,Warnigs $warnig)
     {
@@ -61,6 +61,6 @@ class WarnigsController extends Controller
             $data["originaldata_name"]=isset($originaldata_arr["name"])?$originaldata_arr["name"]:"";
         }
 
-        return new WarnigsResource($data);
+        return WarnigsResource::collection($data);
     }
 }
