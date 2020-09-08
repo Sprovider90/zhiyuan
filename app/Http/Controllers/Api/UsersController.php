@@ -81,7 +81,7 @@ class UsersController extends Controller
         $this->authorize('update', $user);
        	\DB::beginTransaction();
        	try{
-	        $attributes = $request->only(['truename', 'password','status','img']);
+	        $attributes = $request->only(['truename', 'password','status','img','show_project_id','show_project_id','show_area_id']);
 
 	        if (isset($request->roles)) {
 
@@ -96,6 +96,7 @@ class UsersController extends Controller
 	            }
 
 	        }
+
 	        $user->update($attributes);
 	        \DB::commit();
         }catch(\Exception $e){
