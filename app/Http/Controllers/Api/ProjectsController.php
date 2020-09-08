@@ -58,7 +58,7 @@ class ProjectsController extends Controller
     {
 
         $projects_query=Projects::class;
-        ($request->status===0 || $request->status===1) && $projects_query=$projects->where('status',$request->status);
+        ($request->status==='0' || $request->status==='1') && $projects_query=$projects->where('status',$request->status);
         $request->name   && $projects_query=$projects->whereHas('customs',function($query) use ($request){
             $query->where('company_name','like',"%{$request->name}%")
                 ->orWhere('company_addr','like','%'.$request->name.'%')
