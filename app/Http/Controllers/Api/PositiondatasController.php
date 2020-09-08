@@ -39,7 +39,7 @@ class PositiondatasController extends Controller
                 foreach ($tmp["body"]["list"] as $k=>&$v){
                     //判断指标是否污染
                     $v["red"]=$this->getRed($v);
-                    list($v["project_tvoc"],$v["project_hcho"])=$this->getPro($v["projectId"]);
+                    //list($v["project_tvoc"],$v["project_hcho"])=$this->getPro($v["projectId"]);
 
                 }
                 $result=json_encode($tmp);
@@ -48,29 +48,32 @@ class PositiondatasController extends Controller
         return $result;
     }
 
-    protected function getPro($projectId)
-    {
-        if(!empty(self::$proInfo)){
-            return self::$proInfo;
-        }
-
-        $rs=Projects::find($projectId,["tvoc","hcho"]);
-        self::$proInfo=[$rs->tvoc,$rs->hcho];
-        return self::$proInfo;
-    }
+//    protected function getPro($projectId)
+//    {
+//        if(!empty(self::$proInfo)){
+//            return self::$proInfo;
+//        }
+//
+//        $rs=Projects::find($projectId,["tvoc","hcho"]);
+//        self::$proInfo=[$rs->tvoc,$rs->hcho];
+//        return self::$proInfo;
+//    }
     protected function getRed($positiondata)
     {
         $result=[];
         $proinfo=$this->getProThresholds($positiondata["projectId"]);
+
         if(!empty($proinfo)){
             $pipei_data=$proinfo->last();
+
             if(!empty($pipei_data)){
                 foreach ($proinfo as $k=>$v){
                     if($positiondata["timestamp"]>=$v->created_at){
                         $pipei_data=$v;
+                        break;
                     }
                 }
-
+                
                 foreach ($pipei_data->thresholdinfo as $k=>$v){
                     $zhibiao=explode("~",$v);
                     if($zhibiao[1]<=$positiondata[strtolower($k)]){
