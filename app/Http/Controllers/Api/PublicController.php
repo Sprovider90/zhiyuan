@@ -47,7 +47,7 @@ class PublicController extends Controller
             //解决方案
             $w_list = Warnigs::where('project_id',$projects[0]['id'])->get(['id']);
 
-            $msg = WarnigsSms::whereIn('warnig_id',$w_list)->orderBy('id','desc')->limit(1)->get(['warnig_id']);
+            $msg = WarnigsSms::whereIn('warnig_id',$w_list)->orderBy('id','desc')->limit(1)->get();
             $projects[0]['warnigs_sms'] = $msg;
             //检测标准
             if($projects[0]['status'] == 1){
