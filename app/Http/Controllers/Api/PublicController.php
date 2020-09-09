@@ -51,7 +51,7 @@ class PublicController extends Controller
     //通过项目ID获取 项目 区域 空气质量列表
     public function getIndexProjectAreaList(Request $request,Projects $projects)
     {
-        $projects = $projects->with(['areas','areas.file','thresholds'])->where($request->project_id);
+        $projects = $projects->with(['areas','areas.file','thresholds'])->where('id',$request->project_id);
         $request->user()->customer_id && $projects->where('customer_id',$request->user()->customer_id);
         $projects = $projects->first();
         if($projects){
