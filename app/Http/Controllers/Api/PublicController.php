@@ -44,7 +44,7 @@ class PublicController extends Controller
                     $v['tag'] = $tag->air_quality;
                 }
             }
-            if($projects->status == 1){
+            if($projects[0]['status'] == 1){
                 $v->threshold = null;
             }else{
                 $v->threshold = $this->getProjectStageThreshold($projects->stages);
