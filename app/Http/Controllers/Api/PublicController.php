@@ -44,6 +44,12 @@ class PublicController extends Controller
                     $v['tag'] = $tag->air_quality;
                 }
             }
+            //解决方案
+            $w_list = Warnigs::where('project_id',$projects[0]['id'])->get(['id']);
+
+            $msg = WarnigsSms::whereIn('warnig_id',$w_list)->orderBy('id','desc')->limit(1)->get(['warnig_id']);
+            $projects[0]['warnigs_sms'] = $msg;
+            //检测标准
             if($projects[0]['status'] == 1){
                 $projects[0]['threshold'] = null;
             }else{
@@ -56,7 +62,7 @@ class PublicController extends Controller
     //通过项目ID获取 项目 区域 空气质量列表
     public function getIndexProjectAreaList(Request $request,Projects $projects)
     {
-        $projects = $projects->with(['areas','areas.file','thresholds'])->where('id',$request->project_id)->whereIn('status',[1,4,5,6]);
+        $projects = $projects->with(['areas','areas.file','stages'])->where('id',$request->project_id)->whereIn('status',[1,4,5,6]);
         $request->user()->customer_id && $projects = $projects->where('customer_id',$request->user()->customer_id);
         $projects = $projects->first();
         if($projects){
