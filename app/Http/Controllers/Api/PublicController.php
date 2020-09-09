@@ -52,7 +52,7 @@ class PublicController extends Controller
     public function getIndexProjectAreaList(Request $request,Projects $projects)
     {
         $projects = $projects->with(['areas','areas.file','thresholds'])->where('id',$request->project_id);
-        $request->user()->customer_id && $projects->where('customer_id',$request->user()->customer_id);
+        $request->user()->customer_id && $projects = $projects->where('customer_id',$request->user()->customer_id);
         $projects = $projects->first();
         if($projects){
             foreach ($projects['areas'] as $k => $v){
@@ -63,6 +63,7 @@ class PublicController extends Controller
                 }
             }
         }
+        return response()->json($projects);
     }
 
     //首页 项目总数 点位总数  设备总数
