@@ -32,7 +32,7 @@ class PublicController extends Controller
 {
     //获取所有项目列表 首页大屏使用
     public function getIndexProjectList(Request $request,Projects $projects){
-        $projects = $projects->with(['areas','areas.file','thresholds','stages']);
+        $projects = $projects->with(['areas','areas.file','stages']);
         $request->user()->customer_id && $projects->where('customer_id',$request->user()->customer_id);
         $request->user()->show_project_id && $projects = $projects->selectRaw('*,if(id='.$request->user()->show_project_id.',1,0) as order_num')->orderBy('order_num','desc');
         $projects = $projects->whereIn('status',[1,4,5,6])->orderBy('created_at','desc')->get();
@@ -45,9 +45,9 @@ class PublicController extends Controller
                 }
             }
             if($projects[0]['status'] == 1){
-                $v->threshold = null;
+                $projects[0]['threshold'] = null;
             }else{
-                $v->threshold = $this->getProjectStageThreshold($projects[0]['stages']);
+                $projects[0]['threshold'] = $this->getProjectStageThreshold($projects[0]['stages']);
             }
         }
         return response()->json($projects);
