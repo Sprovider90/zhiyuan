@@ -32,10 +32,10 @@ class PublicController extends Controller
 {
     //获取所有项目列表 首页大屏使用
     public function getIndexProjectList(Request $request,Projects $projects){
-        $projects = $projects->with(['areas','areas.file','thresholds']);
+        $projects = $projects->with(['areas','areas.file','thresholds','stages']);
         $request->user()->customer_id && $projects->where('customer_id',$request->user()->customer_id);
         $request->user()->show_project_id && $projects = $projects->selectRaw('*,if(id='.$request->user()->show_project_id.',1,0) as order_num')->orderBy('order_num','desc');
-        $projects = $projects->orderBy('created_at','desc')->get();
+        $projects = $projects->whereIn('status',[1,4,5,6])->orderBy('created_at','desc')->get();
         if($projects[0]['areas']){
             foreach ($projects[0]['areas'] as $k => $v){
                 $tag = Tag::where('model_type',2)->where('model_id',$v->id)->orderBy('created_at','desc')->first();
@@ -44,6 +44,11 @@ class PublicController extends Controller
                     $v['tag'] = $tag->air_quality;
                 }
             }
+            if($projects->status == 1){
+                $v->threshold = null;
+            }else{
+                $v->threshold = $this->getProjectStageThreshold($projects->stages);
+            }
         }
         return response()->json($projects);
     }
@@ -51,7 +56,7 @@ class PublicController extends Controller
     //通过项目ID获取 项目 区域 空气质量列表
     public function getIndexProjectAreaList(Request $request,Projects $projects)
     {
-        $projects = $projects->with(['areas','areas.file','thresholds'])->where('id',$request->project_id);
+        $projects = $projects->with(['areas','areas.file','thresholds'])->where('id',$request->project_id)->whereIn('status',[1,4,5,6]);
         $request->user()->customer_id && $projects = $projects->where('customer_id',$request->user()->customer_id);
         $projects = $projects->first();
         if($projects){
@@ -62,6 +67,16 @@ class PublicController extends Controller
                     $v['tag'] = $tag->air_quality;
                 }
             }
+            //解决方案
+
+            //检测标准
+            if($projects->status == 1){
+                $v->threshold = null;
+            }else{
+                $v->threshold = $this->getProjectStageThreshold($projects->stages);
+            }
+        }else{
+            $projects = [];
         }
         return response()->json($projects);
     }
@@ -310,5 +325,19 @@ class PublicController extends Controller
             return new HttpException(400, '内部错误');
         }
 
+    }
+
+    /**
+     * 获取阶段检测标准
+     * @param $data
+     * @return null
+     */
+    private function getProjectStageThreshold($data){
+        foreach ($data as $k => $v){
+            if(time() > strtotime($v->start_date) && time() < strtotime($v->end_date)){
+               $data = Thresholds::find($v->threshold_id);
+               return $data ? $data->thresholdinfo : null;
+            }
+        }
     }
 }
