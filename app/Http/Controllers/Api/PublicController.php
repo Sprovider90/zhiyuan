@@ -94,7 +94,18 @@ class PublicController extends Controller
             $dateList = [];
         }else{
             //销售额 默认本月
-            $date = $this->returnDate(2);
+            $date = $this->returnDate(3);
+            $dateList = $this->returnDateList(substr($date[0],0,10),substr($date[1],0,10));
+            foreach ($dateList as $k => $v){
+                $dateList[$k]['money'] = 0;
+                $dateList[$k]['order_count'] = 0;
+                $s = FinanceLog::where('type',1)->where('date',$v['date'])->sum('money');
+                $t = FinanceLog::where('type',2)->where('date',$v['date'])->sum('money');
+                $dateList[$k]['money'] = $s-$t;
+                $count = Orders::whereRaw('left(created_at,10)="'.$v['date'].'"')->count();
+                $dateList[$k]['order_count'] = $count ?? 0;
+            }
+            /*$date = $this->returnDate(2);
             if(($order_start && $order_end) && (strtotime($order_start) < strtotime($order_end))){
                 $date = [$order_start,$order_end];
                 $dateList = $this->returnMonthList($date[0],$date[1]);
@@ -121,7 +132,7 @@ class PublicController extends Controller
                     $count = Orders::whereRaw('left(created_at,10)="'.$v['date'].'"')->count();
                     $dateList[$k]['order_count'] = $count ?? 0;
                 }
-            }
+            }*/
         }
 
         //本周项目总数
@@ -131,12 +142,14 @@ class PublicController extends Controller
         if($request->user()->customer_id){
             $proDateList = [];
         }else {
-            if(($pro_start && $pro_end) && (strtotime($pro_start) < strtotime($pro_end))){
+            $pro_date = $this->returnDate(3);
+            $proDateList = $this->returnDateList(substr($pro_date[0], 0, 10), substr($pro_date[1], 0, 10));
+            /*if(($pro_start && $pro_end) && (strtotime($pro_start) < strtotime($pro_end))){
                 $proDateList = $this->returnDateList($pro_start,$pro_end);
             }else{
                 $pro_date = $this->returnDate($type);
                 $proDateList = $this->returnDateList(substr($pro_date[0], 0, 10), substr($pro_date[1], 0, 10));
-            }
+            }*/
             foreach ($proDateList as $k => $v) {
                 $proDateList[$k]['count'] = Projects::whereRaw('left(created_at,10)="' . $v['date'] . '"')->count() ?? 0;
             }
