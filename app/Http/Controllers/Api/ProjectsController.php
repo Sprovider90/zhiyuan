@@ -201,7 +201,7 @@ class ProjectsController extends Controller
                     unset($v['id']);
                 }
                 if(!isset($v['file'])){
-                    unset($v['file']);
+                    $v['file'] = null;
                 }
                 if($id > 0){
                     ProjectsAreas::where('id',$id)->update($v);
