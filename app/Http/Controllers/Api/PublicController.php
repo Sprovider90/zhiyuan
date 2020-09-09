@@ -179,9 +179,15 @@ class PublicController extends Controller
         }
         //预警警报
         if($request->user()->customer_id){
-            $projects=optional($request->user()->with(["customer","customer.projects"])->first()->customer)->projects;
+            /*$projects=optional($request->user()->with(["customer","customer.projects"])->first()->customer)->projects;
             if(!empty($projects)){
                 $projects=array_column($projects->toArray(),"id");
+                $Warnigs = Warnigs::whereIn('project_id',$projects);
+            }else{
+                $Warnigs = Warnigs::whereIn('project_id',[]);
+            }*/
+            $projects=Projects::where("customer_id",$request->user()->customer_id)->pluck("id")->toArray();
+            if(!empty($projects)){
                 $Warnigs = Warnigs::whereIn('project_id',$projects);
             }else{
                 $Warnigs = Warnigs::whereIn('project_id',[]);
@@ -206,14 +212,6 @@ class PublicController extends Controller
                 $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
                 $v->isnew=1;
             }
-            /*$msg_list = WarnigsSms::with(['warnings','warnings.projectsPositions.area'=>function($query){
-                $query->withTrashed();
-            }
-            ])->orderBy('id','desc')->limit(5)->get();
-            foreach ($msg_list as $k => $v){
-                $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
-                $v->isnew=1;
-            }*/
         }
         return response()->json(array(
                 //项目总数 点位总数 设备总数 运行设备数
