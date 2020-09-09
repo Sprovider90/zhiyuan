@@ -177,7 +177,7 @@ class ProjectsController extends Controller
                 if($id > 0){
                     //判断是否与原来阈值id一样 不一样则进行删除projects_thresholds
                     $tmp = ProjectsStages::find($id);
-                    if($v->threshold_id && $v->threshold_id !== $tmp->threshold_id){
+                    if($v['threshold_id'] && $v->threshold_id !== $tmp->threshold_id){
                         //真删projects_thresholds
                         ProjectsThresholds::where('project_id',$project->id)->where('stage_id',$v->id)->forceDelete();
                     }
