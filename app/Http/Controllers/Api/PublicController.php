@@ -71,9 +71,9 @@ class PublicController extends Controller
 
             //检测标准
             if($projects->status == 1){
-                $v->threshold = null;
+                $projects->threshold = null;
             }else{
-                $v->threshold = $this->getProjectStageThreshold($projects->stages);
+                $projects->threshold = $this->getProjectStageThreshold($projects->stages);
             }
         }else{
             $projects = [];
