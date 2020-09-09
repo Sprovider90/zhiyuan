@@ -58,9 +58,9 @@ class PreinstallController extends Controller
                     DB::rollBack();
                     return $this->errorResponse(500,'系统错误');
                 }
-                //更新项目表setting_flg=2
-                Projects::where('id',$project->id)->update(['setting_flg'=>2]);
             }
+            //更新项目表setting_flg=2
+            Projects::where('id',$project->id)->update(['setting_flg'=>2]);
             DB::commit();
             return response('',201);
         }catch (\Exception $e){

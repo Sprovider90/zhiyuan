@@ -94,8 +94,11 @@ class ProjectsController extends Controller
             $projects->areas()->createMany(json_decode($request->areas,true));
             $projects->stages()->createMany(json_decode($request->stages,true));
         });
+        $projects = $projects->load('areas')->load('stages');
+        //修改项目状态
+        $projects->update(['status'=>$this->getProjectStatus($projects->stages)]);
         dispatch(new UpdateProStage(["project_id"=>$projects->id]));
-        return response(new ProjectsResources($projects->load('areas')->load('stages')));
+        return response(new ProjectsResources($projects));
     }
 
     /**
@@ -203,9 +206,12 @@ class ProjectsController extends Controller
             if($del_areas){
                 ProjectsAreas::where('project_id',$project['id'])->whereIN('id',explode(',',$del_areas))->delete();
             }
+            $project = $project->load('areas')->load('stages');
+            //修改项目状态
+            $project->update(['status'=>$this->getProjectStatus($project->stages)]);
             DB::commit();
             dispatch(new UpdateProStage(["project_id"=>$project->id]));
-            return response(new ProjectsResources($project->load('areas')->load('stages')),201);
+            return response(new ProjectsResources($project),201);
         }catch (\Exception $e){
             DB::rollback();
             throw new HttpException(403, $e->getMessage());
@@ -241,6 +247,27 @@ class ProjectsController extends Controller
         $positions = $positions->with(['area','area.file']);
         $positions = $positions->where('project_id',$project);
         return new PorjectsAreasResource($positions->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize));
+    }
+
+    /**
+     * 新增项目或编辑项目时判断当前所属状态
+     * 状态0未开始1暂停中2已结束3项目错误4施工中5交付中6维护中7项目大阶段错误
+     */
+    private function getProjectStatus($data){
+        $count = count($data);
+        //未开始
+        if(time() < strtotime($data[0]['start_date'])){
+            return 0;
+        }
+        if(time() > strtotime($data[$count-1]['end_date'])){
+            return 2;
+        }
+        foreach ($data as $k => $v){
+            if(time() > strtotime($v->start_date) && time() < strtotime($v->end_date)){
+                return $v->stage;
+            }
+        }
+        return 1;
     }
 
 }
