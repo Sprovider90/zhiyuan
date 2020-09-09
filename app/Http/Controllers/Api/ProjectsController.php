@@ -112,13 +112,13 @@ class ProjectsController extends Controller
         $data['start_time'] = $date->min('start_date');
         $data['end_time']   = $date->max('end_date');
         //项目自定义阈值覆盖标准阈值
-        foreach ($data["stages"] as $k => &$v) {
+        foreach ($data["stages"] as $k => $v) {
             $rs=ProjectsThresholds::where(["project_id"=>$v["project_id"],"stage_id"=>$v["id"]])->get();
             if(isset($rs[0])){
-                  $v["thresholds"]["thresholdinfo"]=$rs[0]->thresholdinfo;
-                  $v["thresholds"]["thresholds_id"]=$rs[0]->id;
+                  $v["pro_thresholdinfo"]=$rs[0]->thresholdinfo;
+                  $v["pro_thresholds_id"]=$rs[0]->id;
             }else{
-                  $v["thresholds"]["thresholds_id"]=0;
+                  $v["pro_thresholds_id"]=0;
             }
         }
         foreach ($data['areas'] as $k => $v){
