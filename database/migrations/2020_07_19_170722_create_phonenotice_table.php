@@ -17,7 +17,7 @@ class CreatePhonenoticeTable extends Migration
             $table->bigIncrements('id');
             $table->integer('project_id')->unsigned()->default(0)->comment('项目id');
             $table->integer('warnigs_id')->unsigned()->default(0)->comment('预警列表id');
-            $table->string('projectsetting_kz_json',500)->nullable()->comment('项目通知设置快照');
+            $table->text('projectsetting_kz_json')->nullable()->comment('项目通知设置快照');
             $table->tinyInteger('is_send')->default(0)->comment('是否发送通知，1是0否');
             $table->string('no_send_reason',30)->nullable()->comment("不发送通知的原因:1项目没有设置预警或者设置得不完整（阻断流程）
             2预警列表源数据错误（阻断流程）
