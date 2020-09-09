@@ -47,7 +47,7 @@ class PublicController extends Controller
             if($projects[0]['status'] == 1){
                 $v->threshold = null;
             }else{
-                $v->threshold = $this->getProjectStageThreshold($projects->stages);
+                $v->threshold = $this->getProjectStageThreshold($projects[0]['stages']);
             }
         }
         return response()->json($projects);
