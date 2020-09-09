@@ -179,7 +179,7 @@ class ProjectsController extends Controller
                     $tmp = ProjectsStages::find($id);
                     if($v['threshold_id'] && $v['threshold_id'] != $tmp->threshold_id){
                         //真删projects_thresholds
-                        ProjectsThresholds::where('project_id',$project->id)->where('stage_id',$v->id)->forceDelete();
+                        ProjectsThresholds::where('project_id',$project->id)->where('stage_id',$v['id'])->forceDelete();
                     }
                     ProjectsStages::where('id',$id)->update($v);
                 }else{
