@@ -193,7 +193,7 @@ class PublicController extends Controller
                 $Warnigs = Warnigs::whereIn('project_id',[]);
             }
 
-            $msg_list = $Warnigs->with(['projectsPositions.area'=>function($query){
+            $msg_list = $Warnigs->where('threshold_keys', '!=' , "")->with(['projectsPositions.area'=>function($query){
                 $query->withTrashed();
             }
             ])->orderBy('id','desc')->limit(10)->get();
