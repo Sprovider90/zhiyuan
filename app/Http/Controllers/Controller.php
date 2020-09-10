@@ -22,7 +22,7 @@ class Controller extends BaseController
         $arr = ["humidity"=>"湿度","temperature"=>"温度","formaldehyde"=>"甲醛","PM25"=>"PM25","CO2"=>"CO2","TVOC"=>"TVOC"];
         $data = explode(',',$string);
         foreach ($data as $k => $v){
-            $new_string +=$arr[$v]+',';
+            $new_string .= $arr[$v] .',';
         }
         return substr($new_string,-1);
     }
