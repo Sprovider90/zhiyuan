@@ -179,13 +179,6 @@ class PublicController extends Controller
         }
         //预警警报
         if($request->user()->customer_id){
-            /*$projects=optional($request->user()->with(["customer","customer.projects"])->first()->customer)->projects;
-            if(!empty($projects)){
-                $projects=array_column($projects->toArray(),"id");
-                $Warnigs = Warnigs::whereIn('project_id',$projects);
-            }else{
-                $Warnigs = Warnigs::whereIn('project_id',[]);
-            }*/
             $projects=Projects::where("customer_id",$request->user()->customer_id)->pluck("id")->toArray();
             if(!empty($projects)){
                 $Warnigs = Warnigs::whereIn('project_id',$projects);
@@ -204,7 +197,23 @@ class PublicController extends Controller
             }
         }else{
             //解决方案
-            $sms_id_list = WarnigsSms::orderBy('id','desc')->limit(10)->get(['warnig_id']);
+            $projects=Projects::where("customer_id",$request->user()->customer_id)->pluck("id")->toArray();
+            if(!empty($projects)){
+                $Warnigs = Warnigs::whereIn('project_id',$projects);
+            }else{
+                $Warnigs = Warnigs::whereIn('project_id',[]);
+            }
+
+            $msg_list = $Warnigs->where('threshold_keys', '!=' , "")->with(['projectsPositions.area'=>function($query){
+                $query->withTrashed();
+            }
+            ])->orderBy('id','desc')->limit(10)->get();
+            foreach ($msg_list as $k => $v){
+                $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
+                $v->isnew=1;
+                $v->threshold_keys = $this->getChinaName($v->threshold_keys);
+            }
+            /*$sms_id_list = WarnigsSms::orderBy('id','desc')->limit(10)->get(['warnig_id']);
             $msg_list = Warnigs::with(['projectsPositions.area'=>function($query){
                 $query->withTrashed();
             }
@@ -213,7 +222,7 @@ class PublicController extends Controller
                 $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
                 $v->isnew=1;
                 $v->threshold_keys = $this->getChinaName($v->threshold_keys);
-            }
+            }*/
         }
         return response()->json(array(
                 //项目总数 点位总数 设备总数 运行设备数
