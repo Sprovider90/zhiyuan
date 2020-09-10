@@ -24,7 +24,7 @@ class Controller extends BaseController
         foreach ($data as $k => $v){
             $new_string .= $arr[$v] .',';
         }
-        return mb_substr($new_string,-1);
+        return mb_substr($new_string,0,-1);
     }
 
     /***
