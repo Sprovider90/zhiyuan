@@ -17,6 +17,16 @@ class Controller extends BaseController
 
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    public function getChinaName($string){
+        $new_string = '';
+        $arr = ["humidity"=>"湿度","temperature"=>"温度","formaldehyde"=>"甲醛","PM25"=>"PM25","CO2"=>"CO2","TVOC"=>"TVOC"];
+        $data = explode(',',$string);
+        foreach ($data as $k => $v){
+            $new_string +=$arr[$v]+',';
+        }
+        return substr($new_string,-1);
+    }
+
     /***
      * 返回开始结束日期  统一函数
      *

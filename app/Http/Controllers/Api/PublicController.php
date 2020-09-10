@@ -200,6 +200,7 @@ class PublicController extends Controller
             foreach ($msg_list as $k => $v){
                 $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
                 $v->isnew=1;
+                $v->threshold_keys = $this->getChinaName($v->threshold_keys);
             }
         }else{
             //解决方案
