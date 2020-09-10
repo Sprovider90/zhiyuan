@@ -32,7 +32,7 @@ class DataController extends Controller
             }else{
                 $v->tag = '';
             }
-
+            $v['device']['run_status'] = $v->status;
         }
         return response(new PositionsResource($position));
     }
