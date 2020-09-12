@@ -59,7 +59,12 @@ class WarnigsSmsController extends Controller
         $query->where('customer_id', 0);
         $query->where('warnig_id', $warnigs->id);
 
-        $warnigssms=$query->orderBy('id','desc')->first();
+        $warnigssms=$query->with(["user","user.img"])->orderBy('id','desc')->first();
+
+        if(isset($warnigssms->pics) && !empty($warnigssms->pics)){
+            $warnigssms->pics_img = Files::whereIn('id',explode(",",$warnigssms->pics))->get();
+        }
+
         return new WarnigsSmsResource($warnigssms);
     }
 
