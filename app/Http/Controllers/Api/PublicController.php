@@ -44,7 +44,9 @@ class PublicController extends Controller
                     $v['tag'] = $tag->air_quality;
                 }
                 //所有点位
-                $position = ProjectsPositions::where('area_id',$v->id)->where('status',1)->get();
+                $list = ProjectsPositions::where('area_id',$v->id)->where('status',1)
+                $position = $list->get();
+                $p_id_str = $list->get(['id']);
                 $v->position = $position;
                 if($position){
                     foreach ($v->position as $k1 => $v1){
@@ -55,11 +57,12 @@ class PublicController extends Controller
                         }
                     }
                 }
+                //解决方案
+                $w_list = Warnigs::where('project_id',$projects[0]['id'])->whereIn('point_id',$p_id_str)->get(['id']);
+                $msg = WarnigsSms::whereIn('warnig_id',$w_list)->orderBy('id','desc')->first();
+                $projects[0]['warnigs_sms'] = $msg;
             }
-            //解决方案
-            $w_list = Warnigs::where('project_id',$projects[0]['id'])->get(['id']);
-            $msg = WarnigsSms::whereIn('warnig_id',$w_list)->orderBy('id','desc')->first();
-            $projects[0]['warnigs_sms'] = $msg;
+
             //检测标准
             if($projects[0]['status'] == 1){
                 $projects[0]['threshold'] = null;
@@ -82,6 +85,18 @@ class PublicController extends Controller
                 $v['tag'] =  null;
                 if($tag){
                     $v['tag'] = $tag->air_quality;
+                }
+                //所有点位
+                $position = ProjectsPositions::where('area_id',$v->id)->where('status',1)->get();
+                $v->position = $position;
+                if($position){
+                    foreach ($v->position as $k1 => $v1){
+                        $tag = Tag::where('model_type',3)->where('model_id',$v1->id)->orderBy('created_at','desc')->first();
+                        $v1['tag'] =  null;
+                        if($tag){
+                            $v1['tag'] = $tag->air_quality;
+                        }
+                    }
                 }
             }
             //解决方案
