@@ -87,7 +87,9 @@ class PublicController extends Controller
                     $v['tag'] = $tag->air_quality;
                 }
                 //所有点位
-                $position = ProjectsPositions::where('area_id',$v->id)->where('status',1)->get();
+                $list = ProjectsPositions::where('area_id',$v->id)->where('status',1);
+                $position = $list->get();
+                $p_id_str = $list->get(['id']);
                 $v->position = $position;
                 if($position){
                     foreach ($v->position as $k1 => $v1){
@@ -98,11 +100,11 @@ class PublicController extends Controller
                         }
                     }
                 }
+                //解决方案
+                $w_list = Warnigs::where('project_id',$projects[0]['id'])->whereIn('point_id',$p_id_str)->get(['id']);
+                $msg = WarnigsSms::whereIn('warnig_id',$w_list)->orderBy('id','desc')->first();
+                $v['warnigs_sms'] = $msg;
             }
-            //解决方案
-            $w_list = Warnigs::where('project_id',$projects['id'])->get(['id']);
-            $msg = WarnigsSms::whereIn('warnig_id',$w_list)->orderBy('id','desc')->first();
-            $projects['warnigs_sms'] = $msg;
             //检测标准
             if($projects->status == 1){
                 $projects->threshold = null;
