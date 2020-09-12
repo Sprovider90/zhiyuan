@@ -53,4 +53,14 @@ class WarnigsSmsController extends Controller
         $warnigssms->update($request->all());
         return new WarnigsSmsResource($warnigssms);
     }
+    public function lastsms(Warnigs $warnigs,WarnigsSms $WarnigsSms)
+    {
+        $query = $WarnigsSms->query();
+        $query->where('customer_id', 0);
+        $query->where('warnig_id', $warnigs->id);
+
+        $warnigssms=$query->orderBy('id','desc')->first();
+        return new WarnigsSmsResource($warnigssms);
+    }
+
 }

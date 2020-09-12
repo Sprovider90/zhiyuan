@@ -265,7 +265,9 @@ Route::prefix('v1')
                     // 修改预警警报消息
                     Route::patch('warnigs/{warnigs}/warnigssms/{warnigssms}', 'WarnigsSmsController@update')
                         ->name('warnigs.warnigssms.update');
-
+                    // 某条预警的最新解决方案
+                    Route::get('warnigs/{warnigs}/lastsms', 'WarnigsSmsController@lastsms')
+                        ->name('warnigs.warnigssms.lastsms');
 
 
                 });
