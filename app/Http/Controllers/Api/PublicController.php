@@ -43,6 +43,18 @@ class PublicController extends Controller
                 if($tag){
                     $v['tag'] = $tag->air_quality;
                 }
+                //所有点位
+                $position = ProjectsPositions::where('area_id',$v->id)->where('status',1)->get();
+                $v->position = $position;
+                if($position){
+                    foreach ($v->position as $k1 => $v1){
+                        $tag = Tag::where('model_type',3)->where('model_id',$v1->id)->orderBy('created_at','desc')->first();
+                        $v1['tag'] =  null;
+                        if($tag){
+                            $v1['tag'] = $tag->air_quality;
+                        }
+                    }
+                }
             }
             //解决方案
             $w_list = Warnigs::where('project_id',$projects[0]['id'])->get(['id']);
