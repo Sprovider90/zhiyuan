@@ -60,7 +60,7 @@ class PublicController extends Controller
                 //解决方案
                 $w_list = Warnigs::where('project_id',$projects[0]['id'])->whereIn('point_id',$p_id_str)->get(['id']);
                 $msg = WarnigsSms::whereIn('warnig_id',$w_list)->orderBy('id','desc')->first();
-                $projects[0]['warnigs_sms'] = $msg;
+                $v['warnigs_sms'] = $msg;
             }
 
             //检测标准
