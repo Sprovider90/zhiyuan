@@ -14,6 +14,7 @@ use App\Models\Customers;
 use App\Models\Device;
 use App\Models\Files;
 use App\Models\FinanceLog;
+use App\Models\Location;
 use App\Models\Orders;
 use App\Models\Projects;
 use App\Models\ProjectsAreas;
@@ -98,6 +99,7 @@ class PublicController extends Controller
                         if($tag){
                             $v1['tag'] = $tag->air_quality;
                         }
+                        $v1['location'] = Location::where('position_id',$v1->id)->first();
                     }
                 }
                 //解决方案
