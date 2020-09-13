@@ -40,7 +40,8 @@ class UpdateDevicesInfoJob implements ShouldQueue
             CONCAT(a.project_id,'') AS projectId,
             CONCAT(a.id,'') AS monitorId,
             b.device_number AS deviceId,
-            b.run_status as status
+            b.run_status as status,
+            '' as updateTime
         FROM
             `projects_positions` a
             LEFT JOIN devices b ON a.device_id = b.id
@@ -52,6 +53,7 @@ class UpdateDevicesInfoJob implements ShouldQueue
         if(!empty($rs)){
             foreach ($rs as $k=>$v) {
                 if($v->status==1){
+                    $v->updateTime="".date('Y-m-d H:i:s',time());
                     Redis::hset("air:devices:tags",$v->deviceId,json_encode($v));
                 }
             }
