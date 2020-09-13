@@ -37,16 +37,16 @@ class UpdateDevicesInfoJob implements ShouldQueue
             $where=" and b.id=".$this->credentials["device_id"];
         }
         $sql="SELECT
-            CONCAT(a.project_id,'') AS projectId,
-            CONCAT(a.id,'') AS monitorId,
-            b.device_number AS deviceId,
-            b.run_status as status,
-            '' as updateTime
-        FROM
-            `projects_positions` a
+                CONCAT(a.project_id, '') AS projectId,
+                CONCAT(a.id, '') AS monitorId,
+                b.device_number AS deviceId,
+                b.run_status AS STATUS
+            FROM
+                `projects_positions` a
             LEFT JOIN devices b ON a.device_id = b.id
-        WHERE
-            b.device_number IS NOT NULL ".$where;
+            WHERE
+                b.device_number IS NOT NULL
+            AND a. STATUS = 1 ".$where;
 
         $rs=DB::select($sql);
 
