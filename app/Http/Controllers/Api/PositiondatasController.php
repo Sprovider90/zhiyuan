@@ -38,8 +38,7 @@ class PositiondatasController extends Controller
             if($tmp["body"]["list"]){
                 foreach ($tmp["body"]["list"] as $k=>&$v){
                     //判断指标是否污染
-                    $v["red"]=0;
-                        //$this->getRed($v);
+                    $v["red"]=$this->getRed($v);
                     //list($v["project_tvoc"],$v["project_hcho"])=$this->getPro($v["projectId"]);
 
                 }
