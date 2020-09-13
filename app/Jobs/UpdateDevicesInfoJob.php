@@ -40,7 +40,7 @@ class UpdateDevicesInfoJob implements ShouldQueue
                 CONCAT(a.project_id, '') AS projectId,
                 CONCAT(a.id, '') AS monitorId,
                 b.device_number AS deviceId,
-                b.run_status AS STATUS
+                b.run_status AS status
             FROM
                 `projects_positions` a
             LEFT JOIN devices b ON a.device_id = b.id
