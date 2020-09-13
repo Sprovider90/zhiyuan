@@ -76,8 +76,8 @@ class PositiondatasController extends Controller
 
                 foreach ($pipei_data->thresholdinfo as $k=>$v){
                     $zhibiao=explode("~",$v);
-                    if($zhibiao[1]<=$positiondata[strtolower($k)]){
-                        $result[]=strtolower($k);
+                    if($zhibiao[1]<=$positiondata[$k]){
+                        $result[]=$k;
                     }
                 }
             }
