@@ -47,6 +47,7 @@ class PublicController extends Controller
         $params["pageSize"] = 1;
         $url=config("javasource.original.url");
         $result = Common::curl($url, $params, false);
+        $res = [];
         if(!empty($result)){
             $tmp=json_decode($result,true);
             if($tmp["body"]["list"]){
@@ -54,16 +55,15 @@ class PublicController extends Controller
                     //判断指标是否污染
                     $v["red"]=$this->getRed($v);
                 }
-                $result['data'] = $tmp["body"]["list"];
+                $res['data'] = $tmp["body"]["list"];
             }else{
-                $result['data'] = [];
+                $res['data'] = [];
             }
         }
-        $result['position'] = ProjectsPositions::find($request->monitorId);
-        $result['area ']    = ProjectsAreas::find($result['position']['area_id']);
-        $result['project']  = Projects::find($result['position']['project_id']);
-        return response()->json($result);
-        return $result;
+        $res['position'] = ProjectsPositions::find($request->monitorId);
+        $res['area ']    = ProjectsAreas::find($res['position']['area_id']);
+        $res['project']  = Projects::find($res['position']['project_id']);
+        return response()->json($res);
     }
 
     //获取所有项目列表 首页大屏使用
