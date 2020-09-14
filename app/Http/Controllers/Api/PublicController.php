@@ -37,7 +37,7 @@ class PublicController extends Controller
         $request->user()->customer_id && $projects->where('customer_id',$request->user()->customer_id);
         $request->user()->show_project_id && $projects = $projects->selectRaw('*,if(id='.$request->user()->show_project_id.',1,0) as order_num')->orderBy('order_num','desc');
         $projects = $projects->whereIn('status',[1,4,5,6])->orderBy('created_at','desc')->get();
-        if($projects[0]['areas']){
+        /*if($projects[0]['areas']){
             foreach ($projects[0]['areas'] as $k => $v){
                 $tag = Tag::where('model_type',2)->where('model_id',$v->id)->orderBy('created_at','desc')->first();
                 $v['tag'] =  null;
@@ -70,14 +70,16 @@ class PublicController extends Controller
             }else{
                 $projects[0]['threshold'] = $this->getProjectStageThreshold($projects[0]['stages']);
             }
-        }
+        }*/
         return response()->json($projects);
     }
 
     //通过项目ID获取 项目 区域 空气质量列表
     public function getIndexProjectAreaList(Request $request,Projects $projects)
     {
-        $projects = $projects->with(['areas','areas.file','stages'])->where('id',$request->project_id)->whereIn('status',[1,4,5,6]);
+        $projects = $projects->with(['areas.file','stages'])->where('id',$request->project_id)->whereIn('status',[1,4,5,6])->with(['areas' => function($query){
+            return $query->orderBy('id','desc');
+        }]);
         $request->user()->customer_id && $projects = $projects->where('customer_id',$request->user()->customer_id);
         $projects = $projects->first();
         if($projects){
@@ -221,9 +223,13 @@ class PublicController extends Controller
                 $query->withTrashed();
             }
             ])->orderBy('id','desc')->limit(10)->get();
+            $updatefeid="nocustomerred";
+            if($request->user()->customer_id){
+                $updatefeid="customerred";
+            }
             foreach ($msg_list as $k => $v){
-                $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
-                $v->isnew=1;
+                $v->smscount = WarnigsSms::where(['warnig_id'=>$v->id,$updatefeid=>0])->first(["id"]);
+                $v->isnew=isset($fis->id)?1:0;
                 $v->threshold_keys = $this->getChinaName($v->threshold_keys);
             }
         }else{
