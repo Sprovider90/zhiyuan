@@ -23,7 +23,6 @@ class PositiondatasController extends Controller
     public function index(PositiondatasRequest $request)
     {
         $params=[];
-
         $params["page"]=$request->page?$request->page:1;
         $params["pageSize"]=$request->pageSize;
         $params["type"]=$request->type?$request->type:1;
@@ -31,9 +30,7 @@ class PositiondatasController extends Controller
         $params["endTime"]=$request->endTime;
         $params["monitorId"]=$request->monitorId;
         $url=config("javasource.original.url");
-
         $result = Common::curl($url, $params, false);
-
         if(!empty($result)){
             $tmp=json_decode($result,true);
             if($tmp["body"]["list"]){
