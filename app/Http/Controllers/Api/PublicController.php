@@ -228,7 +228,8 @@ class PublicController extends Controller
                 $updatefeid="customerred";
             }
             foreach ($msg_list as $k => $v){
-                $v->smscount = WarnigsSms::where(['warnig_id'=>$v->id,$updatefeid=>0])->first(["id"]);
+                $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
+                $fis=WarnigsSms::where(['warnig_id'=>$v->id,$updatefeid=>0])->first(["id"]);
                 $v->isnew=isset($fis->id)?1:0;
                 $v->threshold_keys = $this->getChinaName($v->threshold_keys);
             }
