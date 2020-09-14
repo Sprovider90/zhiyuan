@@ -63,6 +63,25 @@ class PublicController extends Controller
         $res['position'] = ProjectsPositions::find($request->monitorId);
         $res['area ']    = ProjectsAreas::find($res['position']['area_id']);
         $res['project']  = Projects::find($res['position']['project_id']);
+        $data = $this->getProjectThreshold($res['position']['project_id']);
+        if($data){
+            foreach ($data as $k => $v){
+                $arr = explode('~',$data[$k]);
+//                if($res['data']['0'][$k] > $arr[0] && )
+                switch ($res['data']['0'][$k]){
+                    case $res['data']['0'][$k] < $arr[0]:
+                        $res['data']['0'][$k.'_tag'] = 1;
+                        break;
+                    case $res['data']['0'][$k] > $arr[0] && $res['data']['0'][$k] < $arr[1]:
+                        $res['data']['0'][$k.'_tag'] = 2;
+                        break;
+                    case $res['data']['0'][$k] > $arr[1]:
+                        $res['data']['0'][$k.'_tag'] = 3;
+                        break;
+                }
+            }
+
+        }
         return response()->json($res);
     }
 

@@ -17,6 +17,37 @@ class Controller extends BaseController
 
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+
+    public function getProjectThreshold($project_id){
+            $data = DB::select('SELECT
+                    a.id AS project_id,
+                    a.stage_id,
+                    c.`name` AS thresholds_name,
+                    CASE
+                WHEN d.thresholdinfo IS NULL THEN
+                    "thresholds"
+                ELSE
+                    "projects_thresholds"
+                END AS fromwhere,
+                 CASE
+                WHEN d.thresholdinfo IS NULL THEN
+                    c.thresholdinfo
+                ELSE
+                    d.thresholdinfo
+                END AS thresholdinfo
+                FROM
+                    `projects` a
+                LEFT JOIN projects_stages b ON a.stage_id = b.id
+                LEFT JOIN thresholds c ON b.threshold_id = c.id
+                LEFT JOIN projects_thresholds d ON a.stage_id = d.stage_id
+                WHERE
+                    a. STATUS IN (4, 5, 6)
+                AND a.stage_id IS NOT NULL
+                AND c.thresholdinfo IS NOT NULL
+                AND a.id='.$project_id);
+            return $data ? json_decode($data['thresholdinfo'],true) : '';
+    }
+
     public function getChinaName($string){
         $new_string = '';
         $arr = ["humidity"=>"湿度","temperature"=>"温度","formaldehyde"=>"甲醛","PM25"=>"PM25","CO2"=>"CO2","TVOC"=>"TVOC"];
