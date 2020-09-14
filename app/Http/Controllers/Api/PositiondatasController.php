@@ -46,6 +46,7 @@ class PositiondatasController extends Controller
         $result['position'] = ProjectsPositions::find($request->monitorId);
         $result['area ']    = ProjectsAreas::find($result['position']['area_id']);
         $result['project']  = Projects::find($result['position']['project_id']);
+        echo '11';
         return response()->json($result);
     }
 
