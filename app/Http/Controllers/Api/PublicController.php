@@ -85,7 +85,7 @@ class PublicController extends Controller
                         $res['position']['tag'] == 1 || $res['position']['tag'] == 2 && $res['position']['tag'] == 3;
                         break;
                 }
-            }exit;
+            }
 
         }
         return response()->json($res);
