@@ -68,6 +68,7 @@ class PublicController extends Controller
         $res['position']['tag']  =  1;
         if($data){
             $res['project']['threshold_name'] = $data->thresholds_name ?? '';
+            $res['project']['threshold'] = $data;
             foreach ($data as $k => $v){
                 $arr = explode('~',$data[$k]);
 //                echo '当前值：'.$res['data']['0'][$k].PHP_EOL;
