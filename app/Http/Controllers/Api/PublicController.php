@@ -85,9 +85,9 @@ class PublicController extends Controller
 
         }*/
         if($data){
-            $res['project']['threshold_name'] = $thresholdinfo_data->thresholds_name ?? '';
+            $res['project']['threshold_name'] = $data->thresholds_name ?? '';
             $res['project']['threshold'] = $data;
-            foreach ($data as $k => $v){
+            foreach ($thresholdinfo_data as $k => $v){
                 $arr = explode('~',$data[$k]);
                 switch ($res['data']['0'][$k]){
                     case $res['data']['0'][$k] < $arr[0]:
