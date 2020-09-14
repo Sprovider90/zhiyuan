@@ -10,6 +10,8 @@ namespace App\Http\Controllers\Api;
 use App\Facades\Common;
 use App\Http\Requests\Api\PositiondatasRequest;
 use App\Models\Projects;
+use App\Models\ProjectsAreas;
+use App\Models\ProjectsPositions;
 use App\Models\ProThresholdsLog;
 use Excel;
 use App\Exports\BaseExport;
@@ -34,18 +36,20 @@ class PositiondatasController extends Controller
 
         if(!empty($result)){
             $tmp=json_decode($result,true);
-
             if($tmp["body"]["list"]){
                 foreach ($tmp["body"]["list"] as $k=>&$v){
                     //判断指标是否污染
                     $v["red"]=$this->getRed($v);
-                    //list($v["project_tvoc"],$v["project_hcho"])=$this->getPro($v["projectId"]);
-
                 }
-                $result=json_encode($tmp);
+                $result['data'] = $tmp["body"]["list"][0];
+            }else{
+                $result['data'] = [];
             }
         }
-        return $result;
+        $result['position'] = ProjectsPositions::find($request->monitorId);
+        $result['area ']    = ProjectsAreas::find($result['position']['area_id']);
+        $result['project']  = Projects::find($result['position']['project_id']);
+        return response()->json($result);
     }
 
 //    protected function getPro($projectId)

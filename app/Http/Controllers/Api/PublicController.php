@@ -49,7 +49,6 @@ class PublicController extends Controller
         $result = Common::curl($url, $params, false);
         if(!empty($result)){
             $tmp=json_decode($result,true);
-
             if($tmp["body"]["list"]){
                 foreach ($tmp["body"]["list"] as $k=>&$v){
                     //判断指标是否污染
