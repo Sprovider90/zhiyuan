@@ -211,6 +211,7 @@ class PublicController extends Controller
             }
         }
         //预警警报
+        $Warnigs = Warnigs::query();
         if($request->user()->customer_id){
             $projects=Projects::where("customer_id",$request->user()->customer_id)->pluck("id")->toArray();
             if(!empty($projects)){
