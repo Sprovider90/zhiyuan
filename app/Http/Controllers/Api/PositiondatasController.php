@@ -23,6 +23,7 @@ class PositiondatasController extends Controller
     public function index(PositiondatasRequest $request)
     {
         $params=[];
+
         $params["page"]=$request->page?$request->page:1;
         $params["pageSize"]=$request->pageSize;
         $params["type"]=$request->type?$request->type:1;
@@ -30,7 +31,9 @@ class PositiondatasController extends Controller
         $params["endTime"]=$request->endTime;
         $params["monitorId"]=$request->monitorId;
         $url=config("javasource.original.url");
+
         $result = Common::curl($url, $params, false);
+
         if(!empty($result)){
             $tmp=json_decode($result,true);
             if($tmp["body"]["list"]){
@@ -38,16 +41,10 @@ class PositiondatasController extends Controller
                     //判断指标是否污染
                     $v["red"]=$this->getRed($v);
                 }
-                $result['data'] = $tmp["body"]["list"][0];
-            }else{
-                $result['data'] = [];
+                $result=json_encode($tmp);
             }
         }
-        $result['position'] = ProjectsPositions::find($request->monitorId);
-        $result['area ']    = ProjectsAreas::find($result['position']['area_id']);
-        $result['project']  = Projects::find($result['position']['project_id']);
-        echo '11';
-        return response()->json($result);
+        return $result;
     }
 
 //    protected function getPro($projectId)

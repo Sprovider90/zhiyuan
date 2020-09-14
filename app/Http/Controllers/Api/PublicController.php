@@ -54,9 +54,15 @@ class PublicController extends Controller
                     //判断指标是否污染
                     $v["red"]=$this->getRed($v);
                 }
-                $result=json_encode($tmp);
+                $result['data'] = $tmp["body"]["list"][0];
+            }else{
+                $result['data'] = [];
             }
         }
+        $result['position'] = ProjectsPositions::find($request->monitorId);
+        $result['area ']    = ProjectsAreas::find($result['position']['area_id']);
+        $result['project']  = Projects::find($result['position']['project_id']);
+        return response()->json($result);
         return $result;
     }
 
