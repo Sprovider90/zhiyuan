@@ -65,6 +65,11 @@ class PublicController extends Controller
         $res['project']  = Projects::find($res['position']['project_id']);
         $data = $this->getProjectThreshold($res['position']['project_id']);
         $data = json_decode($data->thresholdinfo,true);
+        $tag = Tag::where('model_type',3)->where('model_id',$request->monitorId)->orderBy('id','desc')->first();
+        $res['position']['tag']  =  null;
+        if($tag){
+            $res['position']['tag']  = $tag->air_quality;
+        }
         if($data){
             foreach ($data as $k => $v){
                 $arr = explode('~',$data[$k]);
