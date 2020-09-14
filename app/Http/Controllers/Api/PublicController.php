@@ -66,13 +66,12 @@ class PublicController extends Controller
         $data = $this->getProjectThreshold($res['position']['project_id']);
         $data = json_decode($data->thresholdinfo,true);
         $res['position']['tag']  =  1;
-        if($data){
+
+        /*if($data){
             $res['project']['threshold_name'] = $data->thresholds_name ?? '';
             $res['project']['threshold'] = $data;
             foreach ($data as $k => $v){
                 $arr = explode('~',$data[$k]);
-//                echo '当前值：'.$res['data']['0'][$k].PHP_EOL;
-//                echo '检测值：'.$arr[0].'~'.$arr[1].PHP_EOL;
                 if($res['data']['0'][$k] < $arr[0]) {
                     $res['data']['0'][$k . '_tag'] = 1;
                 }elseif ($res['data']['0'][$k] > $arr[0] && $res['data']['0'][$k] < $arr[1]){
@@ -83,6 +82,28 @@ class PublicController extends Controller
                     $res['position']['tag'] == 1 || $res['position']['tag'] == 2 && $res['position']['tag'] = 3;
                 }
             }
+
+        }*/
+        if($data){
+            $res['project']['threshold_name'] = $data->thresholds_name ?? '';
+            foreach ($data as $k => $v){
+                $arr = explode('~',$data[$k]);
+//                echo '当前值：'.$res['data']['0'][$k].PHP_EOL;
+//                echo '检测值：'.$arr[0].'~'.$arr[1].PHP_EOL;
+                switch ($res['data']['0'][$k]){
+                    case $res['data']['0'][$k] < $arr[0]:
+                        $res['data']['0'][$k.'_tag'] = 1;
+                        break;
+                    case $res['data']['0'][$k] >= $arr[0] && $res['data']['0'][$k] <= $arr[1]:
+                        $res['data']['0'][$k.'_tag'] = 2;
+                        $res['position']['tag'] == 1 && $res['position']['tag'] == 2;
+                        break;
+                    case $res['data']['0'][$k] > $arr[1]:
+                        $res['data']['0'][$k.'_tag'] = 3;
+                        $res['position']['tag'] == 1 || $res['position']['tag'] == 2 && $res['position']['tag'] == 3;
+                        break;
+                }
+            }exit;
 
         }
         return response()->json($res);
