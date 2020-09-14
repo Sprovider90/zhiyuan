@@ -178,6 +178,9 @@ Route::prefix('v1')
 
                     //公共接口
                     Route::group(['prefix' => 'public'],function () {
+                        //点位获取最新监测数据
+                        Route::get('getNewPositionData','PublicController@getNewPositionData')
+                            ->name('public.getNewPositionData');
                         //首页数据统计 项目总数 点位总数 设备总数
                         Route::get('getIndexCount','PublicController@getIndexCount')
                             ->name('public.getIndexCount');
