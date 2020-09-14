@@ -84,6 +84,7 @@ class PublicController extends Controller
             }
 
         }*/
+        var_dump($thresholdinfo_data);exit;
         if($data){
             $res['project']['threshold_name'] = $data->thresholds_name ?? '';
             $res['project']['threshold'] = $data;
