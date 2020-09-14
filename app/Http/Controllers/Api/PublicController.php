@@ -103,7 +103,7 @@ class PublicController extends Controller
         }]);
         $request->user()->customer_id && $projects = $projects->where('customer_id',$request->user()->customer_id);
         $projects = $projects->first();
-        $thresholds_data = $this->getProjectThreshold($projects->id);
+        $thresholds_data = $this->getProjectThreshold($request->project_id);
         if($projects){
             foreach ($projects['areas'] as $k => $v){
                 $v->threshold_name = $thresholds_data->thresholds_name;
