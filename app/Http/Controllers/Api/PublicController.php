@@ -212,17 +212,18 @@ class PublicController extends Controller
         }
         //预警警报
         if($request->user()->customer_id){
-            $projects=Projects::where("customer_id",$request->user()->customer_id)->pluck("id")->toArray();
-            if(!empty($projects)){
-                $Warnigs = Warnigs::whereIn('project_id',$projects);
-            }else{
-                $Warnigs = Warnigs::whereIn('project_id',[]);
+            if($request->user()->customer_id){
+                $projects=Projects::where("customer_id",$request->user()->customer_id)->pluck("id")->toArray();
+                if(!empty($projects)){
+                    $Warnigs = Warnigs::whereIn('project_id',$projects);
+                }else{
+                    $Warnigs = Warnigs::whereIn('project_id',[]);
+                }
             }
 
-            $msg_list = $Warnigs->where('threshold_keys', '!=' , "")->with(['projectsPositions.area'=>function($query){
-                $query->withTrashed();
-            }
-            ])->orderBy('id','desc')->limit(10)->get();
+            $msg_list = $Warnigs->where('threshold_keys', '!=' , "")->with(['project','project.customs','projectsPositions'])->with(['projectsPositions.area'=>function($query){
+                $query->withTrashed();}])->orderBy('id','desc')->limit(10)->get();
+
             $updatefeid="nocustomerred";
             if($request->user()->customer_id){
                 $updatefeid="customerred";
