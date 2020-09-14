@@ -103,10 +103,10 @@ class PublicController extends Controller
         }]);
         $request->user()->customer_id && $projects = $projects->where('customer_id',$request->user()->customer_id);
         $projects = $projects->first();
-        $data = $this->getProjectThreshold($projects->id);
+        $thresholds_data = $this->getProjectThreshold($projects->id);
         if($projects){
             foreach ($projects['areas'] as $k => $v){
-                $v->threshold_name = $data['thresholds_name'];
+                $v->threshold_name = $thresholds_data->thresholds_name;
                 $tag = Tag::where('model_type',2)->where('model_id',$v->id)->orderBy('id','desc')->first();
                 $v['tag'] =  null;
                 if($tag){
