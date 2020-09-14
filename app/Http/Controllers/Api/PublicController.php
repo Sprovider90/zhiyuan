@@ -64,7 +64,7 @@ class PublicController extends Controller
         $res['area ']    = ProjectsAreas::find($res['position']['area_id']);
         $res['project']  = Projects::find($res['position']['project_id']);
         $data = $this->getProjectThreshold($res['position']['project_id']);
-        var_dump($data);exit;
+        var_dump($data->thresholdinfo);exit;
         if($data){
             foreach ($data as $k => $v){
                 $arr = explode('~',$data[$k]);
