@@ -35,6 +35,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PublicController extends Controller
 {
+    static $proThresholdsLog = [];
+    static $proInfo = [];
     //获取最新监测点监测数据
     public function getNewPositionData(Request $request){
         $params["type"]= 1;
