@@ -46,6 +46,7 @@ class Controller extends BaseController
                 AND a.stage_id IS NOT NULL
                 AND c.thresholdinfo IS NOT NULL
                 AND a.id='.$project_id);
+            $data = $data[0];
             return $data ? json_decode($data->thresholdinfo,true) : '';
     }
 
