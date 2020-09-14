@@ -64,7 +64,7 @@ class PublicController extends Controller
         $res['area']    = ProjectsAreas::find($res['position']['area_id']);
         $res['project']  = Projects::find($res['position']['project_id']);
         $data = $this->getProjectThreshold($res['position']['project_id']);
-        $data = json_decode($data->thresholdinfo,true);
+        $thresholdinfo_data = json_decode($data->thresholdinfo,true);
         $res['position']['tag']  =  1;
 
         /*if($data){
@@ -85,7 +85,7 @@ class PublicController extends Controller
 
         }*/
         if($data){
-            $res['project']['threshold_name'] = $data->thresholds_name ?? '';
+            $res['project']['threshold_name'] = $thresholdinfo_data->thresholds_name ?? '';
             $res['project']['threshold'] = $data;
             foreach ($data as $k => $v){
                 $arr = explode('~',$data[$k]);
