@@ -37,40 +37,6 @@ class PublicController extends Controller
         $request->user()->customer_id && $projects->where('customer_id',$request->user()->customer_id);
         $request->user()->show_project_id && $projects = $projects->selectRaw('*,if(id='.$request->user()->show_project_id.',1,0) as order_num')->orderBy('order_num','desc');
         $projects = $projects->whereIn('status',[1,4,5,6])->orderBy('created_at','desc')->get();
-        /*if($projects[0]['areas']){
-            foreach ($projects[0]['areas'] as $k => $v){
-                $tag = Tag::where('model_type',2)->where('model_id',$v->id)->orderBy('created_at','desc')->first();
-                $v['tag'] =  null;
-                if($tag){
-                    $v['tag'] = $tag->air_quality;
-                }
-                //所有点位
-                $list = ProjectsPositions::where('area_id',$v->id)->where('status',1);
-                $position = $list->get();
-                $p_id_str = $list->get(['id']);
-                $v->position = $position;
-                if($position){
-                    foreach ($v->position as $k1 => $v1){
-                        $tag = Tag::where('model_type',3)->where('model_id',$v1->id)->orderBy('created_at','desc')->first();
-                        $v1['tag'] =  null;
-                        if($tag){
-                            $v1['tag'] = $tag->air_quality;
-                        }
-                    }
-                }
-                //解决方案
-                $w_list = Warnigs::where('project_id',$projects[0]['id'])->whereIn('point_id',$p_id_str)->get(['id']);
-                $msg = WarnigsSms::whereIn('warnig_id',$w_list)->orderBy('id','desc')->first();
-                $v['warnigs_sms'] = $msg;
-            }
-
-            //检测标准
-            if($projects[0]['status'] == 1){
-                $projects[0]['threshold'] = null;
-            }else{
-                $projects[0]['threshold'] = $this->getProjectStageThreshold($projects[0]['stages']);
-            }
-        }*/
         return response()->json($projects);
     }
 
@@ -107,6 +73,10 @@ class PublicController extends Controller
                 //解决方案
                 $w_list = Warnigs::where('project_id',$projects[0]['id'])->whereIn('point_id',$p_id_str)->get(['id']);
                 $msg = WarnigsSms::whereIn('warnig_id',$w_list)->orderBy('id','desc')->first();
+                $msg->pics_img =[];
+                if(isset($msg->pics) && !empty($msg->pics)){
+                    $msg->pics_img = Files::whereIn('id',explode(",",$msg->pics))->get();
+                }
                 $v['warnigs_sms'] = $msg;
             }
             //检测标准
@@ -123,13 +93,6 @@ class PublicController extends Controller
 
     //首页 项目总数 点位总数  设备总数
     public function getIndexCount(Request $request){
-        $order_start = $request->get('order_start','');
-        $order_end   = $request->get('order_end','');
-
-        $pro_start  = $request->get('pro_start','');
-        $pro_end    = $request->get('pro_end','');
-        $type       = $request->get('type',1);
-
         $where = [];
         $request->user()->customer_id && $where[] = ['customer_id',$request->user()->customer_id];
         //项目总数
@@ -161,34 +124,6 @@ class PublicController extends Controller
                 $count = Orders::whereRaw('left(created_at,10)="'.$v['date'].'"')->count();
                 $dateList[$k]['order_count'] = $count ?? 0;
             }
-            /*$date = $this->returnDate(2);
-            if(($order_start && $order_end) && (strtotime($order_start) < strtotime($order_end))){
-                $date = [$order_start,$order_end];
-                $dateList = $this->returnMonthList($date[0],$date[1]);
-                foreach ($dateList as $k => $v){
-                    $dateList[$k]['money'] = 0;
-                    $dateList[$k]['order_count'] = 0;
-                    $s = FinanceLog::where('type',1)->whereRaw('left(date,7)="'.$v['date'].'"')->sum('money');
-                    $t = FinanceLog::where('type',2)->whereRaw('left(date,7)="'.$v['date'].'"')->sum('money');
-                    $dateList[$k]['money'] = $s-$t;
-                    $count = Orders::whereRaw('left(created_at,7)="'.$v['date'].'"')->count();
-                    $dateList[$k]['order_count'] = $count ?? 0;
-                }
-            }else{
-                if(($order_start && $order_end)){
-                    $date = [$order_start,$order_end];
-                }
-                $dateList = $this->returnDateList(substr($date[0],0,10),substr($date[1],0,10));
-                foreach ($dateList as $k => $v){
-                    $dateList[$k]['money'] = 0;
-                    $dateList[$k]['order_count'] = 0;
-                    $s = FinanceLog::where('type',1)->where('date',$v['date'])->sum('money');
-                    $t = FinanceLog::where('type',2)->where('date',$v['date'])->sum('money');
-                    $dateList[$k]['money'] = $s-$t;
-                    $count = Orders::whereRaw('left(created_at,10)="'.$v['date'].'"')->count();
-                    $dateList[$k]['order_count'] = $count ?? 0;
-                }
-            }*/
         }
 
         //本周项目总数
@@ -200,17 +135,11 @@ class PublicController extends Controller
         }else {
             $pro_date = $this->returnDate(3);
             $proDateList = $this->returnDateList(substr($pro_date[0], 0, 10), substr($pro_date[1], 0, 10));
-            /*if(($pro_start && $pro_end) && (strtotime($pro_start) < strtotime($pro_end))){
-                $proDateList = $this->returnDateList($pro_start,$pro_end);
-            }else{
-                $pro_date = $this->returnDate($type);
-                $proDateList = $this->returnDateList(substr($pro_date[0], 0, 10), substr($pro_date[1], 0, 10));
-            }*/
             foreach ($proDateList as $k => $v) {
                 $proDateList[$k]['count'] = Projects::whereRaw('left(created_at,10)="' . $v['date'] . '"')->count() ?? 0;
             }
         }
-        //预警警报
+        //预警警报 / 解决方案
         $Warnigs = Warnigs::query();
         if($request->user()->customer_id){
             $projects=Projects::where("customer_id",$request->user()->customer_id)->pluck("id")->toArray();
