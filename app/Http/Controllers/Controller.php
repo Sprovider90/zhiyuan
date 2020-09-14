@@ -20,7 +20,7 @@ class Controller extends BaseController
 
 
     public function getProjectThreshold($project_id){
-            $data = DB::sselect('SELECT
+            $data = DB::select('SELECT
                     a.id AS project_id,
                     a.stage_id,
                     c.`name` AS thresholds_name,
