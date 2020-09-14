@@ -73,9 +73,8 @@ class PublicController extends Controller
                 //解决方案
                 $w_list = Warnigs::where('project_id',$projects[0]['id'])->whereIn('point_id',$p_id_str)->get(['id']);
                 $msg = WarnigsSms::whereIn('warnig_id',$w_list)->orderBy('id','desc')->first();
-                $msg->pics_img =[];
-                if(isset($msg->pics) && !empty($msg->pics)){
-                    $msg->pics_img = Files::whereIn('id',explode(",",$msg->pics))->get();
+                if($msg && isset($msg->pics) && !empty($msg->pics)){
+                    $msg['pics_img'] = Files::whereIn('id',explode(",",$msg->pics))->get();
                 }
                 $v['warnigs_sms'] = $msg;
             }
