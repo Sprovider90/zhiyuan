@@ -106,7 +106,7 @@ class PublicController extends Controller
         $thresholds_data = $this->getProjectThreshold($request->project_id);
         if($projects){
             foreach ($projects['areas'] as $k => $v){
-                $v->threshold_name = $thresholds_data->thresholds_name;
+                $v->threshold_name = $thresholds_data ? $thresholds_data->thresholds_name : '';
                 $tag = Tag::where('model_type',2)->where('model_id',$v->id)->orderBy('id','desc')->first();
                 $v['tag'] =  null;
                 if($tag){
