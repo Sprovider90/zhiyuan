@@ -51,10 +51,10 @@ class PublicController extends Controller
         if(!empty($result)){
             $tmp=json_decode($result,true);
             if($tmp["body"]["list"]){
-                foreach ($tmp["body"]["list"] as $k=>&$v){
+                /*foreach ($tmp["body"]["list"] as $k=>&$v){
                     //判断指标是否污染
                     $v["red"]=$this->getRed($v);
-                }
+                }*/
                 $res['data'] = $tmp["body"]["list"];
             }else{
                 $res['data'] = [];

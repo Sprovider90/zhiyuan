@@ -26,7 +26,7 @@ class DataController extends Controller
             });
         $position = $position->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
         foreach ($position as $k => $v){
-            $tag = Tag::where('model_type',3)->where('model_id',$v->id)->orderBy('created_at','desc')->first();
+            $tag = Tag::where('model_type',3)->where('model_id',$v->id)->orderBy('id','desc')->first();
             if($tag){
                 $v->tag = $tag->air_quality;
             }else{
