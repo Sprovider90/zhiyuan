@@ -43,7 +43,7 @@ class PublicController extends Controller
         $params["endTime"]  = date("Y-m-d 23:59:59");
         $params["page"]     = 1;
         $params["pageSize"] = 1;
-        $result = Common::curl($url, $params, false);
+        $url=config("javasource.original.url");
         $result = Common::curl($url, $params, false);
         if(!empty($result)){
             $tmp=json_decode($result,true);
