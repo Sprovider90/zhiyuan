@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exports\BaseExport;
+use App\Facades\Common;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FilesRequest;
+use App\Http\Requests\Api\PositiondatasRequest;
 use App\Http\Resources\CustomersResources;
 use App\Http\Resources\DeviceResource;
 use App\Http\Resources\FilesResource;
@@ -19,6 +22,7 @@ use App\Models\Orders;
 use App\Models\Projects;
 use App\Models\ProjectsAreas;
 use App\Models\ProjectsPositions;
+use App\Models\ProThresholdsLog;
 use App\Models\Tag;
 use App\Models\Thresholds;
 use App\Models\Warnigs;
@@ -31,6 +35,29 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PublicController extends Controller
 {
+    //获取最新监测点监测数据
+    public function getNewPositionData(Request $request){
+        $params["type"]= 1;
+        $params["monitorId"]= $request->monitorId;
+        $params["startTime"]= date( 'Y-m-d 00:00:00', strtotime('-1 week'));
+        $params["endTime"]  = date("Y-m-d 23:59:59");
+        $params["page"]     = 1;
+        $params["pageSize"] = 1;
+        $result = Common::curl($url, $params, false);
+        if(!empty($result)){
+            $tmp=json_decode($result,true);
+
+            if($tmp["body"]["list"]){
+                foreach ($tmp["body"]["list"] as $k=>&$v){
+                    //判断指标是否污染
+                    $v["red"]=$this->getRed($v);
+                }
+                $result=json_encode($tmp);
+            }
+        }
+        return $result;
+    }
+
     //获取所有项目列表 首页大屏使用
     public function getIndexProjectList(Request $request,Projects $projects){
         $projects = $projects->with(['areas','areas.file','stages']);
@@ -50,7 +77,7 @@ class PublicController extends Controller
         $projects = $projects->first();
         if($projects){
             foreach ($projects['areas'] as $k => $v){
-                $tag = Tag::where('model_type',2)->where('model_id',$v->id)->orderBy('created_at','desc')->first();
+                $tag = Tag::where('model_type',2)->where('model_id',$v->id)->orderBy('id','desc')->first();
                 $v['tag'] =  null;
                 if($tag){
                     $v['tag'] = $tag->air_quality;
@@ -62,7 +89,7 @@ class PublicController extends Controller
                 $v->position = $position;
                 if($position){
                     foreach ($v->position as $k1 => $v1){
-                        $tag = Tag::where('model_type',3)->where('model_id',$v1->id)->orderBy('created_at','desc')->first();
+                        $tag = Tag::where('model_type',3)->where('model_id',$v1->id)->orderBy('id','desc')->first();
                         $v1['tag'] =  null;
                         if($tag){
                             $v1['tag'] = $tag->air_quality;
@@ -294,4 +321,49 @@ class PublicController extends Controller
             }
         }
     }
+
+    protected function getRed($positiondata)
+    {
+        $result=[];
+        $proinfo=$this->getProThresholds($positiondata["projectId"]);
+
+        if(!empty($proinfo)){
+            $pipei_data=$proinfo->last();
+
+            if(!empty($pipei_data)){
+                foreach ($proinfo as $k=>$v){
+                    if($positiondata["timestamp"]>=$v->created_at){
+                        $pipei_data=$v;
+                        break;
+                    }
+                }
+
+                foreach ($pipei_data->thresholdinfo as $k=>$v){
+                    $zhibiao=explode("~",$v);
+                    if($zhibiao[1]<=$positiondata[$k]){
+                        $result[]=$k;
+                    }
+                }
+            }
+        }
+        return $result;
+    }
+    protected function getProThresholds($project_id)
+    {
+        $result=[];
+        if(!empty(self::$proThresholdsLog)){
+            return self::$proThresholdsLog;
+        }
+        $result=ProThresholdsLog::where("project_id",$project_id)->orderBy('created_at','desc')->get();
+
+        if(!empty($result)){
+            foreach ($result as $k=>$v){
+                $v->thresholdinfo=json_decode($v->thresholdinfo,true);
+            }
+            self::$proThresholdsLog=$result;
+        }
+        return $result;
+
+    }
+
 }
