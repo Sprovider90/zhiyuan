@@ -44,6 +44,7 @@ class PublicController extends Controller
         $params["page"]     = 1;
         $params["pageSize"] = 1;
         $result = Common::curl($url, $params, false);
+        $result = Common::curl($url, $params, false);
         if(!empty($result)){
             $tmp=json_decode($result,true);
 
