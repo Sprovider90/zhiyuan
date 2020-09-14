@@ -55,7 +55,7 @@ class PublicController extends Controller
                     //判断指标是否污染
                     $v["red"]=$this->getRed($v);
                 }
-                $res['data'] = $tmp["body"]["list"][0][0];
+                $res['data'] = $tmp["body"]["list"][0];
             }else{
                 $res['data'] = [];
             }
