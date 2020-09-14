@@ -65,25 +65,22 @@ class PublicController extends Controller
         $res['project']  = Projects::find($res['position']['project_id']);
         $data = $this->getProjectThreshold($res['position']['project_id']);
         $data = json_decode($data->thresholdinfo,true);
-        $tag = Tag::where('model_type',3)->where('model_id',$request->monitorId)->orderBy('id','desc')->first();
-        $res['position']['tag']  =  null;
-        if($tag){
-            $res['position']['tag']  = $tag->air_quality;
-        }
+        $res['position']['tag']  =  1;
         if($data){
             $res['project']['threshold_name'] = $data->thresholds_name ?? '';
             foreach ($data as $k => $v){
                 $arr = explode('~',$data[$k]);
-//                if($res['data']['0'][$k] > $arr[0] && )
                 switch ($res['data']['0'][$k]){
                     case $res['data']['0'][$k] < $arr[0]:
                         $res['data']['0'][$k.'_tag'] = 1;
                         break;
                     case $res['data']['0'][$k] > $arr[0] && $res['data']['0'][$k] < $arr[1]:
                         $res['data']['0'][$k.'_tag'] = 2;
+                        $res['position']['tag'] = 2;
                         break;
                     case $res['data']['0'][$k] > $arr[1]:
                         $res['data']['0'][$k.'_tag'] = 3;
+                        $res['position']['tag'] = 3;
                         break;
                 }
             }
