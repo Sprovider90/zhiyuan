@@ -39,7 +39,7 @@ class PublicController extends Controller
     static $proInfo = [];
     //获取最新监测点监测数据
     public function getNewPositionData(Request $request){
-        $params["type"]= 1;
+        $params["type"]=$request->type?$request->type:1;
         $params["monitorId"]= $request->monitorId;
         $params["startTime"]= date( 'Y-m-d 00:00:00', strtotime('-1 week'));
         $params["endTime"]  = date("Y-m-d 23:59:59");
