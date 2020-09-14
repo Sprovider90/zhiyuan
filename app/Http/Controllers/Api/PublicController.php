@@ -96,11 +96,11 @@ class PublicController extends Controller
                         break;
                     case $res['data']['0'][$k] >= $arr[0] && $res['data']['0'][$k] <= $arr[1]:
                         $res['data']['0'][$k.'_tag'] = 2;
-                        $res['position']['tag'] == 1 && $res['position']['tag'] == 2;
+                        $res['position']['tag'] == 1 && $res['position']['tag'] = 2;
                         break;
                     case $res['data']['0'][$k] > $arr[1]:
                         $res['data']['0'][$k.'_tag'] = 3;
-                        $res['position']['tag'] == 1 || $res['position']['tag'] == 2 && $res['position']['tag'] == 3;
+                        $res['position']['tag'] == 1 || $res['position']['tag'] == 2 && $res['position']['tag'] = 3;
                         break;
                 }
             }exit;
