@@ -70,8 +70,8 @@ class PublicController extends Controller
             $res['project']['threshold_name'] = $data->thresholds_name ?? '';
             foreach ($data as $k => $v){
                 $arr = explode('~',$data[$k]);
-                echo '当前值：'.$res['data']['0'][$k].PHP_EOL;
-                echo '检测值：'.$arr[0].'~'.$arr[1].PHP_EOL;
+//                echo '当前值：'.$res['data']['0'][$k].PHP_EOL;
+//                echo '检测值：'.$arr[0].'~'.$arr[1].PHP_EOL;
                 switch ($res['data']['0'][$k]){
                     case $res['data']['0'][$k] < $arr[0]:
                         $res['data']['0'][$k.'_tag'] = 1;
