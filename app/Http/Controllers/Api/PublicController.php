@@ -212,72 +212,27 @@ class PublicController extends Controller
         }
         //预警警报
         if($request->user()->customer_id){
-            if($request->user()->customer_id){
-                $projects=Projects::where("customer_id",$request->user()->customer_id)->pluck("id")->toArray();
-                if(!empty($projects)){
-                    $Warnigs = Warnigs::whereIn('project_id',$projects);
-                }else{
-                    $Warnigs = Warnigs::whereIn('project_id',[]);
-                }
+            $projects=Projects::where("customer_id",$request->user()->customer_id)->pluck("id")->toArray();
+            if(!empty($projects)){
+                $Warnigs = Warnigs::whereIn('project_id',$projects);
+            }else{
+                $Warnigs = Warnigs::whereIn('project_id',[]);
             }
-            $Warnigs = $Warnigs->where('threshold_keys', '!=' , "");
-            $msg_list = $Warnigs->with(['project','project.customs','projectsPositions'])->with(['projectsPositions.area'=>function($query){
-                $query->withTrashed();}])->orderBy('id','desc')->limit(10)->get();
-            $updatefeid="nocustomerred";
-            if($request->user()->customer_id){
-                $updatefeid="customerred";
-            }
-
-            foreach ($msg_list as $k => $v){
-                $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
-                $fis=WarnigsSms::where(['warnig_id'=>$v->id,$updatefeid=>0])->first(["id"]);
-                $v->isnew=isset($fis->id)?1:0;
-            }
-           /* $Warnigs = Warnigs::query();
-            if($request->user()->customer_id){
-                $projects=Projects::where("customer_id",$request->user()->customer_id)->pluck("id")->toArray();
-                if(!empty($projects)){
-                    $Warnigs = Warnigs::whereIn('project_id',$projects);
-                }else{
-                    $Warnigs = Warnigs::whereIn('project_id',[]);
-                }
-            }
-
-            $msg_list = $Warnigs->where('threshold_keys', '!=' , "")->with(['project','project.customs','projectsPositions'])->with(['projectsPositions.area'=>function($query){
-                $query->withTrashed();}])->orderBy('id','desc')->limit(10)->get();
-
-            $updatefeid="nocustomerred";
-            if($request->user()->customer_id){
-                $updatefeid="customerred";
-            }
-            foreach ($msg_list as $k => $v){
-                $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
-                $fis=WarnigsSms::where(['warnig_id'=>$v->id,$updatefeid=>0])->first(["id"]);
-                $v->isnew=isset($fis->id)?1:0;
-                $v->threshold_keys = $this->getChinaName($v->threshold_keys);
-            }*/
-        }else{
-            //解决方案
-            $msg_list = Warnigs::where('threshold_keys', '!=' , "")->with(['projectsPositions.area'=>function($query){
-                $query->withTrashed();
-            }
-            ])->orderBy('id','desc')->limit(10)->get();
-            foreach ($msg_list as $k => $v){
-                $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
-                $v->isnew=1;
-                $v->threshold_keys = $this->getChinaName($v->threshold_keys);
-            }
-            /*$sms_id_list = WarnigsSms::orderBy('id','desc')->limit(10)->get(['warnig_id']);
-            $msg_list = Warnigs::with(['projectsPositions.area'=>function($query){
-                $query->withTrashed();
-            }
-            ])->whereIN('id',$sms_id_list)->orderBy('id','desc')->get();
-            foreach ($msg_list as $k => $v){
-                $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
-                $v->isnew=1;
-                $v->threshold_keys = $this->getChinaName($v->threshold_keys);
-            }*/
         }
+        $Warnigs = $Warnigs->where('threshold_keys', '!=' , "");
+        $msg_list = $Warnigs->with(['project','project.customs','projectsPositions'])->with(['projectsPositions.area'=>function($query){
+            $query->withTrashed();}])->orderBy('id','desc')->limit(10)->get();
+        $updatefeid="nocustomerred";
+        if($request->user()->customer_id){
+            $updatefeid="customerred";
+        }
+
+        foreach ($msg_list as $k => $v){
+            $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
+            $fis=WarnigsSms::where(['warnig_id'=>$v->id,$updatefeid=>0])->first(["id"]);
+            $v->isnew=isset($fis->id)?1:0;
+        }
+
         return response()->json(array(
                 //项目总数 点位总数 设备总数 运行设备数
                 'count' => array(
