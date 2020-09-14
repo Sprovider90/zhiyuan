@@ -71,7 +71,7 @@ class PublicController extends Controller
             $res['position']['tag']  = $tag->air_quality;
         }
         if($data){
-            $res['area']['threshold_name'] = $data['threshold_name'];
+            $res['area']['threshold_name'] = $data->threshold_name ?? '';
             foreach ($data as $k => $v){
                 $arr = explode('~',$data[$k]);
 //                if($res['data']['0'][$k] > $arr[0] && )
