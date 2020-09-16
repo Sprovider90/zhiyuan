@@ -98,7 +98,8 @@ class PublicController extends Controller
                         }
                     }
                 }else{
-                    /*$orderDateLsit = DB::select('select count(id) as count ,left(created_at,7) as date FROM projects where created_at between "'.$request->start_date.'" AND "'.$request->end_date.'"   GROUP BY date ORDER BY date');
+                    $dateList = $this->returnDateList($request->start_date,$request->end_date);
+                   $orderDateLsit = DB::select('select count(id) as count ,left(created_at,10) as date FROM projects where created_at between "'.$request->start_date.'" AND "'.$request->end_date.'"   GROUP BY date ORDER BY date');
                     $date = array_column($orderDateLsit,'date');
                     $dateNum = array_column($orderDateLsit,'count','date');
                     foreach ($dateList as $k => $v) {
@@ -106,7 +107,7 @@ class PublicController extends Controller
                         if(in_array($v['date'],$date)){
                             $dateList[$k]['count'] = $dateNum[$v['date']];
                         }
-                    }*/
+                    }
                 }
 
 
