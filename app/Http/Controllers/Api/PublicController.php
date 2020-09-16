@@ -67,9 +67,9 @@ class PublicController extends Controller
                         }
                     }
                 }else{
-                    $orderDateLsit = DB::select('select count(id) as count ,left(created_at,7) as date FROM projects where LEFT(created_at,10) between "'.$request->start_date.'" AND "'.$request->end_date.'"   GROUP BY date ORDER BY date');
+                    $orderDateLsit = DB::select('select count(id) as count ,left(created_at,7) as date FROM projects where created_at between "'.$request->start_date.'" AND "'.$request->end_date.'"   GROUP BY date ORDER BY date');
                     $date = array_column($orderDateLsit,'date');
-                    $dateNum = array_column($orderDateLsit,'money','date');
+                    $dateNum = array_column($orderDateLsit,'count','date');
                     foreach ($dateList as $k => $v) {
                         $dateList[$k]['count'] = 0;
                         if(in_array($v['date'],$date)){
