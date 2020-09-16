@@ -137,7 +137,7 @@ class PublicController extends Controller
                 /*if($msg && isset($msg->pics) && !empty($msg->pics)){
                     $msg['pics_img'] = Files::whereIn('id',explode(",",$msg->pics))->first();
                 }*/
-                $v['warnigs_sms'] = $msg->content;
+                $v['warnigs_sms'] = $msg->content ?? '';
             }
             //检测标准
             if($projects->status == 1){
