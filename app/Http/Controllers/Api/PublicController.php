@@ -134,10 +134,10 @@ class PublicController extends Controller
                 //解决方案
                 $w_list = Warnigs::where('project_id',$request->project_id)->whereIn('point_id',$p_id_str)->get(['id']);
                 $msg = WarnigsSms::whereIn('warnig_id',$w_list)->orderBy('id','desc')->first();
-                if($msg && isset($msg->pics) && !empty($msg->pics)){
-                    $msg['pics_img'] = Files::whereIn('id',explode(",",$msg->pics))->get();
-                }
-                $v['warnigs_sms'] = $msg;
+                /*if($msg && isset($msg->pics) && !empty($msg->pics)){
+                    $msg['pics_img'] = Files::whereIn('id',explode(",",$msg->pics))->first();
+                }*/
+                $v['warnigs_sms'] = $msg->content;
             }
             //检测标准
             if($projects->status == 1){
