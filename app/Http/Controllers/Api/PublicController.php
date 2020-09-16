@@ -59,11 +59,11 @@ class PublicController extends Controller
             foreach ($dateList as $k => $v) {
                 $v['count'] = 0;
                 if(in_array($v['date'],$date)){
-                    $v['count'] = $dateNum[$v['date']];
+                    $dateList[$k]['count'] = $dateNum[$v['date']];
                 }
             }
         }
-        return response()->json($proDateList);
+        return response()->json($dateList);
     }
 
     //获取最新监测点监测数据
