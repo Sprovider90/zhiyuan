@@ -49,7 +49,7 @@ class PublicController extends Controller
         if($request->user()->customer_id){
             $dateList = [];
         }else {
-            $pro_date = $this->returnDate($request->type ?? 1);
+            $pro_date = $this->returnDate($request->type ?? 3);
             $start_date = substr($pro_date[0], 0, 10);
             $end_date = substr($pro_date[1], 0, 10);
             $dateList = $this->returnDateList($start_date, $end_date);
