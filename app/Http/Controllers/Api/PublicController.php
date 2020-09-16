@@ -62,7 +62,7 @@ class PublicController extends Controller
                     $dateNum = array_column($saleDateLsit,'money','date');
                     foreach ($dateList as $k => $v) {
                         $dateList[$k]['money'] = 0;
-                        if(in_array($v,$date)){
+                        if(in_array($v['date'],$date)){
                             $dateList[$k]['money'] = $dateNum[$v['date']];
                         }
                     }

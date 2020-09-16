@@ -27,7 +27,7 @@ class Controller extends BaseController
         $i = 0;
         do {
             $month = date('Ym', strtotime($start . ' + ' . $i . ' month'));
-            $range[] = date('Y-m', strtotime($start . ' + ' . $i . ' month'));
+            $range[] = ['date' => date('Y-m', strtotime($start . ' + ' . $i . ' month'))];
             $i++;
         } while ($month < $end);
 
