@@ -43,11 +43,9 @@ class PublicController extends Controller
     //获取首页 销售额/订单数 type 1销售额/2订单数
     public function getIndexOrderSale(Request $request){
         $type = $request->get('type',1);
-        $pro_date = $this->returnDate(1);
+        /*$pro_date = $this->returnDate(1);
         $start_date = substr($pro_date[0], 0, 10);
-        $end_date = substr($pro_date[1], 0, 10);
-
-
+        $end_date = substr($pro_date[1], 0, 10);*/
 
         if($request->user()->customer_id){
             $dateList = [];
