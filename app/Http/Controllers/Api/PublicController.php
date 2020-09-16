@@ -83,7 +83,7 @@ class PublicController extends Controller
                 }
             }else{
                 //按天统计
-                if( $type ==1 ){
+                if( $type == 1 ){
                     $dateList = $this->returnDateList($request->start_date,$request->end_date);
                     $saleDateLsit = DB::select('select SUM(money) as money ,date ,type FROM finance_logs where date between "'.$request->start_date.'" AND "'.$request->end_date.'"  GROUP BY date,type ORDER BY date');
                     $date = array_column($saleDateLsit,'date');
@@ -91,14 +91,14 @@ class PublicController extends Controller
                         $dateList[$k]['money'] = 0;
                         if(in_array($v['date'],$date)){
                             foreach ($saleDateLsit as $k1 => $v1){
-                                if($v['date'] == $v1->date1){
+                                if($v['date'] == $v1->date){
                                     $v1->type ==1 ? $dateList[$k]['money'] += $v1->money : $dateList[$k]['money'] -= $v1->money;
                                 }
                             }
                         }
                     }
                 }else{
-                    $orderDateLsit = DB::select('select count(id) as count ,left(created_at,7) as date FROM projects where created_at between "'.$request->start_date.'" AND "'.$request->end_date.'"   GROUP BY date ORDER BY date');
+                    /*$orderDateLsit = DB::select('select count(id) as count ,left(created_at,7) as date FROM projects where created_at between "'.$request->start_date.'" AND "'.$request->end_date.'"   GROUP BY date ORDER BY date');
                     $date = array_column($orderDateLsit,'date');
                     $dateNum = array_column($orderDateLsit,'count','date');
                     foreach ($dateList as $k => $v) {
@@ -106,7 +106,7 @@ class PublicController extends Controller
                         if(in_array($v['date'],$date)){
                             $dateList[$k]['count'] = $dateNum[$v['date']];
                         }
-                    }
+                    }*/
                 }
 
 
