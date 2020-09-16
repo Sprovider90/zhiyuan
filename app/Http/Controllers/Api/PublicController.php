@@ -221,6 +221,7 @@ class PublicController extends Controller
             $v->smscount = WarnigsSms::where('warnig_id',$v->id)->count();
             $fis=WarnigsSms::where(['warnig_id'=>$v->id,$updatefeid=>0])->first(["id"]);
             $v->isnew=isset($fis->id)?1:0;
+            $v->check_result = $this->getChinaName($v->check_result);
         }
 
         return response()->json(array(
