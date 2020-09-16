@@ -234,13 +234,13 @@ class PublicController extends Controller
                     'run_device_count'  => $run_device_count,
                 ),
                 //销售额 订单数
-                'order_count_list'      => $dateList,
+                'order_count_list'      => [],
                 //项目累计
                 'project_count'         => $project_count,
                 //项目本周新增
                 'project_week_count'    => $bz_pro_count,
                 //项目
-                'project_count_list'    => $proDateList,
+                'project_count_list'    => [],
                 //预警方案/解决方案
                 'msg_list'              => $msg_list
          ));
