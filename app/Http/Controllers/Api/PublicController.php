@@ -59,9 +59,8 @@ class PublicController extends Controller
                 if( $type ==1 ){
                     $saleDateLsit = DB::select('select SUM(money) as money ,left(date,7) as date1 FROM finance_logs where date between "'.$request->start_date.'" AND "'.$request->end_date.'"  GROUP BY date1 ORDER BY date1');
                     $date = array_column($saleDateLsit,'date');
-                    $dateNum = array_column($saleDateLsit,'money','date');
+                    $dateNum = array_column($saleDateLsit,'money','date1');
                     foreach ($dateList as $k => $v) {
-                        var_dump($v);exit;
                         $dateList[$k]['money'] = 0;
                         if(in_array($v['date'],$date)){
                             $dateList[$k]['money'] = $dateNum[$v['date']];
