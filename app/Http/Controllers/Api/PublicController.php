@@ -65,7 +65,7 @@ class PublicController extends Controller
 //                            $dateList[$k]['money'] = $dateNum[$v['date']];
                             foreach ($saleDateLsit as $k1 => $v1){
                                 if($v['date'] == $v1['date1']){
-                                    $v1->type ==1 ? $dateList[$k]['money'] += $v1['money'] : $dateList[$k]['money'] -= $v1['money'];
+                                    $v1['type'] ==1 ? $dateList[$k]['money'] += $v1['money'] : $dateList[$k]['money'] -= $v1['money'];
                                 }
                             }
                         }
