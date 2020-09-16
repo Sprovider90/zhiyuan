@@ -169,12 +169,13 @@ class PublicController extends Controller
         $device_count = Device::where($where)->count();
         //运行设备
         $run_device_count = Device::where($where)->where('run_status',1)->count();
-        if($request->user()->customer_id){
+        /*if($request->user()->customer_id){
             $dateList = [];
         }else{
             //销售额 默认本月
             $date = $this->returnDate(3);
             $dateList = $this->returnDateList(substr($date[0],0,10),substr($date[1],0,10));
+            $logList = DB::select('select ');
             foreach ($dateList as $k => $v){
                 $dateList[$k]['money'] = 0;
                 $dateList[$k]['order_count'] = 0;
@@ -184,13 +185,13 @@ class PublicController extends Controller
                 $count = Orders::whereRaw('left(created_at,10)="'.$v['date'].'"')->count();
                 $dateList[$k]['order_count'] = $count ?? 0;
             }
-        }
+        }*/
 
         //本周项目总数
         $bz_date = $this->returnDate(1);
         $bz_pro_count = Projects::where($where)->whereBetween('created_at',$bz_date)->count();
         //项目数据表
-        if($request->user()->customer_id){
+        /*if($request->user()->customer_id){
             $proDateList = [];
         }else {
             $pro_date = $this->returnDate(3);
@@ -198,7 +199,7 @@ class PublicController extends Controller
             foreach ($proDateList as $k => $v) {
                 $proDateList[$k]['count'] = Projects::whereRaw('left(created_at,10)="' . $v['date'] . '"')->count() ?? 0;
             }
-        }
+        }*/
         //预警警报 / 解决方案
         $Warnigs = Warnigs::query();
         if($request->user()->customer_id){
