@@ -53,7 +53,7 @@ class PublicController extends Controller
             $start_date = substr($pro_date[0], 0, 10);
             $end_date = substr($pro_date[1], 0, 10);
             if($request->start_date && $request->end_date){
-                $pro_date = returnDateList($request->start_date,$request->end_date);
+                $pro_date = $this->returnDateList($request->start_date,$request->end_date);
                 $start_date = $request->start_date;
                 $end_date = $request->end_date;
             }
