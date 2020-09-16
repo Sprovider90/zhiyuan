@@ -187,6 +187,7 @@ class PublicController extends Controller
             }
         }
         $t2=microtime(true);
+        echo $time1=$t2-$t1,PHP_EOL;exit;
 
         $t3=microtime(true);
         //本周项目总数
