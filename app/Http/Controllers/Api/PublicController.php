@@ -153,7 +153,7 @@ class PublicController extends Controller
 
     //首页 项目总数 点位总数  设备总数
     public function getIndexCount(Request $request){
-        $t1=microtime(true);
+
         $where = [];
         $request->user()->customer_id && $where[] = ['customer_id',$request->user()->customer_id];
         //项目总数
@@ -169,7 +169,7 @@ class PublicController extends Controller
         $device_count = Device::where($where)->count();
         //运行设备
         $run_device_count = Device::where($where)->where('run_status',1)->count();
-
+        $t1=microtime(true);
         if($request->user()->customer_id){
             $dateList = [];
         }else{
