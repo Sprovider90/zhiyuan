@@ -57,21 +57,12 @@ class PublicController extends Controller
             $date = array_column($proDateList,'date');
             $dateNum = array_column($proDateList,'num','date');
             foreach ($dateList as $k => $v) {
-                /*var_dump($k);
-                echo "-------".PHP_EOL;
-                var_dump($v->num);
-                echo "-------".PHP_EOL;
-                var_dump($date);
-                echo "-------".PHP_EOL;
-                var_dump($v);exit;
-                exit;*/
+                $v['count'] = 0;
                 if(in_array($v['date'],$date)){
-                    echo $dateNum[$v['date']],PHP_EOL;
+                    $v['count'] = $dateNum[$v['date']];
                 }
-
-//                $proDateList[$k]['count'] = Projects::whereRaw('left(created_at,10)="' . $v['date'] . '"')->count() ?? 0;
             }
-        }exit;
+        }
         return response()->json($proDateList);
     }
 
