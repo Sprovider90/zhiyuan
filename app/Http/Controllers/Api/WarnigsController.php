@@ -30,17 +30,8 @@ class WarnigsController extends Controller
 
         $request->threshold_keys      && $Warnigs = $Warnigs->where('threshold_keys','like',"%{$request->threshold_keys},%");
 
-        /*$request->reuseparam      && $Warnigs = $Warnigs->whereHas('project',function($query) use ($request){
+        $request->reuseparam      && $Warnigs = $Warnigs->whereHas('project',function($query) use ($request){
             $query->where('name','like',"%{$request->reuseparam}%");
-        });*/
-
-        $request->reuseparam      && $Warnigs = $Warnigs->where(function($query) use ($request){
-            $query->whereHas('project',function ($query1) use ($request) {
-                $query1->where('name','like',"%{$request->reuseparam}%");
-            });
-            $request->reuseparam && $query->orWhereHas('projectsPositions',function ($query1) use ($request){
-                $$query1->where('name','like',"%{$request->reuseparam}%");
-            });
         });
 
         $data = $Warnigs->with(['project','project.customs','projectsPositions'])->with(['projectsPositions.area'=>function($query){
