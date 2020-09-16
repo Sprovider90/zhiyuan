@@ -186,10 +186,7 @@ class PublicController extends Controller
                 $dateList[$k]['order_count'] = $count ?? 0;
             }
         }
-        $t2=microtime(true);
-        echo $time1=$t2-$t1,PHP_EOL;exit;
 
-        $t3=microtime(true);
         //本周项目总数
         $bz_date = $this->returnDate(1);
         $bz_pro_count = Projects::where($where)->whereBetween('created_at',$bz_date)->count();
@@ -229,10 +226,6 @@ class PublicController extends Controller
         }
         $t4=microtime(true);
 
-        echo $time1=$t2-$t1,PHP_EOL;
-
-        echo $time2=$t4-$t3,PHP_EOL;
-        exit;
         return response()->json(array(
                 //项目总数 点位总数 设备总数 运行设备数
                 'count' => array(
