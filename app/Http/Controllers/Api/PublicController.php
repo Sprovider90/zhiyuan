@@ -169,7 +169,6 @@ class PublicController extends Controller
         $device_count = Device::where($where)->count();
         //运行设备
         $run_device_count = Device::where($where)->where('run_status',1)->count();
-        $t1=microtime(true);
         if($request->user()->customer_id){
             $dateList = [];
         }else{
@@ -224,7 +223,6 @@ class PublicController extends Controller
             $v->isnew=isset($fis->id)?1:0;
             $v->threshold_keys = $this->getChinaName($v->threshold_keys);
         }
-        $t4=microtime(true);
 
         return response()->json(array(
                 //项目总数 点位总数 设备总数 运行设备数
