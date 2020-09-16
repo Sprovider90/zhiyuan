@@ -200,7 +200,7 @@ class PublicController extends Controller
             }
         }
         //预警警报 / 解决方案
-        /*$Warnigs = Warnigs::query();
+        $Warnigs = Warnigs::query();
         if($request->user()->customer_id){
             $projects=Projects::where("customer_id",$request->user()->customer_id)->pluck("id")->toArray();
             if(!empty($projects)){
@@ -222,7 +222,7 @@ class PublicController extends Controller
             $fis=WarnigsSms::where(['warnig_id'=>$v->id,$updatefeid=>0])->first(["id"]);
             $v->isnew=isset($fis->id)?1:0;
             $v->threshold_keys = $this->getChinaName($v->threshold_keys);
-        }*/
+        }
 
         return response()->json(array(
                 //项目总数 点位总数 设备总数 运行设备数
@@ -241,7 +241,7 @@ class PublicController extends Controller
                 //项目
                 'project_count_list'    => $proDateList,
                 //预警方案/解决方案
-                'msg_list'              => []
+                'msg_list'              => $msg_list
          ));
     }
 
