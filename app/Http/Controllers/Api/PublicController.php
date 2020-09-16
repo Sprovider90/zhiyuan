@@ -95,7 +95,7 @@ class PublicController extends Controller
         $projects = $projects->with(['areas','areas.file','stages']);
         $request->user()->customer_id && $projects->where('customer_id',$request->user()->customer_id);
         $request->user()->show_project_id && $projects = $projects->selectRaw('*,if(id='.$request->user()->show_project_id.',1,0) as order_num')->orderBy('order_num','desc');
-        $projects = $projects->whereIn('status',[1,4,5,6])->orderBy('created_at','desc')->get();
+        $projects = $projects->whereIn('status',[1,4,5,6])->orderBy('id','desc')->get();
         return response()->json($projects);
     }
 
