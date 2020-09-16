@@ -53,7 +53,7 @@ class PublicController extends Controller
             $dateList = [];
         }else{
             //判断开始日期 结束日期 是否跨月
-            if((strtotime($end_date) - strtotime($start_date))/60/60/24 > 30){
+            if((strtotime($request->end_date) - strtotime($request->start_date))/60/60/24 > 30){
                 $dateList = $this->returnMonthRange($request->start_date,$request->end_date);
                 //按月统计
                 if( $type ==1 ){
