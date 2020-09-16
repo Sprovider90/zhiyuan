@@ -61,7 +61,10 @@ class PublicController extends Controller
                 echo "-------".PHP_EOL;
                 var_dump($v->num);
                 echo "-------".PHP_EOL;
-                var_dump($date);exit;
+                var_dump($date);
+                echo "-------".PHP_EOL;
+                var_dump($v);exit;
+                exit;
                 /*if(in_array($v['date'],$date)){
                     echo $dateNum[$v['date']],PHP_EOL;
                 }*/
