@@ -49,7 +49,7 @@ class PublicController extends Controller
         if($request->user()->customer_id){
             $dateList = [];
         }else {
-            $pro_date = $this->returnDate($request->type ?? 3);
+            $pro_date = $this->returnDate($request->type ?? 2);
             $start_date = substr($pro_date[0], 0, 10);
             $end_date = substr($pro_date[1], 0, 10);
             $dateList = $this->returnDateList($start_date, $end_date);
@@ -57,7 +57,7 @@ class PublicController extends Controller
             $date = array_column($proDateList,'date');
             $dateNum = array_column($proDateList,'num','date');
             foreach ($dateList as $k => $v) {
-                $v['count'] = 0;
+                $dateList[$k]['count'] = 0;
                 if(in_array($v['date'],$date)){
                     $dateList[$k]['count'] = $dateNum[$v['date']];
                 }
