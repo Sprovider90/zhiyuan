@@ -37,6 +37,33 @@ class PublicController extends Controller
 {
     static $proThresholdsLog = [];
     static $proInfo = [];
+
+
+
+    //获取首页 销售额/订单数
+    public function getIndexOrderSale(Request $request){
+
+    }
+    //获取新增项目统计
+    public function getIndexNewProjectCount(Request $request){
+        if($request->user()->customer_id){
+            $dateList = [];
+        }else {
+            $pro_date = $this->returnDate($request->type ?? 1);
+            $dateList = $this->returnDateList(substr($pro_date[0], 0, 10), substr($pro_date[1], 0, 10));
+            $proDateList = DB::select('select count(id) as num ,left(created_at,10) as date FROM projects GROUP BY date ORDER BY date');
+            $date = array_column($proDateList,'date');
+            foreach ($proDateList as $k => $v) {
+                if(in_array($v['date'],$date)){
+                    echo $date,PHP_EOL;
+                }
+
+//                $proDateList[$k]['count'] = Projects::whereRaw('left(created_at,10)="' . $v['date'] . '"')->count() ?? 0;
+            }
+        }exit;
+        return response()->json($proDateList);
+    }
+
     //获取最新监测点监测数据
     public function getNewPositionData(Request $request){
         $params["type"]=$request->type?$request->type:1;
