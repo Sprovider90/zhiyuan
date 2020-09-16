@@ -66,12 +66,20 @@ class PublicController extends Controller
                             $dateList[$k]['money'] = $dateNum[$v['date']];
                         }
                     }
-
+                }else{
+                    $orderDateLsit = DB::select('select count(id) as count ,left(created_at,7) as date FROM projects where LEFT(created_at,10) between "'.$request->start_date.'" AND "'.$request->end_date.'"   GROUP BY date ORDER BY date');
+                    $date = array_column($orderDateLsit,'date');
+                    $dateNum = array_column($orderDateLsit,'money','date');
+                    foreach ($dateList as $k => $v) {
+                        $dateList[$k]['money'] = 0;
+                        if(in_array($v['date'],$date)){
+                            $dateList[$k]['money'] = $dateNum[$v['date']];
+                        }
+                    }
                 }
 
             }else{
-                //按天统计
-                /*$proDateList = DB::select('select count(id) as num ,left(created_at,10) as date FROM projects where left(created_at,10) between "'.$start_date.'" AND "'.$end_date.'"  GROUP BY date ORDER BY date');*/
+
 
 
             }
