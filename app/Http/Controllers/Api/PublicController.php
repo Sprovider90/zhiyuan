@@ -40,9 +40,58 @@ class PublicController extends Controller
 
 
 
-    //获取首页 销售额/订单数
+    //获取首页 销售额/订单数 type 1销售额/2订单数
     public function getIndexOrderSale(Request $request){
+        $type = $request->get('type',1);
+        $pro_date = $this->returnDate(1);
+        $start_date = substr($pro_date[0], 0, 10);
+        $end_date = substr($pro_date[1], 0, 10);
 
+
+
+        if($request->user()->customer_id){
+            $dateList = [];
+        }else{
+            //判断开始日期 结束日期 是否跨月
+            if((strtotime($end_date) - strtotime($start_date))/60/60/24 > 30){
+                if($request->start_date && $request->end_date){
+                    $pro_date = $this->returnMonthRange($request->start_date,$request->end_date);
+                }
+                //按月统计
+                if( $type ==1 ){
+                    $saleDateLsit = DB::select('select SUM(money) as money ,left(date,7) as date1 FROM finance_logs where date between "'.$request->start_date.'" AND "'.$request->end_date.'"  GROUP BY date1 ORDER BY date1');
+                    $date = array_column($saleDateLsit,'date');
+                    $dateNum = array_column($saleDateLsit,'money','date');
+                    foreach ($pro_date as $k => $v) {
+                        $dateList[$k]['money'] = 0;
+                        if(in_array($v,$date)){
+                            $dateList[$k]['money'] = $dateNum[$v['date']];
+                        }
+                    }
+
+                }
+
+            }else{
+                //按天统计
+                /*$proDateList = DB::select('select count(id) as num ,left(created_at,10) as date FROM projects where left(created_at,10) between "'.$start_date.'" AND "'.$end_date.'"  GROUP BY date ORDER BY date');*/
+
+
+            }
+
+            //销售额 默认本月
+            /*$date = $this->returnDate(3);
+            $dateList = $this->returnDateList(substr($date[0],0,10),substr($date[1],0,10));
+            foreach ($dateList as $k => $v){
+                $dateList[$k]['money'] = 0;
+                $dateList[$k]['order_count'] = 0;
+                $s = FinanceLog::where('type',1)->where('date',$v['date'])->sum('money');
+                $t = FinanceLog::where('type',2)->where('date',$v['date'])->sum('money');
+                $dateList[$k]['money'] = $s-$t;
+                $count = Orders::whereRaw('left(created_at,10)="'.$v['date'].'"')->count();
+                $dateList[$k]['order_count'] = $count ?? 0;
+            }*/
+        }
+        return response()->json($dateList);
     }
     //获取新增项目统计
     public function getIndexNewProjectCount(Request $request){

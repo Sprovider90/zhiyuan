@@ -187,6 +187,9 @@ Route::prefix('v1')
                         //首页项目总数
                         Route::get('getIndexNewProjectCount','PublicController@getIndexNewProjectCount')
                             ->name('public.getIndexNewProjectCount');
+                        //首页销售订单统计表
+                        Route::get('getIndexOrderSale','PublicController@getIndexOrderSale')
+                            ->name('public.getIndexOrderSale');
                         //首页大屏右侧项目列表
                         Route::get('getIndexProjectList','PublicController@getIndexProjectList')
                             ->name('public.getIndexProjectList');

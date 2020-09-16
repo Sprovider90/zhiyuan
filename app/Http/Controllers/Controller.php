@@ -19,6 +19,21 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
 
+
+    function returnMonthRange($start, $end)
+    {
+        $end = date('Ym', strtotime($end)); // 转换为月
+        $range = [];
+        $i = 0;
+        do {
+            $month = date('Ym', strtotime($start . ' + ' . $i . ' month'));
+            $range[] = date('Y-m', strtotime($start . ' + ' . $i . ' month'));
+            $i++;
+        } while ($month < $end);
+
+        return $range;
+    }
+
     public function getProjectThreshold($project_id){
             $data = DB::select('SELECT
                     a.id AS project_id,
