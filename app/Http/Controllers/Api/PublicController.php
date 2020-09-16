@@ -57,13 +57,17 @@ class PublicController extends Controller
                 $dateList = $this->returnMonthRange($request->start_date,$request->end_date);
                 //按月统计
                 if( $type ==1 ){
-                    $saleDateLsit = DB::select('select SUM(money) as money ,left(date,7) as date1 FROM finance_logs where date between "'.$request->start_date.'" AND "'.$request->end_date.'"  GROUP BY date1 ORDER BY date1');
+                    $saleDateLsit = DB::select('select SUM(money) as money ,left(date,7) as date1,type FROM finance_logs where date between "'.$request->start_date.'" AND "'.$request->end_date.'"  GROUP BY date1,type ORDER BY date1');
                     $date = array_column($saleDateLsit,'date1');
-                    $dateNum = array_column($saleDateLsit,'money','date1');
                     foreach ($dateList as $k => $v) {
                         $dateList[$k]['money'] = 0;
                         if(in_array($v['date'],$date)){
-                            $dateList[$k]['money'] = $dateNum[$v['date']];
+//                            $dateList[$k]['money'] = $dateNum[$v['date']];
+                            foreach ($saleDateLsit as $k1 => $v1){
+                                if($v['date'] == $v1['date1']){
+                                    $v1->type ==1 ? $dateList[$k]['money'] += $v1['money'] : $dateList[$k]['money'] -= $v1['money'];
+                                }
+                            }
                         }
                     }
                 }else{
@@ -77,7 +81,6 @@ class PublicController extends Controller
                         }
                     }
                 }
-
             }else{
 
 
