@@ -53,6 +53,7 @@ class PublicController extends Controller
             $dateList = $this->returnDateList(substr($pro_date[0], 0, 10), substr($pro_date[1], 0, 10));
             $proDateList = DB::select('select count(id) as num ,left(created_at,10) as date FROM projects GROUP BY date ORDER BY date');
             $date = array_column($proDateList,'date');
+            var_dump($date);exit;
             foreach ($proDateList as $k => $v) {
                 if(in_array($v['date'],$date)){
                     echo $date,PHP_EOL;
