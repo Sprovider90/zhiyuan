@@ -58,8 +58,8 @@ class PublicController extends Controller
             $dateNum = array_column($proDateList,'num','date');
             foreach ($proDateList as $k => $v) {
                 var_dump($k);
-                var_dump($v);
-                var_dump($date);exit;
+                var_dump($v->num);
+                var_dump($date['date']);exit;
                 /*if(in_array($v['date'],$date)){
                     echo $dateNum[$v['date']],PHP_EOL;
                 }*/
