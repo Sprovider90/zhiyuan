@@ -54,7 +54,7 @@ class PublicController extends Controller
             $end_date = substr($pro_date[1], 0, 10);
             $dateList = $this->returnDateList($start_date, $end_date);
             $proDateList = DB::select('select count(id) as num ,left(created_at,10) as date FROM projects where left(created_at,10) between "'.$start_date.'" AND "'.$end_date.'"  GROUP BY date ORDER BY date');
-            $date = array_column($proDateList,'date','num');
+            $date = array_column($proDateList,'date');
             $dateNum = array_column($proDateList,'num','date');
             foreach ($proDateList as $k => $v) {
                 if(in_array($v['date'],$date)){
