@@ -32,6 +32,8 @@ class WarnigsController extends Controller
 
         $request->reuseparam      && $Warnigs = $Warnigs->whereHas('project',function($query) use ($request){
             $query->where('name','like',"%{$request->reuseparam}%");
+        })->orWhereHas('projectsPositions',function($query) use ($request){
+            $query->where('name','like',"%{$request->reuseparam}%");
         });
 
         $data = $Warnigs->with(['project','project.customs','projectsPositions'])->with(['projectsPositions.area'=>function($query){

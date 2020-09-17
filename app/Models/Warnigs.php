@@ -10,7 +10,7 @@ class Warnigs extends Model
     protected  $table = 'warnigs';
 
     protected $fillable = [
-        'project_id','point_id','waring_time','threshold_keys','originaldata'
+        'project_id','point_id','waring_time','threshold_keys'
     ];
     public function project(){
         return $this->hasOne(Projects::class, 'id', 'project_id');
