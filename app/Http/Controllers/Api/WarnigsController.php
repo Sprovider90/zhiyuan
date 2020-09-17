@@ -23,12 +23,11 @@ class WarnigsController extends Controller
 
         }
 
-        $Warnigs = $Warnigs->where('threshold_keys', '!=' , "");
         if($request->start_time && $request->end_time){
             $Warnigs = $Warnigs->whereBetween('created_at',[$request->start_time,$request->end_time]);
         }
 
-        $request->threshold_keys      && $Warnigs = $Warnigs->where('threshold_keys','like',"%{$request->threshold_keys}%");
+
 
         $request->reuseparam      && $Warnigs = $Warnigs->whereHas('project',function($query) use ($request){
             $query->where('name','like',"%{$request->reuseparam}%");
@@ -36,6 +35,8 @@ class WarnigsController extends Controller
             $query->where('name','like',"%{$request->reuseparam}%");
         });
 
+        $request->threshold_keys      && $Warnigs = $Warnigs->where('threshold_keys','like',"%{$request->threshold_keys}%");
+        $Warnigs = $Warnigs->where('threshold_keys', '!=' , "");
         $data = $Warnigs->with(['project','project.customs','projectsPositions'])->with(['projectsPositions.area'=>function($query){
             $query->withTrashed();}])->orderBy('id','desc')->paginate();
 
