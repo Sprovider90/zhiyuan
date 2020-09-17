@@ -28,7 +28,7 @@ class WarnigsController extends Controller
             $Warnigs = $Warnigs->whereBetween('created_at',[$request->start_time,$request->end_time]);
         }
 
-        $request->threshold_keys      && $Warnigs = $Warnigs->where('threshold_keys','like',"%{$request->threshold_keys},%");
+        $request->threshold_keys      && $Warnigs = $Warnigs->where('threshold_keys','like',"%{$request->threshold_keys}%");
 
         $request->reuseparam      && $Warnigs = $Warnigs->whereHas('project',function($query) use ($request){
             $query->where('name','like',"%{$request->reuseparam}%");
