@@ -44,14 +44,15 @@ class PreinstallController extends Controller
         try{
             DB::beginTransaction();
             foreach ($data[0] as $row) {
+                $date = date("Y-m-d",intval(($row[0] - 25569) * 3600 * 24));
                 //删除原有数据 进行覆盖操作
-                Preinstall::where('date',date("Y-m-d",intval(($row[0] - 25569) * 3600 * 24))->delete();
+                Preinstall::where('date',$date)->delete();
                 $model = new Preinstall();
                 $flg = $model->create(
                     [
                         'project_id'            => $project->id,
                         'customer_id'           => $project->customer_id,
-                        'date'                  => date("Y-m-d",intval(($row[0] - 25569) * 3600 * 24)),
+                        'date'                  => $date,
                         'hcho'                  => $row[1],
                         'tvoc'                  => $row[2],
                     ]
