@@ -110,7 +110,9 @@ class ProjectsController extends Controller
     public function show(Projects $project,ProjectsStages $projectsStages)
     {
 
-        $data = $project->load(['stages','stages.thresholds'])->load(['position','position.areas'])->load('customs')->load('areas','areas.file');
+        $data = $project->load(['stages' => function($query){
+            $query->orderBy('stages','asc')->orderBy('id','desc');
+        },'stages.thresholds'])->load(['position','position.areas'])->load('customs')->load('areas','areas.file');
         $date = $projectsStages->where('project_id',$project->id);
         $data['start_time'] = $date->min('start_date');
         $data['end_time']   = $date->max('end_date');
