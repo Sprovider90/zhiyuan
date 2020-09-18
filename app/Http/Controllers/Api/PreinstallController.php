@@ -47,7 +47,7 @@ class PreinstallController extends Controller
                 return response()->json(['message' => '请填写导入数据'],404);
             }
             //删除原有数据 进行覆盖操作
-            Preinstall::where('project_id',$project)->delete();
+            Preinstall::where('project_id',$project->id)->delete();
             foreach ($data[0] as $row) {
                 $date = date("Y-m-d",intval(($row[0] - 25569) * 3600 * 24));
                 Preinstall::where('project_id',$project->id)->where('date',$date)->delete();
