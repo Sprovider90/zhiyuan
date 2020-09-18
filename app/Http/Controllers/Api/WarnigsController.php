@@ -64,7 +64,9 @@ class WarnigsController extends Controller
         if(isset($data["originaldata"]) && $originaldata_arr=json_decode($data["originaldata"])){
             $data["originaldata_name"]=isset($originaldata_arr["name"])?$originaldata_arr["name"]:"";
         }
-
+        $fir=WarnigsSms::where(['warnig_id'=>$data["id"],"customer_id"=>$data["project"]["customer_id"]])->orderBy('id','asc')->first("created_at");
+        $data["first_sms_time"]=isset($fir->created_at)?$fir->toArray()["created_at"]:"";
+       
         return new WarnigsResource($data);
     }
 }
