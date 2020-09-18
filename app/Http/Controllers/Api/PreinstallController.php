@@ -46,7 +46,7 @@ class PreinstallController extends Controller
             foreach ($data[0] as $row) {
                 $date = date("Y-m-d",intval(($row[0] - 25569) * 3600 * 24));
                 //删除原有数据 进行覆盖操作
-                Preinstall::where('date',$date)->delete();
+                Preinstall::where('project_id',$project)->delete();
                 $model = new Preinstall();
                 $flg = $model->create(
                     [
