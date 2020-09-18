@@ -191,7 +191,7 @@ class ProjectsController extends Controller
             $del_stages = $request->stages_del;
             if($del_stages){
                 ProjectsStages::where('project_id',$project['id'])->whereIN('id',explode(',',$del_stages))->delete();
-                ProjectsThresholds::where('project_id',$project['id'])->whereIN('stage_id',explode(',',$del_stages))->forceDelete();
+//                ProjectsThresholds::where('project_id',$project['id'])->whereIN('stage_id',explode(',',$del_stages))->forceDelete();
             }
             //区域处理
             $areas_data = json_decode($request->areas,true);
