@@ -111,7 +111,7 @@ class ProjectsController extends Controller
     {
 
         $data = $project->load(['stages' => function($query){
-            $query->orderBy('stage','asc')->orderBy('id','desc');
+            $query->orderBy('stage','asc')->orderBy('start_date','asc');
         },'stages.thresholds'])->load(['position','position.areas'])->load('customs')->load('areas','areas.file');
         $date = $projectsStages->where('project_id',$project->id);
         $data['start_time'] = $date->min('start_date');
