@@ -187,7 +187,7 @@ class PublicController extends Controller
             $res['project']['threshold'] = $data;
             foreach ($thresholdinfo_data as $k => $v){
                 if($k == 'co2' || $k == 'pm25'){
-                    $k = ucwords($k);
+                    $k = strtoupper($k);
                 }
                 $arr = explode('~',$v);
                 switch ($res['data']['0'][$k]){
