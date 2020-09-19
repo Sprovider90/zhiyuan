@@ -182,6 +182,7 @@ class PublicController extends Controller
         $data = $this->getProjectThreshold($res['position']['project_id']);
         $thresholdinfo_data = json_decode($data->thresholdinfo,true);
         $res['position']['tag']  =  1;
+        var_dump($res['data']);exit;
         if($data){
             $res['project']['threshold_name'] = $data->thresholds_name ?? '';
             $res['project']['threshold'] = $data;
