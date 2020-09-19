@@ -34,72 +34,63 @@ class PositiondatasController extends Controller
 
         $result = Common::curl($url, $params, false);
 
-        if(!empty($result)){
-            $tmp=json_decode($result,true);
-            if($tmp["body"]["list"]){
-                foreach ($tmp["body"]["list"] as $k=>&$v){
-                    //判断指标是否污染
-                    $v["red"]=$this->getRed($v);
-                }
-                $result=json_encode($tmp);
-            }
-        }
-        return $result;
-    }
-
-//    protected function getPro($projectId)
-//    {
-//        if(!empty(self::$proInfo)){
-//            return self::$proInfo;
+//        if(!empty($result)){
+//            $tmp=json_decode($result,true);
+//            if($tmp["body"]["list"]){
+//                foreach ($tmp["body"]["list"] as $k=>&$v){
+//                    //判断指标是否污染
+//                    $v["red"]=$this->getRed($v);
+//                }
+//                $result=json_encode($tmp);
+//            }
 //        }
+        return $result;
+    }
+
+//    protected function getRed($positiondata)
+//    {
+//        $result=[];
+//        $proinfo=$this->getProThresholds($positiondata["projectId"]);
 //
-//        $rs=Projects::find($projectId,["tvoc","hcho"]);
-//        self::$proInfo=[$rs->tvoc,$rs->hcho];
-//        return self::$proInfo;
+//        if(!empty($proinfo)){
+//            $pipei_data=$proinfo->last();
+//
+//            if(!empty($pipei_data)){
+//                foreach ($proinfo as $k=>$v){
+//                    if($positiondata["timestamp"]>=$v->created_at){
+//                        $pipei_data=$v;
+//                        break;
+//                    }
+//                }
+//
+//                foreach ($pipei_data->thresholdinfo as $k=>$v){
+//                    $zhibiao=explode("~",$v);
+//                    if(bccomp($positiondata[$k],$zhibiao[1],3)>=0){
+//                        $result[]=$k;
+//                    }
+//                }
+//            }
+//        }
+//        return $result;
 //    }
-    protected function getRed($positiondata)
-    {
-        $result=[];
-        $proinfo=$this->getProThresholds($positiondata["projectId"]);
-
-        if(!empty($proinfo)){
-            $pipei_data=$proinfo->last();
-
-            if(!empty($pipei_data)){
-                foreach ($proinfo as $k=>$v){
-                    if($positiondata["timestamp"]>=$v->created_at){
-                        $pipei_data=$v;
-                        break;
-                    }
-                }
-
-                foreach ($pipei_data->thresholdinfo as $k=>$v){
-                    $zhibiao=explode("~",$v);
-                    if(bccomp($positiondata[$k],$zhibiao[1],3)>=0){
-                        $result[]=$k;
-                    }
-                }
-            }
-        }
-        return $result;
-    }
-    protected function getProThresholds($project_id)
-    {
-        $result=[];
-        if(!empty(self::$proThresholdsLog)){
-            return self::$proThresholdsLog;
-        }
-        $result=ProThresholdsLog::where("project_id",$project_id)->orderBy('created_at','desc')->get();
-
-        if(!empty($result)){
-            foreach ($result as $k=>$v){
-                $v->thresholdinfo=json_decode($v->thresholdinfo,true);
-            }
-            self::$proThresholdsLog=$result;
-        }
-        return $result;
-
-    }
+//    protected function getProThresholds($project_id,$stage_id)
+//    {
+//        $result=[];
+//        if(!empty(self::$proThresholdsLog)){
+//            return self::$proThresholdsLog;
+//        }
+//        $where=["project_id"=>$project_id,"stage_id"=>$stage_id];
+//        $result=ProThresholdsLog::where($where)->orderBy('created_at','desc')->get();
+//
+//        if(!empty($result)){
+//            foreach ($result as $k=>$v){
+//                $v->thresholdinfo=json_decode($v->thresholdinfo,true);
+//            }
+//            self::$proThresholdsLog=$result;
+//        }
+//        return $result;
+//
+//    }
     public function export(PositiondatasRequest $request)
     {
         $params=[];
