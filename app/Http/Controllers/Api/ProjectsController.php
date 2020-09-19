@@ -97,7 +97,7 @@ class ProjectsController extends Controller
         $projects = $projects->load('areas')->load('stages');
         //修改项目状态
         $projects->update(['status'=>$this->getProjectStatus($projects->stages)]);
-        dispatch(new UpdateProStage(["project_id"=>$projects->id]));
+        dispatch(new UpdateProStage(["project_id"=>$projects->id,'fromwhere' => 'ProjectsController_store']));
         return response(new ProjectsResources($projects));
     }
 
@@ -219,13 +219,12 @@ class ProjectsController extends Controller
             //修改项目状态
             $project->update(['status'=>$this->getProjectStatus($project->stages)]);
             DB::commit();
-            dispatch(new UpdateProStage(["project_id"=>$project->id]));
+            dispatch(new UpdateProStage(["project_id"=>$project->id,'fromwhere' => 'ProjectsController_update']));
             return response(new ProjectsResources($project),201);
         }catch (\Exception $e){
             DB::rollback();
             throw new HttpException(403, $e->getMessage());
         }
-        dispatch(new UpdateProStage(["project_id"=>$project->id]));
         return response(new ProjectsResources($project->load('areas')->load('stages')),201);
     }
 
