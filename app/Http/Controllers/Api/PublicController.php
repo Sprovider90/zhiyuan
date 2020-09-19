@@ -179,6 +179,7 @@ class PublicController extends Controller
         $res['position'] = ProjectsPositions::find($request->monitorId);
         $res['area']    = ProjectsAreas::find($res['position']['area_id']);
         $res['project']  = Projects::find($res['position']['project_id']);
+        var_dump($res);exit;
         $data = $this->getProjectThreshold($res['position']['project_id']);
         $thresholdinfo_data = json_decode($data->thresholdinfo,true);
         $res['position']['tag']  =  1;
