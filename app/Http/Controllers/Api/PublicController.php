@@ -187,7 +187,7 @@ class PublicController extends Controller
             $res['project']['threshold'] = $data;
             foreach ($thresholdinfo_data as $k => $v){
                 $arr = explode('~',$v);
-                var_dump($res);exit;
+                var_dump($res['data']);exit;
                 switch ($res['data']['0'][$k]){
                     case $res['data']['0'][$k] < $arr[0]:
                         $res['data']['0'][$k.'_tag'] = 1;
