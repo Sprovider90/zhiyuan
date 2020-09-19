@@ -155,7 +155,7 @@ class PublicController extends Controller
 
     //获取最新监测点监测数据
     public function getNewPositionData(Request $request){
-        $params["type"]=$request->type ? $request->type:1;
+        $params["type"]=$request->type ? $request->type:2;
         $params["monitorId"]= $request->monitorId;
         $params["startTime"]= date( 'Y-m-d 00:00:00', strtotime('-1 week'));
         $params["endTime"]  = date("Y-m-d 23:59:59");
@@ -180,7 +180,6 @@ class PublicController extends Controller
         $res['area']    = ProjectsAreas::find($res['position']['area_id']);
         $res['project']  = Projects::find($res['position']['project_id']);
         $data = $this->getProjectThreshold($res['position']['project_id']);
-        var_dump($data);exit;
         $thresholdinfo_data = json_decode($data->thresholdinfo,true);
         $res['position']['tag']  =  1;
         if($data){
