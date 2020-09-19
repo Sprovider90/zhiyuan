@@ -186,6 +186,7 @@ class PublicController extends Controller
             $res['project']['threshold_name'] = $data->thresholds_name ?? '';
             $res['project']['threshold'] = $data;
             foreach ($thresholdinfo_data as $k => $v){
+                var_dump(json_encode($thresholdinfo_data));
                 $arr = explode('~',$v);
                 var_dump($res['data']);exit;
                 switch ($res['data']['0'][$k]){
