@@ -23,7 +23,7 @@ class PositionsController extends Controller
         $positions->location()->create($request->all());
         //同时修改设备：运行中
         $device->where('id',$positions->device_id)->update(['run_status' => 1]);
-        $request->device_id && dispatch(new UpdateDevicesInfoJob(["device_id"=>$request->device_id]));
+        $request->device_id && dispatch(new UpdateDevicesInfoJob(["device_id"=>$request->device_id,'fromwhere'=>'PositionsController_store']));
         return response(new PositionsResource($positions->load('location')));
     }
 
@@ -41,7 +41,7 @@ class PositionsController extends Controller
             if(!isset($location->left) && !isset($request->top)){
                 throw new HttpException(403, '请修改点位坐标');
             }
-             //查询坐标
+            //查询坐标
             $location = Location::where('position_id',$position->id)->first();
             if($location){
                 if($location->left == $request->left && $location->top == $request->top){
@@ -51,13 +51,13 @@ class PositionsController extends Controller
         }
         //原设备 已停止状态
         $device->where('id',$position->device_id)->update(['run_status' => 2]);
-        dispatch(new UpdateDevicesInfoJob(["device_id"=>$position->device_id]));
+//        dispatch(new UpdateDevicesInfoJob(["device_id"=>$position->device_id,'fromwhere' => 'PositionsController_update']));
         $position->update($request->all());
         $position->location()->delete();
         $position->location()->create($request->all());
         //同时修改设备 运行中状态
         $device->where('id',$request->device_id)->update(['run_status' => 1]);
-        $request->device_id && dispatch(new UpdateDevicesInfoJob(["device_id"=>$request->device_id])) ;
+        $request->device_id && dispatch(new UpdateDevicesInfoJob(["device_id"=>$request->device_id,'fromwhere' => 'PositionsController_update'])) ;
 
         return response(new PositionsResource($position->load('location')));
     }
@@ -83,7 +83,7 @@ class PositionsController extends Controller
         $position->update(['status' => $request->status]);
         //同时修改设备 已停止状态
         $device->where('id',$position->device_id)->update(['run_status' =>  $request->status == 1 ? 1 : 2]);
-        dispatch(new UpdateDevicesInfoJob(["device_id"=>$position->device_id]));
+        dispatch(new UpdateDevicesInfoJob(["device_id"=>$position->device_id,'fromwhere' => 'PositionsController_status']));
 
         return response(new PositionsResource($position),201);
     }
