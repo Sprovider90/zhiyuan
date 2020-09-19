@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\ProjectsStatusLog;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -93,7 +94,10 @@ LEFT JOIN (
         if(!empty($rs)){
             foreach ($rs as $k=>$v) {
                 Projects::where('id', $v->project_id)->update(['status' => $v->pro_status, 'stage_id' => $v->stage_stage_id]);
+                //维护项目状态的变更
+                ProjectsStatusLog::create(['status' => $v->pro_status, 'stage_id' => $v->stage_stage_id,'project_id'=>$v->project_id,'fromwhere'=>$this->credentials["fromwhere"]]);
             }
+
         }
         //生成快照供预警使用
     }

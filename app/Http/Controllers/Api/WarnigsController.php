@@ -66,7 +66,7 @@ class WarnigsController extends Controller
         }
         $fir=WarnigsSms::where(['warnig_id'=>$data["id"],"customer_id"=>$data["project"]["customer_id"]])->orderBy('id','asc')->first("created_at");
         $data["first_sms_time"]=isset($fir->created_at)?$fir->toArray()["created_at"]:"";
-       
+
         return new WarnigsResource($data);
     }
 }

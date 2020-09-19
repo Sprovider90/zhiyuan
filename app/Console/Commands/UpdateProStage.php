@@ -37,7 +37,7 @@ class UpdateProStage extends Command
      */
     public function handle()
     {
-        dispatch(new UpdateProStageJob());
+        dispatch(new UpdateProStageJob(["fromwhere"=>"Commands"]));
         $this->info("ok");
     }
 

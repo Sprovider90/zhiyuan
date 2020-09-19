@@ -39,7 +39,7 @@ class UpdateDevicesInfo extends Command
      */
     public function handle()
     {
-        dispatch(new UpdateDevicesInfoJob());
+        dispatch(new UpdateDevicesInfoJob(["fromwhere"=>"Commands"]));
         $this->info("ok");
     }
 }
