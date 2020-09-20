@@ -13,5 +13,7 @@ return [
     ],
     'kz'=>[
         'createpropic_address' => env('PROPIC_ADDRESS', null),
+        'createdevicesinfo_address' => env('DEVICESINFO_ADDRESS', null),
     ]
+
 ];

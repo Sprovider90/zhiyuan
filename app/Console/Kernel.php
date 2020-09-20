@@ -43,8 +43,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('zhiyuan:updatedevicesinfo')
             ->dailyAt('1:00')
             ->timezone('Asia/Shanghai');
-//        $schedule->command('zhiyuan:createprothresholdslog')->timezone('Asia/Shanghai')
-//            ->everyMinute();
+        $schedule->command('zhiyuan:createdevicesinfopic')->timezone('Asia/Shanghai')
+            ->everyMinute();
     }
 
     /**
