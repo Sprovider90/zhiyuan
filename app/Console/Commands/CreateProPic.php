@@ -40,7 +40,7 @@ class CreateProPic extends Command
         $path=config("javasource.kz.createpropic_address");
         $date=date("YmdHi",time());
         $dic=$path.substr($date,0,8);
-        $filename=substr($date,0,11)."000";
+        $filename=$date."00";
         if (!is_dir($dic)) {
             $mkdir_rs=@mkdir($dic, 0755, true);
             if(empty($mkdir_rs)){
@@ -55,17 +55,21 @@ class CreateProPic extends Command
     protected function getKzData(){
 
         $sql="SELECT
-                a.id as project_id,
+                a.id AS project_id,
                 a.stage_id,
-                c.`name`,
-                CASE WHEN d.thresholdinfo IS NULL THEN
-                \"thresholds\"
-                ELSE
-                \"projects_thresholds\" END AS fromwhere,
-                CASE WHEN d.thresholdinfo IS NULL THEN
+                c.`name` AS thresholds_name,
+                CASE
+            WHEN d.thresholdinfo IS NULL THEN
+                'thresholds'
+            ELSE
+                'projects_thresholds'
+            END AS fromwhere,
+             CASE
+            WHEN d.thresholdinfo IS NULL THEN
                 c.thresholdinfo
-                ELSE
-                d.thresholdinfo END AS thresholdinfo
+            ELSE
+                d.thresholdinfo
+            END AS thresholdinfo
             FROM
                 `projects` a
             LEFT JOIN projects_stages b ON a.stage_id = b.id
@@ -73,9 +77,10 @@ class CreateProPic extends Command
             LEFT JOIN projects_thresholds d ON a.stage_id = d.stage_id
             WHERE
                 a. STATUS IN (4, 5, 6)
-            AND a.stage_id IS NOT NULL";
-             $rs=DB::select($sql);
-
+            AND a.stage_id IS NOT NULL
+            AND b.deleted_at IS NULL
+            AND c.thresholdinfo IS NOT NULL";
+        $rs=DB::select($sql);
         return $rs;
     }
 

@@ -41,6 +41,9 @@ class CreateProThresholdsLog extends Command
     {
         $db_data=$this->getKzData();
         if(!empty($db_data)){
+            if(!File::exists('path')){
+
+            }
             foreach ($db_data as $k =>$v){
                 $where=[];
                 $where['project_id']=$v->project_id;
@@ -65,9 +68,9 @@ class CreateProThresholdsLog extends Command
                 c.`name` AS thresholds_name,
                 CASE
             WHEN d.thresholdinfo IS NULL THEN
-                \"thresholds\"
+                'thresholds'
             ELSE
-                \"projects_thresholds\"
+                'projects_thresholds'
             END AS fromwhere,
              CASE
             WHEN d.thresholdinfo IS NULL THEN
