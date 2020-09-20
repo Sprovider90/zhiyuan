@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
+
 class CreateProPic extends Command
 {
     /**
@@ -47,8 +49,28 @@ class CreateProPic extends Command
                 $this->error("create path err ".$dic);
             }
         }
+        $KzData=$this->getKzData();
+        file_put_contents($dic."/".$filename.".txt",json_encode($KzData,true));
+        //维护redis供java实时数据处理
+        $keys=Redis::hkeys("air:prothreshold:tags");
+        if(!empty($keys)){
+            $needdelete=array_diff($keys,array_column($KzData,"project_id"));
+            if(!empty($needdelete)){
+                foreach ($needdelete as $k=>$v){
+                    Redis::hdel("air:prothreshold:tags", $v);
+                }
+            }
+        }
+        //写入redis
+        //删除redis
 
-        file_put_contents($dic."/".$filename.".txt",json_encode($this->getKzData(),true));
+        if($KzData){
+            foreach ($KzData as $k => $v){
+                $v->updateTime=$dic."/".$filename.".txt";
+                Redis::hset("air:prothreshold:tags",$v->project_id,json_encode($v,true));
+            }
+        }
+
 
         $this->info("ok");
     }
