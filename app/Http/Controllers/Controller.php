@@ -135,10 +135,6 @@ class Controller extends BaseController
         $monarr[] = ['date' => $start_date];
         $start_date	= strtotime($start_date);
         $end_date 	= strtotime($end_date);
-        $maxTime = strtotime("-1 day",strtotime(" +1 month",strtotime($end_date)));
-        if($end_date >  $maxTime){
-            $end_date = $maxTime;
-        }
         while( ($start_date =  strtotime('+1 month', $start_date)) <= $end_date){
             $monarr[] = array('date' =>  date('Y-m', $start_date));
         }
