@@ -51,10 +51,12 @@ class PublicController extends Controller
             $dateList = [];
         }else{
             //判断开始日期 结束日期 是否跨月
-            if((strtotime($request->end_date) - strtotime($request->start_date))/60/60/24 > 30){
+            if($request->end_date != $request->start_date){
+                $request->start_date = date ("Y-m-d",strtotime($request->start_date));
+                $request->end_date = date("Y-m-d",strtotime("-1 day",strtotime(" +1 month",strtotime($request->end_date))));
                 $dateList = $this->returnMonthRange($request->start_date,$request->end_date);
                 //按月统计
-                if( $type ==1 ){
+                if( $type == 1 ){
                     $saleDateLsit = DB::select('select SUM(money) as money ,left(date,7) as date1,type FROM finance_logs where date between "'.$request->start_date.'" AND "'.$request->end_date.'"  GROUP BY date1,type ORDER BY date1');
                     $date = array_column($saleDateLsit,'date1');
                     foreach ($dateList as $k => $v) {
