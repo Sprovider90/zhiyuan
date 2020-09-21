@@ -113,8 +113,9 @@ class Controller extends BaseController
         $start_date = strtotime($start_date);
         $end_date = strtotime($end_date);
         if($start_date > $end_date) return [];
-        if($end_date >  time()){
-            $end_date = strtotime(date("Y-m-d"));
+        $maxTime = strtotime(date("Y-m-d"));
+        if($end_date >  $maxTime){
+            $end_date = $maxTime;
         }
         while ($end_date >= $start_date) {
             $arr[] = array('date' =>  date('Y-m-d', $start_date));
