@@ -82,6 +82,8 @@ class PublicController extends Controller
                     }
                 }
             }else{
+                $request->start_date = date ("Y-m-d",strtotime($request->start_date));
+                $request->end_date = date("Y-m-d",strtotime("-1 day",strtotime(" +1 month",strtotime($request->end_date))));
                 //按天统计
                 if( $type == 1 ){
                     $dateList = $this->returnDateList($request->start_date,$request->end_date);
