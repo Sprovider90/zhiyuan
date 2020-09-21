@@ -252,7 +252,7 @@ class ProjectsController extends Controller
      * @return ProjectsResources
      */
     public function area($project,ProjectsPositions $positions,Request $request){
-        $positions = $positions->with(['area','area.file']);
+        $positions = $positions->with(['area','area.file','device']);
         $positions = $positions->where('project_id',$project);
         return new PorjectsAreasResource($positions->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize));
     }
