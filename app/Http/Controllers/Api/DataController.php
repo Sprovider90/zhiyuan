@@ -24,7 +24,9 @@ class DataController extends Controller
                           $query->where('name','like',"%{$request->keyword}%");
                       });
             });
-        $request->soc && $position->device->where('soc','<=',$request->soc);
+        $request->soc && $position->whereHas('device' , function($query) use ($request) {
+            $query->where('soc','<',$request->soc);
+        });
         $position = $position->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
         foreach ($position as $k => $v){
             $tag = Tag::where('model_type',3)->where('model_id',$v->id)->orderBy('id','desc')->first();
