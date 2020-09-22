@@ -34,7 +34,8 @@ class DataController extends Controller
             }else{
                 $v->tag = '';
             }
-            $v->device ? $v->device->run_status = $v->status : [];
+            echo json_encode($v).PHP_EOL;
+            $v->device->run_status = $v->status;
         }
         return response(new PositionsResource($position));
     }
