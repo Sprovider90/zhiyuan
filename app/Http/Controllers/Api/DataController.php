@@ -13,9 +13,7 @@ class DataController extends Controller
 {
     //
     public function index(Request $request,ProjectsPositions $position){
-        $position = $position->with(['project','area','device'=>function($query) use ($request){
-            $request->soc && $query->where('soc','<=',$request->soc);
-        }]);
+        $position = $position->with(['project','area','device']);
         $request->user()->customer_id && $position->whereHas('project',function ($query) use ($request){
             $query->where('customer_id',$request->user()->customer_id);
         });
@@ -26,6 +24,7 @@ class DataController extends Controller
                           $query->where('name','like',"%{$request->keyword}%");
                       });
             });
+        $request->soc && $position->device()->where('soc','<=',$request->soc);
         $position = $position->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
         foreach ($position as $k => $v){
             $tag = Tag::where('model_type',3)->where('model_id',$v->id)->orderBy('id','desc')->first();
@@ -34,7 +33,6 @@ class DataController extends Controller
             }else{
                 $v->tag = '';
             }
-            echo json_encode($v).PHP_EOL;
             $v->device->run_status = $v->status;
         }
         return response(new PositionsResource($position));
