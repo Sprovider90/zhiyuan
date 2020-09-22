@@ -9,6 +9,8 @@ use App\Http\Requests\Api\WarnigsSmsRequest;
 use App\Models\WarnigsSms;
 use App\Models\Warnigs;
 use App\Models\Files;
+use Illuminate\Support\Facades\Redis;
+
 class WarnigsSmsController extends Controller
 {
     public function index(WarnigsSmsRequest $request, WarnigsSms $WarnigsSms)
@@ -44,6 +46,14 @@ class WarnigsSmsController extends Controller
         $warnigssms->send_id=$request->user()->id;
         $warnigssms->customer_id=$request->user()->customer_id;
         $warnigssms->save();
+        $arr=[];
+        $arr["stage"]=1004;
+        if($request->user()->customer_id==0){
+            $arr["stage"]=1005;
+        }
+        $arr["time"]=date('Y-m-d H:i:s',time());
+
+        $rs=Redis::rpush('messagelist',json_encode($arr));
 
         return new WarnigsSmsResource($warnigssms);
     }
