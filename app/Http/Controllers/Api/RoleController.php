@@ -12,9 +12,9 @@ use App\Http\Requests\Api\RoleRequest;
 class RoleController extends Controller {
 
 
-    public function index() {
-        $roles = Role::all();// 获取所有角色
-        RoleResource::wrap('data');
+    public function index(RoleRequest $request) {
+        $roles = Role::orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);// 获取所有角色
+        //RoleResource::wrap('data');
         return RoleResource::collection($roles);
     }
     public function store(RoleRequest $request) {
