@@ -21,7 +21,7 @@ class UsersloginlogController extends Controller
         }
 
         $Loginlog = QueryBuilder::for($query)
-            ->allowedIncludes('users')
+            ->allowedIncludes('users')->orderBy('id','desc')
             ->paginate($request->pageSize ?? $request->pageSize);
         return UsersloginlogResources::collection($Loginlog);
     }

@@ -38,7 +38,7 @@ class MessageController extends Controller
         }
 
 
-        $messages = QueryBuilder::for($query)
+        $messages = QueryBuilder::for($query)->orderBy('id','desc')
             ->paginate($request->pageSize ?? $request->pageSize);
 
         return MessageResource::collection($messages);
