@@ -7,7 +7,7 @@ class Message extends Model
 {
     protected  $table = 'message';
     protected $fillable = [
-        'type','content'
+        'type','content','url'
     ];
 
 }
