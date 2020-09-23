@@ -38,7 +38,7 @@ class WarnigsController extends Controller
         $request->threshold_keys      && $Warnigs = $Warnigs->where('threshold_keys','like',"%{$request->threshold_keys}%");
         $Warnigs = $Warnigs->where('threshold_keys', '!=' , "");
         $data = $Warnigs->with(['project','project.customs','projectsPositions'])->with(['projectsPositions.area'=>function($query){
-            $query->withTrashed();}])->orderBy('id','desc')->paginate();
+            $query->withTrashed();}])->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
 
 
         $updatefeid="nocustomerred";

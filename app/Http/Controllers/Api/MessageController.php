@@ -38,7 +38,7 @@ class MessageController extends Controller
         }
 
         $messages = QueryBuilder::for($query)
-            ->paginate();
+            ->paginate($request->pageSize ?? $request->pageSize);
         return MessageResource::collection($messages);
     }
     public function destroy(Message $message)
