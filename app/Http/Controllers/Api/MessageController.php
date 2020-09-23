@@ -37,8 +37,7 @@ class MessageController extends Controller
         	$query =$query->where('type',$request['type']);
         }
 
-        $messages = QueryBuilder::for($query)
-            ->paginate();
+        $messages = QueryBuilder::for($query)->orderBy('id','desc')->paginate();
         return MessageResource::collection($messages);
     }
     public function destroy(Message $message)
