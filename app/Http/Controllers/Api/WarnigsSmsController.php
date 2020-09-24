@@ -52,8 +52,8 @@ class WarnigsSmsController extends Controller
             $arr["stage"]=1005;
         }
         $arr["time"]=date('Y-m-d H:i:s',time());
-
-        $rs=Redis::rpush('messagelist',json_encode($arr));
+        $arr["warnig_id"]=$warnigssms->id;
+        Redis::rpush('messagelist',json_encode($arr));
 
         return new WarnigsSmsResource($warnigssms);
     }
