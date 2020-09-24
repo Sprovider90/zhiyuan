@@ -14,7 +14,7 @@ use App\Models\ProjectsAreas;
 use App\Models\ProjectsPositions;
 use App\Models\ProThresholdsLog;
 use Excel;
-use App\Exports\BaseExport;
+use App\Exports\PositiondatasExport;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 class PositiondatasController extends Controller
 {
@@ -34,63 +34,9 @@ class PositiondatasController extends Controller
 
         $result = Common::curl($url, $params, false);
 
-//        if(!empty($result)){
-//            $tmp=json_decode($result,true);
-//            if($tmp["body"]["list"]){
-//                foreach ($tmp["body"]["list"] as $k=>&$v){
-//                    //判断指标是否污染
-//                    $v["red"]=$this->getRed($v);
-//                }
-//                $result=json_encode($tmp);
-//            }
-//        }
         return $result;
     }
 
-//    protected function getRed($positiondata)
-//    {
-//        $result=[];
-//        $proinfo=$this->getProThresholds($positiondata["projectId"]);
-//
-//        if(!empty($proinfo)){
-//            $pipei_data=$proinfo->last();
-//
-//            if(!empty($pipei_data)){
-//                foreach ($proinfo as $k=>$v){
-//                    if($positiondata["timestamp"]>=$v->created_at){
-//                        $pipei_data=$v;
-//                        break;
-//                    }
-//                }
-//
-//                foreach ($pipei_data->thresholdinfo as $k=>$v){
-//                    $zhibiao=explode("~",$v);
-//                    if(bccomp($positiondata[$k],$zhibiao[1],3)>=0){
-//                        $result[]=$k;
-//                    }
-//                }
-//            }
-//        }
-//        return $result;
-//    }
-//    protected function getProThresholds($project_id,$stage_id)
-//    {
-//        $result=[];
-//        if(!empty(self::$proThresholdsLog)){
-//            return self::$proThresholdsLog;
-//        }
-//        $where=["project_id"=>$project_id,"stage_id"=>$stage_id];
-//        $result=ProThresholdsLog::where($where)->orderBy('created_at','desc')->get();
-//
-//        if(!empty($result)){
-//            foreach ($result as $k=>$v){
-//                $v->thresholdinfo=json_decode($v->thresholdinfo,true);
-//            }
-//            self::$proThresholdsLog=$result;
-//        }
-//        return $result;
-//
-//    }
     public function export(PositiondatasRequest $request)
     {
         $params=[];
@@ -105,14 +51,13 @@ class PositiondatasController extends Controller
         $arr=json_decode($result,true);
         if(!empty($arr["body"]["list"])){
             $export_data=[];
-            $export_data[]=['统计时间','甲醛（mg/m3）','PM2.5（μg/m3）','TVOC（mg/m3）','CO2（ppm）','温度（℃）','湿度（%RH）'];
-            foreach ($arr["body"]["list"] as $k=>$v){
-                $export_data[]=[$v["timestamp"],$v["formaldehyde"],$v["pm25"],$v["tvoc"],$v["co2"],$v["temperature"],$v["humidity"]];
+            $export_data[]=['统计时间','甲醛（mg/m3）','TVOC（mg/m3）','PM2.5（μg/m3）','CO2（ppm）','温度（℃）','湿度（%RH）'];
+            foreach ($arr["body"]["list"] as $k=>&$v){
+                $export_data[]=[$v["timestamp"],$v["formaldehyde"],$v["TVOC"],$v["PM25"],$v["CO2"],$v["temperature"],$v["humidity"]];
             }
-
-            $export = new BaseExport($export_data);
-
-            return Excel::download($export, $arr["body"]["list"][0]["monitorId"].'.xlsx');
+            $export = new PositiondatasExport($export_data,array_column($arr["body"]["list"],"red"));
+            $rs=ProjectsPositions::where('id', $arr["body"]["list"][0]["monitorId"])->first();
+            return Excel::download($export, $rs->name.'.xlsx');
         }else{
             return new HttpException(400, '无数据');
         }
