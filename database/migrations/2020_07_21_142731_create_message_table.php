@@ -19,6 +19,7 @@ class CreateMessageTable extends Migration
             $table->string('content')->comment('消息内容');
             $table->text('rev_users')->comment('接收的账号ids');
             $table->integer('user_id')->comment('接收的账号id');
+            $table->string('url')->nullable()->comment('跳转地址');
             $table->tinyInteger('is_read')->default(0)->comment('0未读1已读');
             $table->timestampTz('send_time',0)->nullable()->comment('消息触发的时候时间');
             $table->timestamps();

@@ -18,6 +18,7 @@ class CreateProjectsStatusLogTable extends Migration
             $table->integer('project_id')->unsigned()->default(0)->comment('项目id');
             $table->integer('stage_id')->unsigned()->default(0)->comment('阶段id');
             $table->tinyInteger('status')->default(0)->comment('项目状态');
+            $table->string('fromwhere',100)->nullable()->comment('触发地方');
             $table->string('original_file',100)->nullable()->comment('数据来源');
             $table->timestamps();
         });

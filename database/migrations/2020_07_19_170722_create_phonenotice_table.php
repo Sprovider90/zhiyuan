@@ -16,6 +16,7 @@ class CreatePhonenoticeTable extends Migration
         Schema::create('phonenotice', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('project_id')->unsigned()->default(0)->comment('项目id');
+            $table->integer('point_id')->unsigned()->default(0)->comment('检测点id');
             $table->integer('warnigs_id')->unsigned()->unique()->default(0)->comment('预警列表id');
             $table->text('projectsetting_kz_json')->nullable()->comment('项目通知设置快照');
             $table->tinyInteger('is_send')->default(0)->comment('是否发送通知，1是0否');

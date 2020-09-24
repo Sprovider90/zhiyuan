@@ -17,6 +17,7 @@ class CreateWarnigsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('project_id')->unsigned()->default(0)->comment('项目id');
             $table->integer('point_id')->unsigned()->default(0)->comment('检测id');
+            $table->string('device_id')->comment("设备编号");
             $table->string('thresholds_name')->comment("标准检测点名称");
             $table->timestampTz('waring_time',0)->nullable();
             $table->string('threshold_keys')->comment("预警指标（多个逗号隔开），如果有值代表在预警列表中暂时");
