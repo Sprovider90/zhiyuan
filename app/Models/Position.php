@@ -16,6 +16,10 @@ class Position extends Model
         'project_id','number', 'name','device_id','area_id','status'
     ];
 
+    public function project(){
+        return $this->hasOne(Projects::class, 'id', 'project_id');
+    }
+
     /**
      * 关联区域表
      * @return mixed
