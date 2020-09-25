@@ -13,7 +13,7 @@ class SeedUsersData extends Migration
     {
         $arr=[
             'name' => "guoqingkuaile",
-            'phone'=>'17780510690',
+            'phone'=>'17780510691',
             'remember_token' => Str::random(10),
             'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
             'truename'=>"chaoguan",
