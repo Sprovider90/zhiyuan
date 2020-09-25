@@ -29,7 +29,7 @@ class WarnigsSmsRequest extends FormRequest
             case 'POST':{
                 $rules=[
                     'content' => 'required|string',
-                    'pics' => 'required|string',
+                    //'pics' => 'required|string',
                 ];
                 break;
             }
