@@ -41,7 +41,7 @@ class PublicController extends Controller
 
     public function getNewPosition(Request $request){
         $position = Position::with(['project'])->where('status',1);
-        $position = $position->whereHas('projct',function($query) use ($request) {
+        $position = $position->whereHas('project',function($query) use ($request) {
             $query->whereIn('status',[4,5,6]);
             $request->user()->customer_id && $query->where('customer_id',$request->user()->customer_id);
         });
