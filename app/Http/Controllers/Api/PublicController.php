@@ -19,6 +19,7 @@ use App\Models\Files;
 use App\Models\FinanceLog;
 use App\Models\Location;
 use App\Models\Orders;
+use App\Models\Position;
 use App\Models\Projects;
 use App\Models\ProjectsAreas;
 use App\Models\ProjectsPositions;
@@ -38,7 +39,16 @@ class PublicController extends Controller
     static $proThresholdsLog = [];
     static $proInfo = [];
 
-
+    public function getNewPosition(Request $request){
+//        $position = Position::with(['project'])->where('status',1);
+        $position = Position::with(['project']);
+        $position = $position->whereHas('project',function($query) use ($request) {
+//            $query->whereIn('status',[4,5,6]);
+            $request->user()->customer_id && $query->where('customer_id',$request->user()->customer_id);
+        });
+        $position = $position->orderBy('id','desc')->first();
+        return response($position);
+    }
 
     //获取首页 销售额/订单数 type 1销售额/2订单数
     public function getIndexOrderSale(Request $request){

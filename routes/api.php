@@ -178,6 +178,9 @@ Route::prefix('v1')
 
                     //公共接口
                     Route::group(['prefix' => 'public'],function () {
+                        //获取登录用户最新添加的点位id和项目id
+                        Route::get('getNewPosition','PublicController@getNewPosition')
+                            ->name('public.getNewPosition');
                         //点位获取最新监测数据
                         Route::get('getNewPositionData','PublicController@getNewPositionData')
                             ->name('public.getNewPositionData');
