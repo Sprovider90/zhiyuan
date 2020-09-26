@@ -24,10 +24,10 @@ class FinanceController extends Controller
         $where = [];
         $request->user()->customer_id && $where[] = ['cid',$request->user()->customer_id];
         //订单总金额
-        $order_money_count = Finance::where($where)->whereBetween('created_at',$date)->sum('money');
+        $order_money_count = Finance::where($where)->whereNotIn('order_status',[5])->whereBetween('created_at',$date)->sum('money');
         //已收款
         $receive_money_count = 0;
-        $order_pay = Finance::where($where)->whereBetween('created_at',$date)->whereIn('order_status',[2,3,4])->whereBetween('created_at',$date)->get();
+        $order_pay = Finance::where($where)->whereBetween('created_at',$date)->whereIn('order_status',[2,3,4,6])->whereBetween('created_at',$date)->get();
         if($order_pay){
             foreach ($order_pay as $k => $v){
                 if($v->order_status == 2){
@@ -60,7 +60,7 @@ class FinanceController extends Controller
         }
         //已退款
         $exit_money_count = 0;
-        $exit_money_order = Finance::where($where)->whereBetween('created_at',$date)->whereIn('order_status',[4])->whereBetween('created_at',$date)->get();
+        $exit_money_order = Finance::where($where)->whereBetween('created_at',$date)->whereIn('order_status',[4,6])->whereBetween('created_at',$date)->get();
         foreach ($exit_money_order as $k => $v){
                 $log = FinanceLog::where("order_id",$v->id)->where('type',2)->get();
                 foreach ($log as $k1 => $v1){
