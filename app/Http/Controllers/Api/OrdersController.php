@@ -48,7 +48,7 @@ class OrdersController extends Controller
                     $order_payment_money += $v->money;
                     break;
                 case 3:
-                    $money = Finance::where('order_id',$v->id)->where("type",1)->sum('money');
+                    $money = FinanceLog::where('order_id',$v->id)->where("type",1)->sum('money');
                     $order_payment_money += $money;
                     break;
                 case 6:
