@@ -98,7 +98,7 @@ class FinanceController extends Controller
             $query->where('company_name','like',"%{$request->name}%")->orWhere('company_addr','like','%'.$request->name.'%');
         });
         $request->time      && $finance = $finance->whereDate('created_at',$request->time);
-        $finance->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
+        $finance = $finance->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
         return new FinanceResource($finance);
     }
 
