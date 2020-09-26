@@ -8,6 +8,7 @@ use App\Http\Requests\Api\FinanceRequest;
 use App\Http\Resources\FinanceLogResource;
 use App\Http\Resources\FinanceResource;
 use App\Http\Resources\OrdersResources;
+use App\Models\Files;
 use App\Models\Finance;
 use App\Models\FinanceLog;
 use App\Models\Orders;
@@ -169,6 +170,9 @@ class FinanceController extends Controller
         $financeLog = $financeLog->with('user')
             ->where('order_id',$orderId)
             ->orderBy('id','desc');
+        foreach ($financeLog as $k => $v){
+            $v->files = Files::whereIN("id",explode(',',$v->file))->get();
+        }
         return new OrdersResources($financeLog->paginate($request->pageSize ?? $request->pageSize));
     }
 
