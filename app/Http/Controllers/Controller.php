@@ -38,7 +38,6 @@ class Controller extends BaseController
             $data = DB::select('SELECT
                     a.id AS project_id,
                     a.stage_id,
-                    c.descript,
                     c.`name` AS thresholds_name,
                     CASE
                 WHEN d.thresholdinfo IS NULL THEN
