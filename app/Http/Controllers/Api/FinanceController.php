@@ -169,11 +169,12 @@ class FinanceController extends Controller
     public function financeLog($orderId,FinanceLog $financeLog,Request $request){
         $financeLog = $financeLog->with('user')
             ->where('order_id',$orderId)
-            ->orderBy('id','desc');
+            ->orderBy('id','desc')
+            ->paginate($request->pageSize ?? $request->pageSize);
         foreach ($financeLog as $k => $v){
-            $financeLog[$k]['files'] = Files::whereIN("id",explode(',',$v->file))->get();
+            $financeLog[$k]['files'] = Files::financeLog("id",explode(',',$v->file))->get();
         }
-        return new OrdersResources($financeLog->paginate($request->pageSize ?? $request->pageSize));
+        return new OrdersResources($financeLog);
     }
 
 }
