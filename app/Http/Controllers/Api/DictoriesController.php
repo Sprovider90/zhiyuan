@@ -23,17 +23,37 @@ class DictoriesController extends Controller
         $dictories = Dictories::findOrFail($id);
         $sql_arr=array_column(json_decode($dictories["value"]),"id");
 
+
+
+
         $attributes = $request->only(['value']);
         //$attributes["id"]=$id;
-        $give_arr=array_column(json_decode($attributes["value"]),"id");
+        $values=json_decode($attributes["value"],true);
+        $give_arr=array_column($values,"id");
         $differ=array_diff($sql_arr,$give_arr);
         if(!empty($differ)){
             abort(422, 'value里面的值不能删除');
         }
+        /*
+         * 组装id
+         * */
+
+        $max_id=1;
+        if(!empty($sql_arr)){
+            rsort($sql_arr);
+            $max_id=$sql_arr[0]+1;
+        }
+        foreach ($values as $k =>&$v){
+            if(!isset($v["id"])){
+                $v["id"]=$max_id;
+                $max_id++;
+            }
+        }
+        $attributes["value"]=json_encode($values);
        	try{
             $dictories->update($attributes);
         }catch(\Exception $e){
-    		abort(400, '内部错误');
+    		abort(400, $e->getMessage());
     	}
         return new DictoriesResource($dictories);
     }
