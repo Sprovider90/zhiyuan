@@ -100,7 +100,7 @@ class FinanceController extends Controller
         $request->time      && $finance = $finance->whereDate('created_at',$request->time);
         $finance = $finance->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
         foreach ($finance as $k => $v){
-            switch ($v->status){
+            switch ($v->order_status){
                 case 1://待付款
                     $v->payment = 0;
                     break;
