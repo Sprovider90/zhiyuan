@@ -171,7 +171,7 @@ class FinanceController extends Controller
             ->where('order_id',$orderId)
             ->orderBy('id','desc');
         foreach ($financeLog as $k => $v){
-            $v->files = Files::whereIN("id",explode(',',$v->file))->get();
+            $financeLog[$k]['files'] = Files::whereIN("id",explode(',',$v->file))->get();
         }
         return new OrdersResources($financeLog->paginate($request->pageSize ?? $request->pageSize));
     }
