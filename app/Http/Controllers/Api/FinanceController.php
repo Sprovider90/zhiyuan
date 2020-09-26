@@ -99,6 +99,29 @@ class FinanceController extends Controller
         });
         $request->time      && $finance = $finance->whereDate('created_at',$request->time);
         $finance = $finance->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
+        foreach ($finance as $k => $v){
+            switch ($v->status){
+                case 1://待付款
+                    $v->payment = 0;
+                    break;
+                case 2://已付款
+                    $v->payment = $v->money;
+                    break;
+                case 3://部分付款
+                    $v->payment = Finance::where("order_id",$v->id)->where('type',1)->sum('money');
+                    break;
+                case 4://已退款
+                    $v->payment = 0;
+                    break;
+                case 5://已取消
+                    $v->payment = 0;
+                    break;
+                case 6://部分退款
+                    $log = Finance::where("order_id",$v->id)->groupBy('type')->sum('money');
+                    var_dump($log);exit;
+                    break;
+            }
+        }
         return new FinanceResource($finance);
     }
 
