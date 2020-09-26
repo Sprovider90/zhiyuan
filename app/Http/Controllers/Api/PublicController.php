@@ -245,6 +245,8 @@ class PublicController extends Controller
         if($projects){
             foreach ($projects['areas'] as $k => $v){
                 $v->threshold_name = $thresholds_data ? $thresholds_data->thresholds_name : '';
+                $thresholds = Thresholds::where('name',$thresholds_data->thresholds_name)->first();
+                $v->descript = $thresholds->descript;
                 $tag = Tag::where('model_type',2)->where('model_id',$v->id)->orderBy('id','desc')->first();
                 $v['tag'] =  null;
                 if($tag){
