@@ -118,7 +118,7 @@ class FinanceController extends Controller
                     break;
                 case 6://部分退款
                     $log = Finance::where("order_id",$v->id)->groupBy('type')->sum('money');
-                    var_dump($log);exit;
+                    var_dump(json_encode($log));exit;
                     break;
             }
         }
