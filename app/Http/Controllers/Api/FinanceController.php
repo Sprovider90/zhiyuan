@@ -119,6 +119,7 @@ class FinanceController extends Controller
                 case 6://部分退款
                     $v->payment = 0;
                     $log = FinanceLog::where("order_id",$v->id)->groupBy('type')->get(['id','type',DB::raw('SUM(money) as money1')]);
+                    var_dump(json_encode($log));exit;
                     foreach ($log as $k1 => $v1){
                         if($v1->type == 1){
                             $v->payment += $v1->money1;
