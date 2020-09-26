@@ -108,7 +108,7 @@ class FinanceController extends Controller
                     $v->payment = $v->money;
                     break;
                 case 3://部分付款
-                    $v->payment = Finance::where("order_id",$v->id)->where('type',1)->sum('money');
+                    $v->payment = FinanceLog::where("order_id",$v->id)->where('type',1)->sum('money');
                     break;
                 case 4://已退款
                     $v->payment = 0;
@@ -117,7 +117,7 @@ class FinanceController extends Controller
                     $v->payment = 0;
                     break;
                 case 6://部分退款
-                    $log = Finance::where("order_id",$v->id)->groupBy('type')->sum('money');
+                    $log = FinanceLog::where("order_id",$v->id)->groupBy('type')->sum('money as money');
                     var_dump(json_encode($log));exit;
                     break;
             }
