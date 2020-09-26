@@ -98,7 +98,8 @@ class FinanceController extends Controller
             $query->where('company_name','like',"%{$request->name}%")->orWhere('company_addr','like','%'.$request->name.'%');
         });
         $request->time      && $finance = $finance->whereDate('created_at',$request->time);
-        return new FinanceResource($finance->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize));
+        $finance->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
+        return new FinanceResource($finance);
     }
 
     /**
@@ -152,7 +153,12 @@ class FinanceController extends Controller
                     if($order_money_count < $request->money){
                         return $this->errorResponse('400','退款金额必须小于已收款金额');
                     }else{
-                        $order_status = 4;
+                        //部分退款状态 20200926需求变更
+                        if($order_money_count == $request->money){
+                            $order_status = 4;
+                        }else{//全部退款
+                            $order_status = 6;
+                        }
                     }
                 }
                 $finance->update(['order_status' => $order_status]);
