@@ -66,7 +66,16 @@ class OrdersController extends Controller
         //待付款
         $order_wait_money = Orders::where($where)->whereBetween('created_at',$date)->where('order_status',1)->sum('money');
         //已退款
-        $order_refund_money = Orders::where($where)->whereBetween('created_at',$date)->where('order_status',4)->sum('money');
+        $order_refund_money  = 0;
+        $order_refund = Orders::where($where)->whereBetween('created_at',$date)->where('order_status',[4,6])->get();
+        foreach ($order_refund as $k => $v){
+            if($v->order_status==4){
+                $order_refund_money += $v->money;
+            }else{
+                $money = FinanceLog::where('order_id',$v->id)->('type',2)->sum('money');
+                $order_refund_money += $money;
+            }
+        }
         return response()->json([
             //订单总数
             'order_count'                   => $order_count,
