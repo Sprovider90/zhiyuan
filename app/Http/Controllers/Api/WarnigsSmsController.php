@@ -41,6 +41,9 @@ class WarnigsSmsController extends Controller
     }
     public function store(WarnigsSmsRequest $request,Warnigs $warnigs,WarnigsSms $warnigssms)
     {
+        if($request->user()->customer_id!=0 && (!isset($request->pics) or empty($request->pics))){
+            abort(422, "图片必传");
+        }
         $warnigssms->fill($request->all());
         $warnigssms->warnig_id=$warnigs->id;
         $warnigssms->send_id=$request->user()->id;
