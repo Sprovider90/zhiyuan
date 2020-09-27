@@ -449,7 +449,7 @@ class PublicController extends Controller
             $fileData = str_replace('=', '',str_replace('data:image/jpeg;base64,', '', $file));
             $img_len = strlen($fileData);
             $fileSize = number_format(($img_len - ($img_len / 8) * 2 / 1024), 2);
-            $fileExt  = '.png';
+            $fileExt  = 'png';
             $fileName = $clientName =date("YmdHis").rand(10000000,99999999).'.'.$fileExt;
             $fileMime = 'image/png';
         }else{

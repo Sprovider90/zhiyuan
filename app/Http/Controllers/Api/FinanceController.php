@@ -31,7 +31,7 @@ class FinanceController extends Controller
         $order_money_count = Finance::where($where)->whereNotIn('order_status',[5])->sum('money');
         //已收款
         $receive_money_count = 0;
-        $order_pay = Finance::where($where)->whereIn('order_status',[2,3,4,6])->whereBetween('created_at',$date)->get();
+        $order_pay = Finance::where($where)->whereIn('order_status',[2,3,4,6])->get();
         if($order_pay){
             foreach ($order_pay as $k => $v){
                 if($v->order_status == 2){
@@ -50,7 +50,7 @@ class FinanceController extends Controller
         }
         //待收款
         $wait_money_count = 0;
-        $order_no_pay_money = Finance::where($where)->whereIN('order_status',[1,3])->whereBetween('created_at',$date)->get();
+        $order_no_pay_money = Finance::where($where)->whereIN('order_status',[1,3])->get();
         if($order_no_pay_money){
             foreach ($order_no_pay_money as $k => $v){
                 $wait_money_count  +=  $v->money;
@@ -64,7 +64,7 @@ class FinanceController extends Controller
         }
         //已退款
         $exit_money_count = 0;
-        $exit_money_order = Finance::where($where)->whereIn('order_status',[4,6])->whereBetween('created_at',$date)->get();
+        $exit_money_order = Finance::where($where)->whereIn('order_status',[4,6])->get();
         foreach ($exit_money_order as $k => $v){
                 $log = FinanceLog::where("order_id",$v->id)->where('type',2)->get();
                 foreach ($log as $k1 => $v1){
