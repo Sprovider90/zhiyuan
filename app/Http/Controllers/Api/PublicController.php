@@ -182,7 +182,7 @@ class PublicController extends Controller
     public function getNewPositionData(Request $request){
         $params["type"]=$request->type ? $request->type:2;
         $params["monitorId"]= $request->monitorId;
-        $params["startTime"]= date( 'Y-m-d 00:00:00', strtotime('-1 week'));
+        $params["startTime"]= date( 'Y-m-d 00:00:00', strtotime('-1 month'));
         $params["endTime"]  = date("Y-m-d 23:59:59");
         $params["page"]     = 1;
         $params["pageSize"] = 1;
