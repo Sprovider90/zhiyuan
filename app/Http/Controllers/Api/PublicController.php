@@ -138,9 +138,9 @@ class PublicController extends Controller
             }
         }else {
             if($request->type == 4){
-                $start_date = Projects::max('create_at');
+                $start_date = Projects::max('created_at');
                 var_dump($start_date);exit;
-                $end_date = Projects::min('create_dt');
+                $end_date = Projects::min('created_at');
             }else{
                 $pro_date = $this->returnDate($request->type ?? 1);
                 $start_date = substr($pro_date[0], 0, 10);
