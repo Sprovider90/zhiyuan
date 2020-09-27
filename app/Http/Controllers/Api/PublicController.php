@@ -236,7 +236,7 @@ class PublicController extends Controller
     //通过项目ID获取 项目 区域 空气质量列表
     public function getIndexProjectAreaList(Request $request,Projects $projects)
     {
-        $projects = $projects->with(['areas.file','stages'])->where('id',$request->project_id)->whereIn('status',[1,4,5,6])->with(['areas' => function($query){
+        $projects = $projects->with(['areas.file','stages'])->where('id',$request->project_id)->whereIn('status',[4,5,6])->with(['areas' => function($query){
             return $query->orderBy('id','desc');
         }]);
         $request->user()->customer_id && $projects = $projects->where('customer_id',$request->user()->customer_id);
@@ -245,6 +245,8 @@ class PublicController extends Controller
         if($projects){
             foreach ($projects['areas'] as $k => $v){
                 $v->threshold_name = $thresholds_data ? $thresholds_data->thresholds_name : '';
+                $thresholds = Thresholds::where('name',$thresholds_data->thresholds_name)->first();
+                $v->descript = $thresholds->descript;
                 $tag = Tag::where('model_type',2)->where('model_id',$v->id)->orderBy('id','desc')->first();
                 $v['tag'] =  null;
                 if($tag){

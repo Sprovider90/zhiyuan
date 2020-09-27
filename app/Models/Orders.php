@@ -15,6 +15,7 @@ class Orders extends Model
         'gid',
         'cid',
         'num',
+        'price',
         'money',
         'order_status',
         'send_goods_status','

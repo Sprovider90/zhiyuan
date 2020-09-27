@@ -12,7 +12,7 @@ class Thresholds extends Model
     protected  $table = 'thresholds';
 
     protected $fillable = [
-        'name','status','thresholdinfo'
+        'name','status','thresholdinfo','descript'
     ];
 
 

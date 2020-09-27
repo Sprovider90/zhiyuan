@@ -34,4 +34,10 @@ class DeviceRequest extends FormRequest
             'check_data'    => 'required',
         ];
     }
+    public function messages()
+    {
+        return [
+            'device_number.unique' => '设备ID已存在'
+        ];
+    }
 }

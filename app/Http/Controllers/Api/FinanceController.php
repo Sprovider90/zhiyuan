@@ -8,6 +8,7 @@ use App\Http\Requests\Api\FinanceRequest;
 use App\Http\Resources\FinanceLogResource;
 use App\Http\Resources\FinanceResource;
 use App\Http\Resources\OrdersResources;
+use App\Models\Files;
 use App\Models\Finance;
 use App\Models\FinanceLog;
 use App\Models\Orders;
@@ -23,10 +24,10 @@ class FinanceController extends Controller
         $where = [];
         $request->user()->customer_id && $where[] = ['cid',$request->user()->customer_id];
         //订单总金额
-        $order_money_count = Finance::where($where)->whereBetween('created_at',$date)->sum('money');
+        $order_money_count = Finance::where($where)->whereNotIn('order_status',[5])->whereBetween('created_at',$date)->sum('money');
         //已收款
         $receive_money_count = 0;
-        $order_pay = Finance::where($where)->whereBetween('created_at',$date)->whereIn('order_status',[2,3,4])->whereBetween('created_at',$date)->get();
+        $order_pay = Finance::where($where)->whereBetween('created_at',$date)->whereIn('order_status',[2,3,4,6])->whereBetween('created_at',$date)->get();
         if($order_pay){
             foreach ($order_pay as $k => $v){
                 if($v->order_status == 2){
@@ -59,7 +60,7 @@ class FinanceController extends Controller
         }
         //已退款
         $exit_money_count = 0;
-        $exit_money_order = Finance::where($where)->whereBetween('created_at',$date)->whereIn('order_status',[4])->whereBetween('created_at',$date)->get();
+        $exit_money_order = Finance::where($where)->whereBetween('created_at',$date)->whereIn('order_status',[4,6])->whereBetween('created_at',$date)->get();
         foreach ($exit_money_order as $k => $v){
                 $log = FinanceLog::where("order_id",$v->id)->where('type',2)->get();
                 foreach ($log as $k1 => $v1){
@@ -97,7 +98,38 @@ class FinanceController extends Controller
             $query->where('company_name','like',"%{$request->name}%")->orWhere('company_addr','like','%'.$request->name.'%');
         });
         $request->time      && $finance = $finance->whereDate('created_at',$request->time);
-        return new FinanceResource($finance->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize));
+        $finance = $finance->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
+        foreach ($finance as $k => $v){
+            switch ($v->order_status){
+                case 1://待付款
+                    $v->payment = 0;
+                    break;
+                case 2://已付款
+                    $v->payment = $v->money;
+                    break;
+                case 3://部分付款
+                    $v->payment = FinanceLog::where("order_id",$v->id)->where('type',1)->sum('money');
+                    break;
+                case 4://已退款
+                    $v->payment = 0;
+                    break;
+                case 5://已取消
+                    $v->payment = 0;
+                    break;
+                case 6://部分退款
+                    $v->payment = 0;
+                    $log = FinanceLog::where("order_id",$v->id)->groupBy('type')->select(['type',DB::raw('SUM(money) as money')])->get();
+                    foreach ($log as $k1 => $v1){
+                        if($v1->type == 1){
+                            $v->payment += $v1->money;
+                        }else{
+                            $v->payment -= $v1->money;
+                        }
+                    }
+                    break;
+            }
+        }
+        return new FinanceResource($finance);
     }
 
     /**
@@ -151,7 +183,12 @@ class FinanceController extends Controller
                     if($order_money_count < $request->money){
                         return $this->errorResponse('400','退款金额必须小于已收款金额');
                     }else{
-                        $order_status = 4;
+                        //部分退款状态 20200926需求变更
+                        if($order_money_count == $request->money){
+                            $order_status = 4;
+                        }else{//全部退款
+                            $order_status = 6;
+                        }
                     }
                 }
                 $finance->update(['order_status' => $order_status]);
@@ -168,8 +205,12 @@ class FinanceController extends Controller
     public function financeLog($orderId,FinanceLog $financeLog,Request $request){
         $financeLog = $financeLog->with('user')
             ->where('order_id',$orderId)
-            ->orderBy('id','desc');
-        return new OrdersResources($financeLog->paginate($request->pageSize ?? $request->pageSize));
+            ->orderBy('id','desc')
+            ->paginate($request->pageSize ?? $request->pageSize);
+        foreach ($financeLog as $k => $v){
+            $financeLog[$k]['files'] = Files::whereIN("id",explode(',',$v->file))->get();
+        }
+        return new OrdersResources($financeLog);
     }
 
 }

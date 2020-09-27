@@ -28,17 +28,75 @@ class OrdersController extends Controller
         $date = $this->returnDate($request->type ?? 2);
         $where = [];
         $request->user()->customer_id && $where[] = ['cid',$request->user()->customer_id];
-        //已付款订单数
+        //订单总金额
+        $order_money_count = Orders::where($where)->whereNotIn('order_status',[5])->whereBetween('created_at',$date)->sum('money');
+        //订单总数
+        $order_count = Orders::where($where)->whereNotIn('order_status',[5])->whereBetween('created_at',$date)->count();
+        //20200926需求变更
+        //已付款订单
         $order_pay_count = Orders::where($where)->whereBetween('created_at',$date)->where('order_status',2)->count();
+        //部分付款订单
+        $order_section_pay_count = Orders::where($where)->whereBetween('created_at',$date)->where('order_status',3)->count();
+        //待付款订单
+        $order_wait_count = Orders::where($where)->whereBetween('created_at',$date)->where('order_status',1)->count();
+        //已付款（实收的金额）
+        $order_payment_money = 0 ;
+        $order_payment = Orders::where($where)->whereBetween('created_at',$date)->whereIn('order_status',[2,3,6])->get();
+        foreach ($order_payment as $k => $v){
+            switch ($v->order_status){
+                case 2:
+                    $order_payment_money += $v->money;
+                    break;
+                case 3:
+                    $money = FinanceLog::where('order_id',$v->id)->where("type",1)->sum('money');
+                    $order_payment_money += $money;
+                    break;
+                case 6:
+                    $log = FinanceLog::where("order_id",$v->id)->groupBy('type')->select(['type',DB::raw('SUM(money) as money')])->get();
+                    foreach ($log as $k1 => $v1){
+                        if($v1->type == 1){
+                            $order_payment_money += $v1->money;
+                        }else{
+                            $order_payment_money -= $v1->money;
+                        }
+                    }
+                    break;
+            }
+        }
+        //待付款
+        $order_wait_money = Orders::where($where)->whereBetween('created_at',$date)->where('order_status',1)->sum('money');
+        //已退款
+        $order_refund_money = Orders::where($where)->whereBetween('created_at',$date)->where('order_status',4)->sum('money');
+        return response()->json([
+            //订单总数
+            'order_count'                   => $order_count,
+            //已付款订单
+            'order_pay_count'               => $order_pay_count,
+            //部分付款订单
+            'order_section_pay_count'       => $order_section_pay_count,
+            //待付款订单
+            'order_wait_count'              => $order_wait_count,
+            //订单总金额
+            'order_money_count'             => sprintf("%.2f",$order_money_count),
+            //已付款（实收的金额）
+            'order_payment_money'           => sprintf("%.2f",$order_payment_money),
+            //待付款
+            'order_wait_money'              => sprintf("%.2f",$order_wait_money),
+            //已退款
+            'order_refund_money'            => sprintf("%.2f",$order_refund_money),
+        ]);
+
+
+        /*$date = $this->returnDate($request->type ?? 2);
+        $where = [];
+        $request->user()->customer_id && $where[] = ['cid',$request->user()->customer_id];
+
         //待付款订单数
         $order_no_pay_count = Orders::where($where)->whereBetween('created_at',$date)->where('order_status',1)->count();
-        //订单总金额
-        $order_money_count = Orders::where($where)->whereBetween('created_at',$date)->sum('money');
-        //订单总数
-        $order_count = Orders::where($where)->whereBetween('created_at',$date)->count();
+
         //已付订单总金额
         $order_pay_money_count = 0;
-        $order_pay = Orders::where($where)->whereBetween('created_at',$date)->whereIn('order_status',[2,3,4])->get();
+        $order_pay = Orders::where($where)->whereBetween('created_at',$date)->whereIn('order_status',[2,3,4,6])->get();
         if($order_pay){
             foreach ($order_pay as $k => $v){
                 if($v->order_status == 2){
@@ -77,7 +135,7 @@ class OrdersController extends Controller
                 'order_money_count'         => sprintf("%.2f",$order_money_count),
                 'order_pay_money_count'     => sprintf("%.2f",$order_pay_money_count),
                 'order_no_pay_money_count'  => sprintf("%.2f",$order_no_pay_money_count),
-        ]);
+        ]);*/
     }
 
     /**

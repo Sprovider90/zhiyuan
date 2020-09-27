@@ -29,6 +29,6 @@ class Device extends Model
      * @return mixed
      */
     public function storehouse(){
-        return $this->hasMany(Customers::class, 'id', 'storehouse_id');
+        return $this->hasMany(Storehouses::class, 'id', 'storehouse_id');
     }
 }
