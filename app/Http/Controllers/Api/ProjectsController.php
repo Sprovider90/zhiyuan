@@ -24,23 +24,27 @@ class ProjectsController extends Controller
 {
     /**
      * 统计状态
-     * $type  1本周 2本月 3今年 默认2
+     * $type  1本周 2本月 3今年 4全部 默认4
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function count(Projects $projects,Request $request){
-        $date = $this->returnDate($request->type ?? 2);
         $where = [];
         $request->user()->customer_id && $where[] = ['customer_id',$request->user()->customer_id];
+        if($request->type && in_array($request->type,[1,2,3])){
+            $date = $this->returnDate($request->type);
+            $where[] = ['whereBetween','created_at',$date];
+        }
+
         //进行中 1暂停中 4施工中 5交付中 6维护中
-        $ongoing_count   = Projects::where($where)->whereBetween('created_at',$date)->whereIN('status',[1,4,5,6])->count();
+        $ongoing_count   = Projects::where($where)->whereIN('status',[1,4,5,6])->count();
         //已结束 2已结束
-        $over_count  = Projects::where($where)->whereBetween('created_at',$date)->where('status',2)->count();
+        $over_count  = Projects::where($where)->where('status',2)->count();
         //未开始 0未开始
-        $not_started_count   = Projects::where($where)->whereBetween('created_at',$date)->where('status',0)->count();
+        $not_started_count   = Projects::where($where)->where('status',0)->count();
         //项目总数量
-        $all_count  = Projects::where($where)->whereBetween('created_at',$date)->count();
+        $all_count  = Projects::where($where)->count();
         return response()->json([
             'not_started_count'     => $not_started_count,
             'over_count'            => $over_count,
