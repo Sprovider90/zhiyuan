@@ -450,7 +450,7 @@ class PublicController extends Controller
             $img_len = strlen($fileData);
             $fileSize = number_format(($img_len - ($img_len / 8) * 2 / 1024), 2);
             $fileExt  = '.png';
-            $fileName = date("YmdHis").rand(10000000,99999999).'.'.$fileExt;
+            $fileName = $clientName =date("YmdHis").rand(10000000,99999999).'.'.$fileExt;
             $fileMime = 'image/png';
         }else{
             switch ($type){
@@ -489,7 +489,8 @@ class PublicController extends Controller
                 'ext'           =>  $fileExt,
                 'path'          =>  $filePath,
                 'mime'          =>  $fileMime,
-                'upload_name'   =>  $clientName]);
+                'upload_name'   =>  $clientName
+            ]);
             return response(new FilesResource($file),201);
 
         }else{
