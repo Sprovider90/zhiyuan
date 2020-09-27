@@ -150,6 +150,8 @@ class PublicController extends Controller
                     $end_date = $request->end_date;
                 }
             }
+            var_dump($start_date);
+            var_dump($end_date);
             $dateList = $this->returnDateList($start_date, $end_date);
             var_dump($dateList);exit;
             $proDateList = DB::select('select count(id) as num ,left(created_at,10) as date FROM projects where left(created_at,10) between "'.$start_date.'" AND "'.$end_date.'"  GROUP BY date ORDER BY date');
