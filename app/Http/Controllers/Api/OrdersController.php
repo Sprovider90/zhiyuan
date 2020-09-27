@@ -19,29 +19,33 @@ class OrdersController extends Controller
 
     /**
      * 统计订单数
-     * $type  1本周 2本月 3今年 默认2
+     * $type  1本周 2本月 3今年 4全部 默认2
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function count(Request $request){
-        $date = $this->returnDate($request->type ?? 2);
         $where = [];
         $request->user()->customer_id && $where[] = ['cid',$request->user()->customer_id];
+        if($request->type && in_array($request->type,[1,2,3])){
+            $date = $this->returnDate($request->type);
+            $where[] = ['created_at','>',$date[0]];
+            $where[] = ['created_at','<',$date[1]];
+        }
         //订单总金额
-        $order_money_count = Orders::where($where)->whereNotIn('order_status',[5])->whereBetween('created_at',$date)->sum('money');
+        $order_money_count = Orders::where($where)->whereNotIn('order_status',[5])->sum('money');
         //订单总数
-        $order_count = Orders::where($where)->whereNotIn('order_status',[5])->whereBetween('created_at',$date)->count();
+        $order_count = Orders::where($where)->whereNotIn('order_status',[5])->count();
         //20200926需求变更
         //已付款订单
-        $order_pay_count = Orders::where($where)->whereBetween('created_at',$date)->where('order_status',2)->count();
+        $order_pay_count = Orders::where($where)->where('order_status',2)->count();
         //部分付款订单
-        $order_section_pay_count = Orders::where($where)->whereBetween('created_at',$date)->where('order_status',3)->count();
+        $order_section_pay_count = Orders::where($where)->where('order_status',3)->count();
         //待付款订单
-        $order_wait_count = Orders::where($where)->whereBetween('created_at',$date)->where('order_status',1)->count();
+        $order_wait_count = Orders::where($where)->where('order_status',1)->count();
         //已付款（实收的金额）
         $order_payment_money = 0 ;
-        $order_payment = Orders::where($where)->whereBetween('created_at',$date)->whereIn('order_status',[2,3,6])->get();
+        $order_payment = Orders::where($where)->whereIn('order_status',[2,3,6])->get();
         foreach ($order_payment as $k => $v){
             switch ($v->order_status){
                 case 2:
@@ -64,9 +68,9 @@ class OrdersController extends Controller
             }
         }
         //待付款
-        $order_wait_money = Orders::where($where)->whereBetween('created_at',$date)->where('order_status',1)->sum('money');
+        $order_wait_money = Orders::where($where)->where('order_status',1)->sum('money');
         //已退款
-        $order_refund = Orders::where($where)->whereBetween('created_at',$date)->whereIn('order_status',[4,6])->get(['id']);
+        $order_refund = Orders::where($where)->whereIn('order_status',[4,6])->get(['id']);
         $order_refund_money = FinanceLog::whereIn('order_id',$order_refund)->where('type',2)->sum('money');
         return response()->json([
             //订单总数

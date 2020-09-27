@@ -17,17 +17,21 @@ class DeviceController extends Controller
     //
     public function count(Request $request){
         //增加客户登录
-        $date = $this->returnDate($request->type ?? 2);
         $where = [];
         $request->user()->customer_id && $where[] = ['customer_id',$request->user()->customer_id];
+        if($request->type && in_array($request->type,[1,2,3])){
+            $date = $this->returnDate($request->type);
+            $where[] = ['created_at','>',$date[0]];
+            $where[] = ['created_at','<',$date[1]];
+        }
         //设备总数
-        $all_count = Device::where($where)->whereBetween('created_at',$date)->count();
+        $all_count = Device::where($where)->count();
         //在库设备数
-        $in_count = Device::where($where)->whereBetween('created_at',$date)->where('store_status',1)->count();
+        $in_count = Device::where($where)->where('store_status',1)->count();
         //已出库
-        $out_count = Device::where($where)->whereBetween('created_at',$date)->where('store_status',2)->count();
+        $out_count = Device::where($where)->where('store_status',2)->count();
         //运行中设备
-        $run_count = Device::where($where)->whereBetween('created_at',$date)->where('run_status',1)->count();
+        $run_count = Device::where($where)->where('run_status',1)->count();
 
         return response()->json([
             'all'       => $all_count,
