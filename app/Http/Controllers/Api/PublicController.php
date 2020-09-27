@@ -137,14 +137,21 @@ class PublicController extends Controller
                 $dateList[$k]['count'] = 0;
             }
         }else {
-            $pro_date = $this->returnDate($request->type ?? 1);
-            $start_date = substr($pro_date[0], 0, 10);
-            $end_date = substr($pro_date[1], 0, 10);
-            if($request->start_date && $request->end_date){
-                $pro_date = $this->returnDateList($request->start_date,$request->end_date);
-                $start_date = $request->start_date;
-                $end_date = $request->end_date;
+            if($request->type == 4){
+                $start_date = Projects::max('create_at');
+                var_dump($start_date);exit;
+                $end_date = Projects::min('create_dt');
+            }else{
+                $pro_date = $this->returnDate($request->type ?? 1);
+                $start_date = substr($pro_date[0], 0, 10);
+                $end_date = substr($pro_date[1], 0, 10);
+                if($request->start_date && $request->end_date){
+                    $pro_date = $this->returnDateList($request->start_date,$request->end_date);
+                    $start_date = $request->start_date;
+                    $end_date = $request->end_date;
+                }
             }
+
             $dateList = $this->returnDateList($start_date, $end_date);
             $proDateList = DB::select('select count(id) as num ,left(created_at,10) as date FROM projects where left(created_at,10) between "'.$start_date.'" AND "'.$end_date.'"  GROUP BY date ORDER BY date');
             $date = array_column($proDateList,'date');
