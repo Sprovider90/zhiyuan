@@ -143,7 +143,18 @@ class PublicController extends Controller
     //获取新增项目统计
     public function getIndexNewProjectCount(Request $request){
         if($request->user()->customer_id){
-            $dateList = [];
+            $pro_date = $this->returnDate($request->type ?? 1);
+            $start_date = substr($pro_date[0], 0, 10);
+            $end_date = substr($pro_date[1], 0, 10);
+            if($request->start_date && $request->end_date){
+                $pro_date = $this->returnDateList($request->start_date,$request->end_date);
+                $start_date = $request->start_date;
+                $end_date = $request->end_date;
+            }
+            $dateList = $this->returnDateList($start_date, $end_date);
+            foreach ($dateList as $k => $v) {
+                $dateList[$k]['count'] = 0;
+            }
         }else {
             $pro_date = $this->returnDate($request->type ?? 1);
             $start_date = substr($pro_date[0], 0, 10);
