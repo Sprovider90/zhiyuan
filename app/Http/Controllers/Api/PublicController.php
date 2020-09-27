@@ -138,9 +138,8 @@ class PublicController extends Controller
             }
         }else {
             if($request->type == 4){
-                $start_date = Projects::max('created_at');
-                var_dump($start_date);exit;
-                $end_date = Projects::min('created_at');
+                $start_date = date("Y-m-d",strtotime(Projects::max('created_at'))) ;
+                $end_date = date("Y-m-d",strtotime(Projects::min('created_at')));
             }else{
                 $pro_date = $this->returnDate($request->type ?? 1);
                 $start_date = substr($pro_date[0], 0, 10);
@@ -151,7 +150,6 @@ class PublicController extends Controller
                     $end_date = $request->end_date;
                 }
             }
-
             $dateList = $this->returnDateList($start_date, $end_date);
             $proDateList = DB::select('select count(id) as num ,left(created_at,10) as date FROM projects where left(created_at,10) between "'.$start_date.'" AND "'.$end_date.'"  GROUP BY date ORDER BY date');
             $date = array_column($proDateList,'date');
