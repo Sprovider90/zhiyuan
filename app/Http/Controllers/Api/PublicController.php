@@ -446,7 +446,8 @@ class PublicController extends Controller
         $file = $request->file('file');
         $type = $request->get('type',0); //0图片 1视频 2base64文件上传
         if($type ==2 ){
-            $fileData = str_replace('=', '',str_replace('data:image/jpeg;base64,', '', $file));
+            $file = explode(',',$file);
+            $fileData = $file[1];
             $img_len = strlen($fileData);
             $fileSize = number_format(($img_len - ($img_len / 8) * 2 / 1024), 2);
             $fileExt  = 'png';
