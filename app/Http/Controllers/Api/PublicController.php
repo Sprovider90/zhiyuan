@@ -207,29 +207,27 @@ class PublicController extends Controller
         $data = $this->getProjectThreshold($res['position']['project_id']);
         $thresholdinfo_data = json_decode($data->thresholdinfo,true);
         $res['position']['tag']  =  1;
-        if($data){
-            $res['project']['threshold_name'] = $data->thresholds_name ?? '';
-            $res['project']['threshold'] = $data;
-            if($res['data']){
-                if($thresholdinfo_data){
-                    foreach ($thresholdinfo_data as $k => $v){
-                        if($k == 'co2' || $k == 'pm25'){
-                            $k = strtoupper($k);
-                        }
-                        $arr = explode('~',$v);
-                        switch ($res['data']['0'][$k]){
-                            case $res['data']['0'][$k] < $arr[0]:
-                                $res['data']['0'][$k.'_tag'] = 1;
-                                break;
-                            case $res['data']['0'][$k] >= $arr[0] && $res['data']['0'][$k] < $arr[1]:
-                                $res['data']['0'][$k.'_tag'] = 2;
-                                $res['position']['tag'] == 1 && $res['position']['tag'] = 2;
-                                break;
-                            case $res['data']['0'][$k] >= $arr[1]:
-                                $res['data']['0'][$k.'_tag'] = 3;
-                                $res['position']['tag'] == 1 || $res['position']['tag'] == 2 && $res['position']['tag'] = 3;
-                                break;
-                        }
+        $res['project']['threshold_name'] = $data->thresholds_name ?? '';
+        $res['project']['threshold'] = $data;
+        if($res['data']){
+            if($thresholdinfo_data){
+                foreach ($thresholdinfo_data as $k => $v){
+                    if($k == 'co2' || $k == 'pm25'){
+                        $k = strtoupper($k);
+                    }
+                    $arr = explode('~',$v);
+                    switch ($res['data']['0'][$k]){
+                        case $res['data']['0'][$k] < $arr[0]:
+                            $res['data']['0'][$k.'_tag'] = 1;
+                            break;
+                        case $res['data']['0'][$k] >= $arr[0] && $res['data']['0'][$k] < $arr[1]:
+                            $res['data']['0'][$k.'_tag'] = 2;
+                            $res['position']['tag'] == 1 && $res['position']['tag'] = 2;
+                            break;
+                        case $res['data']['0'][$k] >= $arr[1]:
+                            $res['data']['0'][$k.'_tag'] = 3;
+                            $res['position']['tag'] == 1 || $res['position']['tag'] == 2 && $res['position']['tag'] = 3;
+                            break;
                     }
                 }
             }
