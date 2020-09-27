@@ -124,9 +124,14 @@ class PublicController extends Controller
     //获取新增项目统计
     public function getIndexNewProjectCount(Request $request){
         if($request->user()->customer_id){
-            $pro_date = $this->returnDate($request->type ?? 1);
-            $start_date = substr($pro_date[0], 0, 10);
-            $end_date = substr($pro_date[1], 0, 10);
+            if($request->type == 4 || !$request->type){
+                $start_date = date("Y-m-d",strtotime(Projects::where('customer_id',$request->user()->customer_id)->min('created_at')));
+                $end_date = date("Y-m-d",strtotime(Projects::where('customer_id',$request->user()->customer_id)->max('created_at')));
+            }else {
+                $pro_date = $this->returnDate($request->type ?? 1);
+                $start_date = substr($pro_date[0], 0, 10);
+                $end_date = substr($pro_date[1], 0, 10);
+            }
             if($request->start_date && $request->end_date){
                 $pro_date = $this->returnDateList($request->start_date,$request->end_date);
                 $start_date = $request->start_date;
@@ -137,7 +142,6 @@ class PublicController extends Controller
                 $dateList[$k]['count'] = 0;
             }
         }else {
-
             if($request->type == 4 || !$request->type){
                 $start_date = date("Y-m-d",strtotime(Projects::min('created_at'))) ;
                 $end_date = date("Y-m-d",strtotime(Projects::max('created_at')));
