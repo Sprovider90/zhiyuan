@@ -72,7 +72,7 @@ class OrdersController extends Controller
             if($v->order_status==4){
                 $order_refund_money += $v->money;
             }else{
-                $money = FinanceLog::where('order_id',$v->id)->('type',2)->sum('money');
+                $money = FinanceLog::where('order_id',$v->id)->where('type',2)->sum('money');
                 $order_refund_money += $money;
             }
         }
