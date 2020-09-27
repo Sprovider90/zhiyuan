@@ -34,9 +34,9 @@ class ProjectsController extends Controller
         $request->user()->customer_id && $where[] = ['customer_id',$request->user()->customer_id];
         if($request->type && in_array($request->type,[1,2,3])){
             $date = $this->returnDate($request->type);
-            $where[] = ['created_at','whereBetween',$date];
+            $where[] = ['created_at','>',$date[0]];
+            $where[] = ['created_at','<',$date[1]];
         }
-
         //进行中 1暂停中 4施工中 5交付中 6维护中
         $ongoing_count   = Projects::where($where)->whereIN('status',[1,4,5,6])->count();
         //已结束 2已结束
