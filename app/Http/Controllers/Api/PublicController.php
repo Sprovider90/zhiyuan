@@ -53,10 +53,6 @@ class PublicController extends Controller
     //获取首页 销售额/订单数 type 1销售额/2订单数
     public function getIndexOrderSale(Request $request){
         $type = $request->get('type',1);
-        /*$pro_date = $this->returnDate(1);
-        $start_date = substr($pro_date[0], 0, 10);
-        $end_date = substr($pro_date[1], 0, 10);*/
-
         if($request->user()->customer_id){
             $dateList = [];
         }else{
@@ -121,22 +117,7 @@ class PublicController extends Controller
                         }
                     }
                 }
-
-
             }
-
-            //销售额 默认本月
-            /*$date = $this->returnDate(3);
-            $dateList = $this->returnDateList(substr($date[0],0,10),substr($date[1],0,10));
-            foreach ($dateList as $k => $v){
-                $dateList[$k]['money'] = 0;
-                $dateList[$k]['order_count'] = 0;
-                $s = FinanceLog::where('type',1)->where('date',$v['date'])->sum('money');
-                $t = FinanceLog::where('type',2)->where('date',$v['date'])->sum('money');
-                $dateList[$k]['money'] = $s-$t;
-                $count = Orders::whereRaw('left(created_at,10)="'.$v['date'].'"')->count();
-                $dateList[$k]['order_count'] = $count ?? 0;
-            }*/
         }
         return response()->json($dateList);
     }
@@ -316,37 +297,9 @@ class PublicController extends Controller
         $device_count = Device::where($where)->count();
         //运行设备
         $run_device_count = Device::where($where)->where('run_status',1)->count();
-        /*if($request->user()->customer_id){
-            $dateList = [];
-        }else{
-            //销售额 默认本月
-            $date = $this->returnDate(3);
-            $dateList = $this->returnDateList(substr($date[0],0,10),substr($date[1],0,10));
-            $logList = DB::select('select ');
-            foreach ($dateList as $k => $v){
-                $dateList[$k]['money'] = 0;
-                $dateList[$k]['order_count'] = 0;
-                $s = FinanceLog::where('type',1)->where('date',$v['date'])->sum('money');
-                $t = FinanceLog::where('type',2)->where('date',$v['date'])->sum('money');
-                $dateList[$k]['money'] = $s-$t;
-                $count = Orders::whereRaw('left(created_at,10)="'.$v['date'].'"')->count();
-                $dateList[$k]['order_count'] = $count ?? 0;
-            }
-        }*/
-
         //本周项目总数
         $bz_date = $this->returnDate(1);
         $bz_pro_count = Projects::where($where)->whereBetween('created_at',$bz_date)->count();
-        //项目数据表
-        /*if($request->user()->customer_id){
-            $proDateList = [];
-        }else {
-            $pro_date = $this->returnDate(3);
-            $proDateList = $this->returnDateList(substr($pro_date[0], 0, 10), substr($pro_date[1], 0, 10));
-            foreach ($proDateList as $k => $v) {
-                $proDateList[$k]['count'] = Projects::whereRaw('left(created_at,10)="' . $v['date'] . '"')->count() ?? 0;
-            }
-        }*/
         //预警警报 / 解决方案
         $Warnigs = Warnigs::query();
         if($request->user()->customer_id){
@@ -480,6 +433,7 @@ class PublicController extends Controller
             $fileMime = $file->getMimeType();
             $fileData = file_get_contents($fileTmp);
         }
+        echo $fileData;exit;
         $fileUpFlg = Storage::disk('public')->put($fileName,$fileData);
         $filePath = Storage::disk('public')->url($fileName);
         if($fileUpFlg){
