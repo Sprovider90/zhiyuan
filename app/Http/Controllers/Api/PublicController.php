@@ -151,6 +151,7 @@ class PublicController extends Controller
                 }
             }
             $dateList = $this->returnDateList($start_date, $end_date);
+            var_dump($dateList);exit;
             $proDateList = DB::select('select count(id) as num ,left(created_at,10) as date FROM projects where left(created_at,10) between "'.$start_date.'" AND "'.$end_date.'"  GROUP BY date ORDER BY date');
             $date = array_column($proDateList,'date');
             $dateNum = array_column($proDateList,'num','date');
