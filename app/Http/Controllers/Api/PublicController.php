@@ -138,8 +138,14 @@ class PublicController extends Controller
                 $end_date = $request->end_date;
             }
             $dateList = $this->returnDateList($start_date, $end_date);
+            $proDateList = DB::select('select count(id) as num ,left(created_at,10) as date FROM projects where left(created_at,10) between "'.$start_date.'" AND "'.$end_date.'" and  customer_id='.$request->user()->customer_id.' GROUP BY date ORDER BY date');
+            $date = array_column($proDateList,'date');
+            $dateNum = array_column($proDateList,'num','date');
             foreach ($dateList as $k => $v) {
                 $dateList[$k]['count'] = 0;
+                if(in_array($v['date'],$date)){
+                    $dateList[$k]['count'] = $dateNum[$v['date']];
+                }
             }
         }else {
             if($request->type == 4 || !$request->type){
