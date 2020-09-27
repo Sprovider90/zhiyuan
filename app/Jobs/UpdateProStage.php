@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use App\Models\Projects;
+use Illuminate\Support\Facades\Redis;
 
 class UpdateProStage implements ShouldQueue
 {
@@ -96,6 +97,10 @@ LEFT JOIN (
                 Projects::where('id', $v->project_id)->update(['status' => $v->pro_status, 'stage_id' => $v->stage_stage_id]);
                 //维护项目状态的变更
                 ProjectsStatusLog::create(['status' => $v->pro_status, 'stage_id' => $v->stage_stage_id,'project_id'=>$v->project_id,'fromwhere'=>$this->credentials["fromwhere"]]);
+
+                //存入redis java使用
+                Redis::hset("air:prostatusstage:tags",$v->project_id,json_encode(['status' => $v->pro_status, 'stage_id' => $v->stage_stage_id]));
+
             }
 
         }
