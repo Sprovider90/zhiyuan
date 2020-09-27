@@ -452,6 +452,7 @@ class PublicController extends Controller
             $fileExt  = 'png';
             $fileName = $clientName =date("YmdHis").rand(10000000,99999999).'.'.$fileExt;
             $fileMime = 'image/png';
+            $fileData = base64_decode($fileData);
         }else{
             switch ($type){
                 case 0:
