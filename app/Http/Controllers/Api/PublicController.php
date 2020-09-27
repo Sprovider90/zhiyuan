@@ -444,35 +444,42 @@ class PublicController extends Controller
     // 图片上传
     public function store(FilesRequest $request){
         $file = $request->file('file');
-        $type = $request->get('type',0); //0图片 1视频
-
-        $fileSize = sprintf("%.2f",round($file->getSize()/1024,2));
-        $fileExt = strtolower($file->getClientOriginalExtension());
-
-        switch ($type){
-            case 0:
-                //校验图片格式 图片大小
-                $configFileMaxSize = config('filesystems.UPLOAD_IMAGE_MAX_SIZE');
-                $configFileExt = config('filesystems.UPLOAD_IMAGE_EXT');
-                break;
-            case 1:
-                //校验视频格式 视频大小
-                $configFileMaxSize = config('filesystems.UPLOAD_VIDEOS_MAX_SIZE');
-                $configFileExt = config('filesystems.UPLOAD_VIDEOS_EXT');
-                break;
+        $type = $request->get('type',0); //0图片 1视频 2base64文件上传
+        if($type ==2 ){
+            $fileData = str_replace('=', '',str_replace('data:image/jpeg;base64,', '', $file));
+            $img_len = strlen($fileData);
+            $fileSize = number_format(($img_len - ($img_len / 8) * 2 / 1024), 2);
+            $fileExt  = '.png';
+            $fileName = date("YmdHis").rand(10000000,99999999).'.'.$fileExt;
+            $fileMime = 'image/png';
+        }else{
+            switch ($type){
+                case 0:
+                    //校验图片格式 图片大小
+                    $configFileMaxSize = config('filesystems.UPLOAD_IMAGE_MAX_SIZE');
+                    $configFileExt = config('filesystems.UPLOAD_IMAGE_EXT');
+                    break;
+                case 1:
+                    //校验视频格式 视频大小
+                    $configFileMaxSize = config('filesystems.UPLOAD_VIDEOS_MAX_SIZE');
+                    $configFileExt = config('filesystems.UPLOAD_VIDEOS_EXT');
+                    break;
+            }
+            $fileSize = sprintf("%.2f",round($file->getSize()/1024,2));
+            $fileExt = strtolower($file->getClientOriginalExtension());
+            if(round($fileSize/1024/1024,2) > $configFileMaxSize){
+                throw new HttpException(403, '文件最大不超过'.$configFileMaxSize.'M');
+            }
+            if(!in_array(strtolower($fileExt),explode(',',$configFileExt))){
+                throw new HttpException(403, '文件不在允许的'.$configFileExt.'扩展中');
+            }
+            $clientName = $file->getClientOriginalName();
+            $fileTmp = $file->getRealPath();
+            $fileName = date("YmdHis").rand(10000000,99999999).'.'.$fileExt;
+            $fileMime = $file->getMimeType();
+            $fileData = file_get_contents($fileTmp);
         }
-
-        if(round($fileSize/1024/1024,2) > $configFileMaxSize){
-            throw new HttpException(403, '文件最大不超过'.$configFileMaxSize.'M');
-        }
-        if(!in_array(strtolower($fileExt),explode(',',$configFileExt))){
-            throw new HttpException(403, '文件不在允许的'.$configFileExt.'扩展中');
-        }
-        $clientName = $file->getClientOriginalName();
-        $fileTmp = $file->getRealPath();
-        $fileName = date("YmdHis").rand(10000000,99999999).'.'.$fileExt;
-        $fileMime = $file->getMimeType();
-        $fileUpFlg = Storage::disk('public')->put($fileName,file_get_contents($fileTmp));
+        $fileUpFlg = Storage::disk('public')->put($fileName,$fileData);
         $filePath = Storage::disk('public')->url($fileName);
         if($fileUpFlg){
             #插入数据库
