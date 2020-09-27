@@ -403,7 +403,7 @@ class PublicController extends Controller
             $file = explode(',',$file)[1];
             $img_len = strlen($file);
             $fileSize = number_format(($img_len - ($img_len / 8) * 2 / 1024), 2);
-            $fileExt  = 'jpg';
+            $fileExt  = 'png';
             $fileName = $clientName =date("YmdHis").rand(10000000,99999999).'.'.$fileExt;
             $fileMime = 'image/png';
             $fileData = base64_decode($file);
