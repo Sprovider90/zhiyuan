@@ -399,9 +399,8 @@ class PublicController extends Controller
         $file = $request->file('file');
         $type = $request->get('type',0); //0图片 1视频 2base64文件上传
         if($type ==2 ){
-            var_dump(explode(',',$file));
-            $file = explode(',',$file);
-            var_dump($file);exit;
+            $file = $request->get('file');
+            $file = explode(',',$file)[1];
             $img_len = strlen($file);
             $fileSize = number_format(($img_len - ($img_len / 8) * 2 / 1024), 2);
             $fileExt  = 'png';
@@ -435,7 +434,6 @@ class PublicController extends Controller
             $fileMime = $file->getMimeType();
             $fileData = file_get_contents($fileTmp);
         }
-        echo $fileData;exit;
         $fileUpFlg = Storage::disk('public')->put($fileName,$fileData);
         $filePath = Storage::disk('public')->url($fileName);
         if($fileUpFlg){
