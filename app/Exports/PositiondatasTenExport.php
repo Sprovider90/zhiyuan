@@ -34,7 +34,7 @@ class PositiondatasTenExport implements FromArray,WithEvents,WithDrawings
         $drawing = new Drawing();
         $drawing->setName('Logo');
         $drawing->setDescription('This is my logo');
-        $drawing->setPath(public_path('/2020092723344140955028.png'));
+        $drawing->setPath(public_path('../storage/'.basename($this->path)));
         $drawing->setHeight(390);
         $drawing->setCoordinates('J3');
 

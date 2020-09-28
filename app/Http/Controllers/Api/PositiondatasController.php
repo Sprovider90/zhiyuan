@@ -79,17 +79,25 @@ class PositiondatasController extends Controller
             abort(422, "图片必传");
         }
         $imgs=Files::where('id', $data["img"])->first();
+
         if(!$imgs->path){
             abort(422, "图片不存在");
         }
         $url=config("javasource.original.url");
+
         $result = Common::curl($url, $data, false);
         $arr=json_decode($result,true);
         if(!empty($arr["body"]["list"])){
             $export_data=[];
             $export_data[]=['统计时间','甲醛（mg/m3）','TVOC（mg/m3）','PM2.5（μg/m3）','CO2（ppm）','温度（℃）','湿度（%RH）','项目大阶段','项目小阶段'];
             foreach ($arr["body"]["list"] as $k=>$v){
-                list($big,$small)=$this->turnData($v["stage_id"],$v["status"]);
+                if(isset($v["stage_id"]) && isset($v["status"])){
+                    list($big,$small)=$this->turnData($v["stage_id"],$v["status"]);
+                }else{
+                    $big="无";
+                    $small="无";
+                }
+
                 $export_data[]=[$v["timestamp"],$v["formaldehyde"],$v["TVOC"],$v["PM25"],$v["CO2"],$v["temperature"],$v["humidity"],$big,$small];
             }
 
