@@ -91,8 +91,8 @@ class PositiondatasController extends Controller
             $export_data=[];
             $export_data[]=['统计时间','甲醛（mg/m3）','TVOC（mg/m3）','PM2.5（μg/m3）','CO2（ppm）','温度（℃）','湿度（%RH）','项目大阶段','项目小阶段'];
             foreach ($arr["body"]["list"] as $k=>$v){
-                if(isset($v["stage_id"]) && isset($v["status"])){
-                    list($big,$small)=$this->turnData($v["stage_id"],$v["status"]);
+                if(isset($v["stageId"]) && isset($v["status"])){
+                    list($big,$small)=$this->turnData($v["stageId"],$v["status"]);
                 }else{
                     $big="无";
                     $small="无";
