@@ -17,7 +17,7 @@ class CreateBreakdownTable extends Migration
             $table->bigIncrements('id');
             $table->integer('project_id')->comment('项目ID');
             $table->string('device_id')->nullable()->comment('设备id');
-            $table->tinyInteger('type')->default(1)->comment('消息类型 1数据丢失 2数据异常');
+            $table->tinyInteger('type')->default(1)->comment('消息类型 1数据丢失 2数据异常 3设备离线 4设备上线');
             $table->timestampTz('happen_time',0)->nullable()->comment('数据故障时间');
             $table->timestamps();
         });

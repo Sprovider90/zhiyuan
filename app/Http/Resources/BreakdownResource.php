@@ -14,11 +14,12 @@ class BreakdownResource extends JsonResource
      */
     public function toArray($request)
     {
+        $hash=[1=>"数据丢失",2=>"数据异常",3=>"设备离线",4=>"设备上线"];
         $data=parent::toArray($request);
         $data['project'] = new ProjectsResources($this->whenLoaded('project'));
         $data['devices'] = new DeviceResource($this->whenLoaded('devices'));
 
-        $data['type']=$data['type']==1?"数据丢失":"数据异常";
+        $data['type']=$hash[$data['type']];
         return $data;
 
     }
