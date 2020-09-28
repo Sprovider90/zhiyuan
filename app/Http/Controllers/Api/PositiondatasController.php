@@ -100,7 +100,7 @@ class PositiondatasController extends Controller
 
                 $export_data[]=[$v["timestamp"],$v["formaldehyde"],$v["TVOC"],$v["PM25"],$v["CO2"],$v["temperature"],$v["humidity"],$big,$small];
             }
-
+            exit;
             $export = new PositiondatasTenExport($export_data,$imgs->path);
 
             return Excel::download($export, '10.xlsx');
@@ -115,7 +115,8 @@ class PositiondatasController extends Controller
         if(!in_array($status,[4,5,6])){
             $result=["暂停","暂停"];
         }else{
-            $rs=ProjectsStages::where('id',$stage_id)->first();
+            $rs=ProjectsStages::where('id',$stage_id)->withTrashed()->first();
+
             if(!empty($rs)){
                 switch ($rs->stage)
                 {
@@ -132,6 +133,7 @@ class PositiondatasController extends Controller
 
                 }
             }
+
         }
         return $result;
     }
