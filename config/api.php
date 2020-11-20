@@ -10,4 +10,7 @@ return [
         // 登录相关，次数/分钟
         'sign' =>  env('SIGN_RATE_LIMITS', '100,1'),
     ],
+    'admin'=>[
+        'id'=>env('ADMIN_ID',1)
+    ]
 ];

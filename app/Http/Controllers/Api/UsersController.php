@@ -78,10 +78,17 @@ class UsersController extends Controller
     }
     public function update(UserRequest $request,User $user)
     {
+        $admin_id=config("api.admin.id");
+
+        if($user->id==$admin_id  && isset($request->status) && $request->status==0){
+            abort(422, "超级管理员不能被禁用");
+        }
+
         $this->authorize('update', $user);
        	\DB::beginTransaction();
        	try{
 	        $attributes = $request->only(['truename', 'password','status','img','show_project_id','show_position_id','show_area_id']);
+
 
 	        if (isset($request->roles)) {
 
