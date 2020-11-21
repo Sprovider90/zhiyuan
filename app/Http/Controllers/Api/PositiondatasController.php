@@ -67,14 +67,16 @@ class PositiondatasController extends Controller
         $export_data=[];
         $export_data[]=['项目名称','所属区域','设备ID','监测点','查询时间'];
         $export_data[]=[$data->project->name,$data->area->area_name,$data->device->device_number,$data->name,$params["startTime"].'--'.$params["endTime"]];
+        $export = new PositiondatasExport($export_data);
         if(isset($arr["body"]) && !empty($arr["body"]["list"])){
             $export_data[]=['统计时间','甲醛（mg/m3）','TVOC（mg/m3）','PM2.5（μg/m3）','CO2（ppm）','温度（℃）','湿度（%RH）'];
             foreach ($arr["body"]["list"] as $k=>&$v){
                 $export_data[]=[$v["timestamp"],$v["formaldehyde"],$v["TVOC"],$v["PM25"],$v["CO2"],$v["temperature"],$v["humidity"]];
             }
             //$rs=ProjectsPositions::where('id', $arr["body"]["list"][0]["monitorId"])->first();
+            $export = new PositiondatasExport($export_data,array_column($arr["body"]["list"],"red"));
         }
-        $export = new PositiondatasExport($export_data,array_column(@$arr["body"]["list"],"red"));
+
         return Excel::download($export, '1.xlsx');
 
     }
