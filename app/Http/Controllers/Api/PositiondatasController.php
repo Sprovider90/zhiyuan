@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Api;
 use App\Facades\Common;
 use App\Http\Requests\Api\PositiondatasRequest;
 use App\Models\Files;
+use App\Models\Position;
 use App\Models\Projects;
 use App\Models\ProjectsAreas;
 use App\Models\ProjectsPositions;
@@ -38,7 +39,9 @@ class PositiondatasController extends Controller
 
         $result = Common::curl($url, $params, false);
 
-        return $result;
+        //通过点位id查询 项目名称 所处区域  监测点名称 设备ID
+        $data = Position::with('areas','project','device')->where('id',$request->monitorId)->first();
+        return response()->json(['result' => $result,'data' => $data]);
     }
 
     public function export(PositiondatasRequest $request)

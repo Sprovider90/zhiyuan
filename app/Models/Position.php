@@ -35,4 +35,12 @@ class Position extends Model
     public function location(){
         return $this->hasOne(Location::class, 'position_id', 'id');
     }
+
+    /**
+     * 关联设备
+     * @return mixed
+     */
+    public function device(){
+        return $this->hasOne(Device::class, 'device_id', 'id');
+    }
 }
