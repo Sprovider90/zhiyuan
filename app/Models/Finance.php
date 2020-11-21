@@ -12,7 +12,7 @@ class Finance extends Model
     protected  $table = 'orders';
 
     protected $fillable = [
-        'order_number','gid', 'cid','num','money','order_status','send_goods_status','express_name','express_number'
+        'order_number','gid', 'cid','num','money','order_status','send_goods_status','express_name','express_number','type','invoice'
     ];
 
 
