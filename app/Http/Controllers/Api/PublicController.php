@@ -261,7 +261,7 @@ class PublicController extends Controller
                     $v['tag'] = $tag->air_quality;
                 }
                 //所有点位
-                $list = ProjectsPositions::where('area_id',$v->id)->where('status',2);
+                $list = ProjectsPositions::where('area_id',$v->id)->where('status',1);
                 $position = $list->get();
                 $p_id_str = $list->get(['id']);
                 $v->position = $position;
