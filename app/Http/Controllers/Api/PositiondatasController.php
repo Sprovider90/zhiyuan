@@ -72,9 +72,9 @@ class PositiondatasController extends Controller
             foreach ($arr["body"]["list"] as $k=>&$v){
                 $export_data[]=[$v["timestamp"],$v["formaldehyde"],$v["TVOC"],$v["PM25"],$v["CO2"],$v["temperature"],$v["humidity"]];
             }
-            $export = new PositiondatasExport($export_data,array_column($arr["body"]["list"],"red"));
             //$rs=ProjectsPositions::where('id', $arr["body"]["list"][0]["monitorId"])->first();
         }
+        $export = new PositiondatasExport($export_data,array_column($arr["body"]["list"],"red"));
         return Excel::download($export, '1.xlsx');
 
     }
