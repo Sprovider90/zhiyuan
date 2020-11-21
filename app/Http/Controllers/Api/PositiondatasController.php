@@ -64,19 +64,20 @@ class PositiondatasController extends Controller
         $arr=json_decode($result,true);
         //通过点位id查询 项目名称 所处区域  监测点名称 设备ID
         $data = ProjectsPositions::with(['project','area','device'])->where('id',$request->monitorId)->first();
-        $export_data=[];
         $export[] =['项目名称','所属区域','设备ID','监测点','查询时间'];
         $export[] = [$data->project->name,$data->area->area_name,$data->device->device_number,$data->name,$params["startTime"].'--'.$params["endTime"]];
-        if(isset($arr["body"]) && !empty($arr["body"]["list"])){
+        if(!empty($arr["body"]["list"])){
+            $export_data=[];
             $export_data[]=['统计时间','甲醛（mg/m3）','TVOC（mg/m3）','PM2.5（μg/m3）','CO2（ppm）','温度（℃）','湿度（%RH）'];
             foreach ($arr["body"]["list"] as $k=>&$v){
                 $export_data[]=[$v["timestamp"],$v["formaldehyde"],$v["TVOC"],$v["PM25"],$v["CO2"],$v["temperature"],$v["humidity"]];
             }
-            //$rs=ProjectsPositions::where('id', $arr["body"]["list"][0]["monitorId"])->first();
             $export = new PositiondatasExport($export_data,array_column($arr["body"]["list"],"red"));
+            //$rs=ProjectsPositions::where('id', $arr["body"]["list"][0]["monitorId"])->first();
+            return Excel::download($export, '1.xlsx');
+        }else{
+            return new HttpException(400, '无数据');
         }
-        var_dump($export);exit;
-        return Excel::download($export, '1.xlsx');
 
     }
     public function export_ten($data)
