@@ -40,7 +40,7 @@ class PositiondatasController extends Controller
         $result = Common::curl($url, $params, false);
 
         //通过点位id查询 项目名称 所处区域  监测点名称 设备ID
-        $data = Position::with('areas','project','device')->where('id',$request->monitorId)->first();
+        $data = ProjectsPositions::with(['project','area','device'])->where('id',$request->monitorId)->first();
         return response()->json(['result' => $result,'data' => $data]);
     }
 
