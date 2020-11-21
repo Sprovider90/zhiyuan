@@ -26,10 +26,10 @@ class DataController extends Controller
             });*/
         //项目名称
         $request->project_name &&  $position = $position->WhereHas('project',function ($query) use ($request) {
-            $query->where('name','like',"%{$request->keyword}%");
+            $query->where('name','like',"%{$request->project_name}%");
         });
         //点位名称
-        $request->position_name &&  $position = $position->where('name','like',"%{$request->keyword}%");
+        $request->position_name &&  $position = $position->where('name','like',"%{$request->position_name}%");
         //电量
         $request->soc && $position = $position->whereHas('device' , function($query) use ($request) {
             $query->where('soc','<',$request->soc);
