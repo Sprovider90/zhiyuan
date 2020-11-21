@@ -66,7 +66,6 @@ class PositiondatasController extends Controller
         $data = ProjectsPositions::with(['project','area','device'])->where('id',$request->monitorId)->first();
         $export[] =['项目名称','所属区域','设备ID','监测点','查询时间'];
         $export[] = [$data->project->name,$data->area->area_name,$data->device->device_number,$data->name,$params["startTime"].'--'.$params["endTime"]];
-        var_dump($export);exit;
         if(!empty($arr["body"]["list"])){
             $export_data=[];
             $export_data[]=['统计时间','甲醛（mg/m3）','TVOC（mg/m3）','PM2.5（μg/m3）','CO2（ppm）','温度（℃）','湿度（%RH）'];

@@ -19,6 +19,7 @@ class AddProjectInfoToProject extends Migration
             $table->string('project_manage_tel')->nullable()->comment('项目负责人电话');
             $table->string('device_manage_name')->nullable()->comment('设备管理人');
             $table->string('device_manage_tel')->nullable()->comment('设备管理电话');
+            $table->string('memo')->nullable()->comment('项目备注');
         });
     }
 
@@ -35,6 +36,7 @@ class AddProjectInfoToProject extends Migration
             $table->dropColumn('project_manage_tel');
             $table->dropColumn('device_manage_name');
             $table->dropColumn('device_manage_tel');
+            $table->dropColumn('memo');
         });
     }
 }
