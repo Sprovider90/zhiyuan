@@ -74,8 +74,8 @@ class PositiondatasController extends Controller
             }
             $export = new PositiondatasExport($export_data,array_column($arr["body"]["list"],"red"));
             //$rs=ProjectsPositions::where('id', $arr["body"]["list"][0]["monitorId"])->first();
-            return Excel::download($export, '1.xlsx');
         }
+        return Excel::download($export, '1.xlsx');
 
     }
     public function export_ten($data)
