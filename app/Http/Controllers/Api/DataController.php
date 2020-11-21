@@ -17,15 +17,26 @@ class DataController extends Controller
         $request->user()->customer_id && $position->whereHas('project',function ($query) use ($request){
             $query->where('customer_id',$request->user()->customer_id);
         });
-        $request->keyword && $position
+        /*$request->keyword && $position
             ->where(function ($query) use ($request) {
                 $query->orWhere('name','like',"%{$request->keyword}%")
                       ->orWhereHas('project',function ($query) use ($request) {
                           $query->where('name','like',"%{$request->keyword}%");
                       });
-            });
-        $request->soc && $position->whereHas('device' , function($query) use ($request) {
+            });*/
+        //项目名称
+        $request->project_name &&  $position = $position->WhereHas('project',function ($query) use ($request) {
+            $query->where('name','like',"%{$request->keyword}%");
+        });
+        //点位名称
+        $request->position_name &&  $position = $position->where('name','like',"%{$request->keyword}%");
+        //电量
+        $request->soc && $position = $position->whereHas('device' , function($query) use ($request) {
             $query->where('soc','<',$request->soc);
+        });
+        //电量
+        $request->device_number && $position =  $position->whereHas('device' , function($query) use ($request) {
+            $query->where('device_number','like',"%{$request->device_number}%");
         });
         $position = $position->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
         foreach ($position as $k => $v){
