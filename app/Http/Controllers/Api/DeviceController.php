@@ -48,6 +48,7 @@ class DeviceController extends Controller
         $request->device_number &&   $device = $device->where('device_number','like',"%{$request->device_number}%");
         $request->run_status &&   $device = $device->where('run_status',$request->run_status);
         $request->store_status && $device = $device->where('status',$request->store_status);
+        $request->type && $device = $device->where('type',$request->type);
         $device = $device->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
         return response(new DeviceResource($device));
     }
@@ -104,6 +105,7 @@ class DeviceController extends Controller
                         'customer_id'       => $row[5],
                         'check_data'        => $row[6],
                         'status'            => $row[7],
+                        'type'              => $row[8],//1销售 2租赁
                     ]
                 );
                 if(!$flg){
