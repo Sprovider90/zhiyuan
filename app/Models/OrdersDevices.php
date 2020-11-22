@@ -37,4 +37,12 @@ class OrdersDevices extends Model
         return $this->belongsTo(Orders::class, 'order_id', 'id');
     }
 
+    /**
+     * 关联设备表
+     * @return mixed
+     */
+    public function device(){
+        return $this->belongsTo(Device::class, 'device_id', 'id');
+    }
+
 }
