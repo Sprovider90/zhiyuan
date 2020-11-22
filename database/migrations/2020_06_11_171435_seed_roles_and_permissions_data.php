@@ -35,11 +35,17 @@ class SeedRolesAndPermissionsData extends Migration
         Permission::create(['name' => '客户管理-客户列表-新增',"guard_name"=>"api"]);
         Permission::create(['name' => '客户管理-客户列表-编辑',"guard_name"=>"api"]);
         Permission::create(['name' => '客户管理-客户列表-查看',"guard_name"=>"api"]);
-        Permission::create(['name' => '客户管理-订单管理-新增',"guard_name"=>"api"]);
-        Permission::create(['name' => '客户管理-订单管理-编辑',"guard_name"=>"api"]);
-        Permission::create(['name' => '客户管理-订单管理-查看',"guard_name"=>"api"]);
-        Permission::create(['name' => '客户管理-订单管理-取消',"guard_name"=>"api"]);
-        Permission::create(['name' => '客户管理-订单管理-发货',"guard_name"=>"api"]);
+//        Permission::create(['name' => '客户管理-订单管理-新增',"guard_name"=>"api"]);
+//        Permission::create(['name' => '客户管理-订单管理-编辑',"guard_name"=>"api"]);
+//        Permission::create(['name' => '客户管理-订单管理-查看',"guard_name"=>"api"]);
+//        Permission::create(['name' => '客户管理-订单管理-取消',"guard_name"=>"api"]);
+//        Permission::create(['name' => '客户管理-订单管理-发货',"guard_name"=>"api"]);
+        Permission::create(['name' => '订单管理-新增',"guard_name"=>"api"]);
+        Permission::create(['name' => '订单管理-编辑',"guard_name"=>"api"]);
+        Permission::create(['name' => '订单管理-查看',"guard_name"=>"api"]);
+        Permission::create(['name' => '订单管理-取消',"guard_name"=>"api"]);
+        Permission::create(['name' => '订单管理-发货',"guard_name"=>"api"]);
+
         Permission::create(['name' => '库存管理-仓库管理-新增',"guard_name"=>"api"]);
         Permission::create(['name' => '库存管理-仓库管理-编辑',"guard_name"=>"api"]);
 
