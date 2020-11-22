@@ -18,6 +18,7 @@ use App\Models\ProjectsStages;
 use App\Models\ProThresholdsLog;
 use Excel;
 use App\Exports\PositiondatasExport;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use App\Exports\PositiondatasTenExport;
 
@@ -38,12 +39,16 @@ class PositiondatasController extends Controller
         $url=config("javasource.original.url");
 
         $result = Common::curl($url, $params, false);
+        return $result;
+
+    }
+    public function indexHead(Request $request)
+    {
 
         //通过点位id查询 项目名称 所处区域  监测点名称 设备ID
         $data = ProjectsPositions::with(['project','area','device'])->where('id',$request->monitorId)->first();
-        return response()->json(['result' => $result,'data' => $data]);
+        return response()->json(['result' => [],'data' => $data]);
     }
-
     public function export(PositiondatasRequest $request)
     {
         $params=[];

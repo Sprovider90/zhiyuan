@@ -223,7 +223,9 @@ Route::prefix('v1')
                     Route::get('/positiondatas', 'PositiondatasController@index')
                         ->name('PositiondatasController.index');
 
-
+                    //监测点原始数据
+                    Route::get('/positiondatashead', 'PositiondatasController@indexHead')
+                        ->name('PositiondatasController.indexHead');
                     //故障排查
                     Route::get('breakdown','BreakdownController@index')
                         ->name('breakdown.index');
