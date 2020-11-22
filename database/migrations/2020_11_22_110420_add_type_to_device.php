@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddTypeToOrder extends Migration
+class AddTypeToDevice extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class AddTypeToOrder extends Migration
      */
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
+        Schema::table('devices', function (Blueprint $table) {
             //
-            $table->tinyInteger('type')->default(1)->comment('订单类型 1销售 2租赁');
-            $table->tinyInteger('invoice')->default(1)->comment('开发票 1否 2是');
+            $table->tinyInteger('type')->default(1)->comment('1销售 2租赁');
         });
     }
 
@@ -27,10 +26,9 @@ class AddTypeToOrder extends Migration
      */
     public function down()
     {
-        Schema::table('orders', function (Blueprint $table) {
+        Schema::table('devices', function (Blueprint $table) {
             //
             $table->dropColumn('type');
-            $table->dropColumn('invoice');
         });
     }
 }
