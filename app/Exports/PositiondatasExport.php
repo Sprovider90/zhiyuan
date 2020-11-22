@@ -32,7 +32,7 @@ class PositiondatasExport implements FromArray,WithEvents
         foreach ($this->redrule as $k=>$v){
             if(!empty($v)){
                 foreach ($v as $kk=>$vv){
-                    $result[]=$this->liename[$vv]."".($k+2);
+                    $result[]=$this->liename[$vv]."".($k+4);
                 }
             }
         }
