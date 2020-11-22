@@ -64,8 +64,8 @@ class PositiondatasController extends Controller
         $arr=json_decode($result,true);
         //通过点位id查询 项目名称 所处区域  监测点名称 设备ID
         $data = ProjectsPositions::with(['project','area','device'])->where('id',$request->monitorId)->first();
-        $export_data[]=['项目名称',$data->project->name,'所属区域',$data->area->area_name,'监测点名',$data->device->device_number];
-        $export_data[]=['设备ID',$data->name,'查询时间',$params["startTime"].' 至 '.$params["endTime"]];
+        $export_data[]=['项目名称',$data->project->name,'所属区域',$data->area->area_name,'监测点名',$data->name];
+        $export_data[]=['设备ID',$data->device->device_number,'查询时间',$params["startTime"].' 至 '.$params["endTime"]];
 
 //        $export_data[] =['项目名称','所属区域','设备ID','监测点','查询时间'];
 //        $export_data[] = [$data->project->name,$data->area->area_name,$data->device->device_number,$data->name,$params["startTime"].'--'.$params["endTime"]];
