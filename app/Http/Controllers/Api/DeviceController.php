@@ -73,7 +73,7 @@ class DeviceController extends Controller
     }
 
     public function cancel(Device $device){
-        $device->update(['customer_id' => null,'store_status' => 1,'run_status' => 2]);
+        $device->update(['customer_id' => null,'store_status' => 1,'run_status' => 2, 'type' => 2]);
         return response(new DeviceResource($device),201);
     }
 
