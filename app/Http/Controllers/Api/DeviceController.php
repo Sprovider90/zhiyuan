@@ -42,8 +42,8 @@ class DeviceController extends Controller
     }
 
     public function index(Request $request,Device $device){
-        $device = $device->with(['storehouse','customer','customer.user'=>function($query){
-            $query->get(['name','truename']);
+        $device = $device->with(['storehouse','customer'])->with(['customer.user'=>function($query){
+            $query->select(['name','truename']);
         }]);
         //增加客户登录
         $request->user()->customer_id && $device = $device->where('customer_id',$request->user()->customer_id);
