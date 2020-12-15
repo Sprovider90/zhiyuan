@@ -37,4 +37,12 @@ class Customers extends Model
     public function logos(){
         return $this->hasOne(Files::class, 'id', 'logo');
     }
+
+    /**
+     * 关联用户表
+     * @return mixed
+     */
+    public function user(){
+        return $this->hasOne(User::class, 'id', 'customer_id');
+    }
 }
