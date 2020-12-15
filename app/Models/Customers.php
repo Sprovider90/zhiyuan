@@ -43,6 +43,6 @@ class Customers extends Model
      * @return mixed
      */
     public function user(){
-        return $this->hasOne(User::class, 'customer_id', 'id');
+        return $this->hasOne(User::class, 'id', 'customer_id');
     }
 }
