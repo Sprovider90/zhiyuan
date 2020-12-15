@@ -42,7 +42,9 @@ class DeviceController extends Controller
     }
 
     public function index(Request $request,Device $device){
-        $device = $device->with(['storehouse','customer','customer.user']);
+        $device = $device->with(['storehouse','customer','customer.user'=>function($query){
+            $query->get(['name','truename']);
+        }]);
         //增加客户登录
         $request->user()->customer_id && $device = $device->where('customer_id',$request->user()->customer_id);
         $request->device_number &&   $device = $device->where('device_number','like',"%{$request->device_number}%");
@@ -50,9 +52,6 @@ class DeviceController extends Controller
         $request->status && $device = $device->where('status',$request->status);
         $request->store_status && $device = $device->where('store_status',$request->store_status);
         $request->type && $device = $device->where('type',$request->type);
-        $device->whereHas('customer.user', function ($query) {
-            $query->select(['name','truename']);
-        });
         $device = $device->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
         return response(new DeviceResource($device));
     }
