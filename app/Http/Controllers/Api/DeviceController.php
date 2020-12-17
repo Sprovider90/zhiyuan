@@ -122,7 +122,7 @@ class DeviceController extends Controller
         }
     }
 
-    public function state(Request $request,Device $device){
+    public function state(Device $device,Request $request){
         $device->update(['state' => $request->state]);
         return $device;
     }
