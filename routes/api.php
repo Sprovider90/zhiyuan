@@ -148,6 +148,9 @@ Route::prefix('v1')
                     //设备统计
                     Route::get('device/count','DeviceController@count')
                         ->name('device/count');
+                    //设备开关 1开 2关
+                    Route::patch('device/state','DeviceController@state')
+                        ->name('device/state');
                     //收回
                     Route::put('device/{device}/cancel','DeviceController@cancel')
                         ->name('device/cancel');

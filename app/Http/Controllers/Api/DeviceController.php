@@ -120,7 +120,10 @@ class DeviceController extends Controller
             DB::rollBack();
             return $this->errorResponse(500,$e->getMessage());
         }
+    }
 
-
+    public function state(Request $request,Device $device){
+        $device->update(['state' => $request->state]);
+        return $device;
     }
 }
