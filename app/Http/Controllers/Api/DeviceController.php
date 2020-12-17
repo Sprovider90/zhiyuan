@@ -123,6 +123,9 @@ class DeviceController extends Controller
     }
 
     public function state(Device $device,Request $request){
+        if(($request->state!=1 && $request->state !=2) ||$request->state == $device->state){
+            return $this->errorResponse(403,'参数错误');
+        }
         $device->update(['state' => $request->state]);
         return $device;
     }
