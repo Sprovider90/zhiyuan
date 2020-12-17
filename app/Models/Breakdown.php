@@ -7,7 +7,7 @@ class Breakdown extends Model
 {
 
     protected $fillable = [
-        'project_id','device_id', 'type','happen_time'
+        'project_id','device_id', 'type','happen_time','rssi','state','loca_x_y'
     ];
     public function project()
     {
