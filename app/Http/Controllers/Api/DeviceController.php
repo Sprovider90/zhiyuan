@@ -11,6 +11,7 @@ use App\Models\Device;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Redis;
 
 class DeviceController extends Controller
 {
@@ -129,6 +130,14 @@ class DeviceController extends Controller
         if($request->state != $device->state){
             $device->update(['state' => $request->state]);
         }
+
+        $arr=[];
+        $arr["event"]=intval($request->state);
+        $arr["timestamp"]=date('Y-m-d H:i:s',time());
+        $arr["deviceId"]=$device->id;
+
+        Redis::rpush('phpsay',json_encode($arr));
+
         return $device;
     }
 }
