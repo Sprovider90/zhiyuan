@@ -82,9 +82,7 @@ class PositionsController extends Controller
             throw new HttpException(403, '设备在其他点位运行,请勿重复添加');
         }
         $project = Projects::find($position->project_id);
-        echo json_encode($position);
-        echo json_encode($project->customer_id);
-        echo json_encode($device1->customer_id);
+        echo json_encode($device1);
         if(($project->customer_id  !=  $device1->customer_id ) && $request->status == 1){
             throw new HttpException(403, '设备所属客户不一致');
         }
