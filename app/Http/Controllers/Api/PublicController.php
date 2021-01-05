@@ -374,11 +374,10 @@ class PublicController extends Controller
 //        $customer_id && $device =  $device->where('customer_id',$customer_id);
         if($request->customer_id){
             $customered_ids = Customers::where('id',$request->customer_id)->pluck('id');
-            $posionsed  = Position::whereIn('id',$customered_ids)->pluck('device_id');
+            $posionsed  = Position::whereIn('project_id',$customered_ids)->pluck('device_id');
         }else{
             $posionsed  = null;
         }
-        var_dump($posionsed);exit;
         $device = $device->where(function ($query) use ($request,$posionsed) {
             $query->where(function ($query1) use ($request,$posionsed) {
                 $request->customer_id && $query1->where(function ($qy) use ($request,$posionsed){
