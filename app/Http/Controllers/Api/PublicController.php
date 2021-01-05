@@ -382,7 +382,7 @@ class PublicController extends Controller
         $device = $device->where(function ($query) use ($request,$posionsed) {
             $query->where(function ($query1) use ($request,$posionsed) {
                 $request->customer_id && $query1->where(function ($qy) use ($request,$posionsed){
-                    $qy->where('customer_id',$request->customer_id)->orWhereIn('id',$posionsed);
+                    $posionsed && $qy->where('customer_id',$request->customer_id)->orWhereIn('id',$posionsed);
                 });
                 $query1->where('status',1);
             });
