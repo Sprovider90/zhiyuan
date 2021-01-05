@@ -373,8 +373,8 @@ class PublicController extends Controller
 //        $device_id = $request->get('device_id','');
 //        $customer_id && $device =  $device->where('customer_id',$customer_id);
         if($request->customer_id){
-            $customered = Customers::where('id',$request->customer_id)->pluck('id');
-            $posionsed  = Position::whereIn('id',$customered)->pluck('device_id');
+            $customered_ids = Customers::where('id',$request->customer_id)->pluck('id');
+            $posionsed  = Position::whereIn('id',$customered_ids)->pluck('device_id');
         }else{
             $posionsed  = null;
         }
@@ -386,7 +386,6 @@ class PublicController extends Controller
                 });
                 $query1->where('status',1);
             });
-            $posionsed &&
             $request->device_id && $query->orWhere(function ($query1) use ($request){
                 $request->device_id &&  $query1->where('id',$request->device_id);
             });
