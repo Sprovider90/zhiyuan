@@ -372,6 +372,27 @@ class PublicController extends Controller
 //        $customer_id = $request->get('customer_id','');
 //        $device_id = $request->get('device_id','');
 //        $customer_id && $device =  $device->where('customer_id',$customer_id);
+        $device = $device->where(function ($query) use ($request) {
+            $query->where(function ($query1) use ($request) {
+                $request->customer_id && $query1->where('customer_id',$request->customer_id);
+                $query1->where('status',1);
+            });
+            $request->device_id && $query->orWhere(function ($query1) use ($request){
+                $request->device_id &&  $query1->where('id',$request->device_id);
+            });
+        });
+        $device = $device->orderBy('id','desc')->get();
+        foreach ($device as $k => $v){
+            $flg = ProjectsPositions::where('device_id',$v->id)->count();
+            $v->position_flg = 0;
+            if($flg){
+                $v->position_flg = 1;
+            }
+        }
+        return new OrdersResources($device);
+    }
+
+    /*public function devices(Request $request,Device $device){
         if($request->customer_id){
             $customered_ids = Customers::where('id',$request->customer_id)->pluck('id');
             $posionsed  = Position::whereIn('project_id',$customered_ids)->pluck('device_id');
@@ -398,7 +419,7 @@ class PublicController extends Controller
             }
         }
         return new OrdersResources($device);
-    }
+    }*/
 
     //对应项目区域列表
     public function areas(Request $request,ProjectsAreas $projectsAreas){
