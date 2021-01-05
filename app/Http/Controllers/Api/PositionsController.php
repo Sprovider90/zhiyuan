@@ -82,7 +82,7 @@ class PositionsController extends Controller
             throw new HttpException(403, '设备在其他点位运行,请勿重复添加');
         }
         $project = Projects::find($position->project_id);
-        if($device->customer_id && $project->customer_id  !=  $device->customer_id){
+        if($project->customer_id  !=  $device->customer_id){
             throw new HttpException(403, '设备所属客户不一致');
         }
         $position->update(['status' => $request->status]);
