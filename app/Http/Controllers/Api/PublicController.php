@@ -378,7 +378,7 @@ class PublicController extends Controller
         }else{
             $posionsed  = null;
         }
-
+        var_dump($posionsed);exit;
         $device = $device->where(function ($query) use ($request,$posionsed) {
             $query->where(function ($query1) use ($request,$posionsed) {
                 $request->customer_id && $query1->where(function ($qy) use ($request,$posionsed){
