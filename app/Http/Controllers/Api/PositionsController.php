@@ -10,6 +10,7 @@ use App\Jobs\UpdateDevicesInfoJob;
 use App\Models\Device;
 use App\Models\Location;
 use App\Models\Position;
+use App\Models\Projects;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -79,6 +80,10 @@ class PositionsController extends Controller
         $device1 = Device::where('id',$position->device_id)->where('run_status',1)->first();
         if($device1 && $request->status == 1){
             throw new HttpException(403, '设备在其他点位运行,请勿重复添加');
+        }
+        $project = Projects::find($position->project_id);
+        if($device->customer_id && $project->customer_id  !=  $device->customer_id){
+            throw new HttpException(403, '设备所属客户不一致');
         }
         $position->update(['status' => $request->status]);
         //同时修改设备 已停止状态
