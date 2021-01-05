@@ -41,6 +41,6 @@ class Position extends Model
      * @return mixed
      */
     public function device(){
-        return $this->belongsTo(Device::class, 'id', 'device_id');
+        return $this->hasOne(Device::class, 'device_id', 'id');
     }
 }
