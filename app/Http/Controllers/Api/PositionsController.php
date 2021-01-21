@@ -79,7 +79,7 @@ class PositionsController extends Controller
         //查询是否已经在运行
         $device1 = Device::where('id',$position->device_id)->first();
         if($device1->run_status==1 && $request->status == 1){
-            throw new HttpException(403, '设备在其他点位运行,请勿重复添加');
+           // throw new HttpException(403, '设备在其他点位运行,请勿重复添加');
         }
         $project = Projects::find($position->project_id);
         if(($project->customer_id  !=  $device1->customer_id ) && $request->status == 1){
