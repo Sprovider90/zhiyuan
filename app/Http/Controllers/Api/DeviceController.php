@@ -52,8 +52,9 @@ class DeviceController extends Controller
         $request->status && $device = $device->where('status',$request->status);
         $request->store_status && $device = $device->where('store_status',$request->store_status);
         $request->type && $device = $device->where('type',$request->type);
-        $device->each(function ($v){
-            //启用 1   停用 2   未绑定 3
+        $device = $device->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
+        $device->each(function ($device){
+            //设备是否绑定监测点 1启用 2停用 3未绑定
             $flg = 3;
             $bangind = ProjectsPositions::where('device_id',$v->id)->where('status',1)->count();
             if($bangind){
@@ -64,9 +65,8 @@ class DeviceController extends Controller
                     $flg = 2;
                 }
             }
-            $v->position_flg =  $flg;
+            $device->position_flg =  $flg;
         });
-        $device = $device->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
         return response(new DeviceResource($device));
     }
 
