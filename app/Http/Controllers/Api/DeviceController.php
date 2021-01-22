@@ -8,6 +8,7 @@ use App\Http\Resources\DeviceResource;
 use App\Http\Resources\StorehousesResource;
 use App\Imports\DeviceImport;
 use App\Models\Device;
+use App\Models\ProjectsPositions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -51,6 +52,20 @@ class DeviceController extends Controller
         $request->status && $device = $device->where('status',$request->status);
         $request->store_status && $device = $device->where('store_status',$request->store_status);
         $request->type && $device = $device->where('type',$request->type);
+        $device->each(function ($v){
+            //启用 1   停用 2   未绑定 3
+            $flg = 3;
+            $bangind = ProjectsPositions::where('device_id',$v->id)->where('status',1)->count();
+            if($bangind){
+                $flg = 2;
+            }else{
+                $bangind1 = ProjectsPositions::where('device_id',$v->id)->where('status',2)->count();
+                if($bangind1){
+                    $flg = 2;
+                }
+            }
+            $v->position_flg =  $flg;
+        });
         $device = $device->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
         return response(new DeviceResource($device));
     }
