@@ -58,7 +58,7 @@ class DeviceController extends Controller
             $flg = 3;
             $bangind = ProjectsPositions::where('device_id',$v->id)->where('status',1)->count();
             if($bangind){
-                $flg = 2;
+                $flg = 1;
             }else{
                 $bangind1 = ProjectsPositions::where('device_id',$v->id)->where('status',2)->count();
                 if($bangind1){
