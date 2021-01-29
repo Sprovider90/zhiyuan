@@ -87,7 +87,7 @@ class UsersController extends Controller
         $this->authorize('update', $user);
        	\DB::beginTransaction();
        	try{
-	        $attributes = $request->only(['truename', 'password','status','img','show_project_id','show_position_id','show_area_id']);
+	        $attributes = $request->only(['truename', 'password','status','img','show_project_id','show_position_id','show_area_id','template_id']);
 
 
 	        if (isset($request->roles)) {
