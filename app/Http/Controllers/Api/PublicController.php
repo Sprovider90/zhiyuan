@@ -232,6 +232,22 @@ class PublicController extends Controller
         return response()->json($res);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * 批量获取监测点最新的数据
+     */
+    public function getNewPositionDatas(Request $request){
+
+        $params["monitorIds"]= $request->monitorIds;
+        $params["startTime"]= date( 'Y-m-d H:i:s', strtotime('-1 day'));
+        $params["endTime"]  = date("Y-m-d H:i:s");
+
+        $url=config("javasource.original.furl");
+        $result = Common::curl($url, $params, false);
+        return $result;
+
+    }
     //获取所有项目列表 首页大屏使用
     public function getIndexProjectList(Request $request,Projects $projects){
         $projects = $projects->with(['areas','areas.file','stages']);
