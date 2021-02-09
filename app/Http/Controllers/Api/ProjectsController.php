@@ -71,7 +71,7 @@ class ProjectsController extends Controller
         });*/
         $request->name   && $projects_query=$projects->where(function($query) use ($request){
             $query->whereHas('customs',function($q1) use ($request) {
-                $q1->orWhere('company_name', 'like', "%{$request->name}%")
+                $q1->where('company_name', 'like', "%{$request->name}%")
                     ->orWhere('company_addr', 'like', '%' . $request->name . '%')
                     ->orWhere('name', 'like', "%{$request->name}%");
             });
