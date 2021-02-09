@@ -71,7 +71,7 @@ class Projects extends Model
      * @return mixed
      */
     public function position(){
-        return $this->belongsToMany(Position::class, 'project_id', 'id');
+        return $this->hasMany(Position::class, 'project_id', 'id');
     }
 
     /**
