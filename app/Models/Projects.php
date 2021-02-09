@@ -77,8 +77,8 @@ class Projects extends Model
      * 关联点位表
      * @return mixed
      */
-    public function positionto(){
-        return $this->belongsTo(Position::class, 'project_id', 'id');
+    public function position_to_many(){
+        return $this->belongsToMany(Position::class, 'project_id', 'id');
     }
 
     /**
