@@ -60,7 +60,6 @@ class ProjectsController extends Controller
      */
     public function index(Request $request , Projects $projects)
     {
-        DB::connection()->enableQueryLog();
         $projects_query=Projects::with(['customs','position.device']);
         isset($request->status) && $request->status !=='' && $projects_query=$projects->where('status',$request->status);
         /*$request->name   && $projects_query=$projects->whereHas('customs',function($query) use ($request){
@@ -83,7 +82,6 @@ class ProjectsController extends Controller
             ->allowedIncludes('customs','thresholds','waringsetting')
             ->orderBy('id','desc')
             ->paginate($request->pageSize ?? $request->pageSize);
-        dump(DB::getQueryLog());
        // $projects = $projects->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
         foreach ($projects as $k => $v){
             $v->position_count = Position::where('project_id',$v->id)->count();
