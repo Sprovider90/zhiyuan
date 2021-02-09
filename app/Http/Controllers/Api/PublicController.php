@@ -238,7 +238,7 @@ class PublicController extends Controller
         $data = $this->getProjectThreshold($v['position']['project_id']);
         $thresholdinfo_data = json_decode($data->thresholdinfo,true);
         $v['position']['tag']  =  1;
-        if($v['data']){
+        if($v){
             if($thresholdinfo_data){
                 foreach ($thresholdinfo_data as $k => $v){
                     if($k == 'co2' || $k == 'pm25'){
