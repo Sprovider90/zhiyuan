@@ -240,7 +240,7 @@ class PublicController extends Controller
     public function getNewPositionDatas(Request $request){
 
         $params["monitorIds"]= $request->monitorIds;
-        $params["startTime"]= date( 'Y-m-d H:i:s', strtotime('-1 day'));
+        $params["startTime"]= date( 'Y-m-d H:i:s', strtotime('-1 month'));
         $params["endTime"]  = date("Y-m-d H:i:s");
 
         $url=config("javasource.original.furl");
