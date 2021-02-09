@@ -231,7 +231,37 @@ class PublicController extends Controller
         }
         return response()->json($res);
     }
+    function getData(&$v){
 
+        $v['position'] = ProjectsPositions::find($v["monitorId"]);
+
+        $data = $this->getProjectThreshold($v['position']['project_id']);
+        $thresholdinfo_data = json_decode($data->thresholdinfo,true);
+        $v['position']['tag']  =  1;
+        if($v['data']){
+            if($thresholdinfo_data){
+                foreach ($thresholdinfo_data as $k => $v){
+                    if($k == 'co2' || $k == 'pm25'){
+                        $k = strtoupper($k);
+                    }
+                    $arr = explode('~',$v);
+                    switch ($v[$k]){
+                        case $v[$k] < $arr[0]:
+                            $v[$k.'_tag'] = 1;
+                            break;
+                        case $v[$k] >= $arr[0] && $v[$k] < $arr[1]:
+                            $v[$k.'_tag'] = 2;
+                            $v['position']['tag'] == 1 && $res['position']['tag'] = 2;
+                            break;
+                        case $v[$k] >= $arr[1]:
+                            $v[$k.'_tag'] =  3;
+                            $v['position']['tag'] == 1 || $v['position']['tag'] == 2 && $v['position']['tag'] = 3;
+                            break;
+                    }
+                }
+            }
+        }
+    }
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -245,7 +275,24 @@ class PublicController extends Controller
 
         $url=config("javasource.original.furl");
         $result = Common::curl($url, $params, false);
-        return $result;
+        $res = [];
+        if(!empty($result)){
+            $tmp=json_decode($result,true);
+            if($tmp["body"]){
+                /*foreach ($tmp["body"]["list"] as $k=>&$v){
+                    //判断指标是否污染
+                    $v["red"]=$this->getRed($v);
+                }*/
+                $res['data'] = $tmp["body"];
+                foreach ($res['data'] as $k=>&$v){
+                    $this->getData($v);
+                }
+            }else{
+                $res['data'] = [];
+            }
+        }
+        return response()->json($res);
+
 
     }
     //获取所有项目列表 首页大屏使用
