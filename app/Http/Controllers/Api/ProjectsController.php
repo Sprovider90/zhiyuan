@@ -81,7 +81,7 @@ class ProjectsController extends Controller
         });
         $request->user()->customer_id && $projects_query = $projects->where('customer_id',$request->user()->customer_id);
         $projects = QueryBuilder::for($projects_query)
-            ->allowedIncludes('customs','thresholds','waringsetting')
+            ->allowedIncludes('customs','thresholds','waringsetting','position','position.device')
             ->orderBy('id','desc')
             ->paginate($request->pageSize ?? $request->pageSize);
 //        dump(DB::getQueryLog());
