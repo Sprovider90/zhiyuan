@@ -70,13 +70,13 @@ class ProjectsController extends Controller
                 ->orWhere('number','like',"%{$request->name}%");
         });*/
         $request->name   && $projects_query=$projects->where(function($query) use ($request){
-            $query->whereHas('customs',function($q1) use ($request) {
+            $query->orWhereHas('customs',function($q1) use ($request) {
                 $q1->orWhere('company_name', 'like', "%{$request->name}%")
                     ->orWhere('company_addr', 'like', '%' . $request->name . '%')
                     ->orWhere('name', 'like', "%{$request->name}%");
             });
-            $query->whereHas('position.device',function($q2) use ($request){
-                    $q2->orWhere('number','like',"%{$request->name}%");
+            $query->orWhereHas('position.device',function($q2) use ($request){
+                    $q2->where('number','like',"%{$request->name}%");
                 });
         });
         $request->user()->customer_id && $projects_query = $projects->where('customer_id',$request->user()->customer_id);
