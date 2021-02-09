@@ -84,7 +84,7 @@ class ProjectsController extends Controller
             ->allowedIncludes('customs','thresholds','waringsetting','position','position.device')
             ->orderBy('id','desc')
             ->paginate($request->pageSize ?? $request->pageSize);
-        dump(DB::getQueryLog());
+//        dump(DB::getQueryLog());
        // $projects = $projects->orderBy('id','desc')->paginate($request->pageSize ?? $request->pageSize);
         foreach ($projects as $k => $v){
             $v->position_count = Position::where('project_id',$v->id)->count();
