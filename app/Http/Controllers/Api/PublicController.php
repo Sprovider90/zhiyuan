@@ -240,11 +240,11 @@ class PublicController extends Controller
         $v['position']['tag']  =  1;
         if($v){
             if($thresholdinfo_data){
-                foreach ($thresholdinfo_data as $k => $v){
+                foreach ($thresholdinfo_data as $k => $vv){
                     if($k == 'co2' || $k == 'pm25'){
                         $k = strtoupper($k);
                     }
-                    $arr = explode('~',$v);
+                    $arr = explode('~',$vv);
                     switch ($v[$k]){
                         case $v[$k] < $arr[0]:
                             $v[$k.'_tag'] = 1;
