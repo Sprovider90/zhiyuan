@@ -63,11 +63,21 @@ class ProjectsController extends Controller
 
         $projects_query=Projects::class;
         isset($request->status) && $request->status !=='' && $projects_query=$projects->where('status',$request->status);
-        $request->name   && $projects_query=$projects->whereHas('customs',function($query) use ($request){
+        /*$request->name   && $projects_query=$projects->whereHas('customs',function($query) use ($request){
             $query->where('company_name','like',"%{$request->name}%")
                 ->orWhere('company_addr','like','%'.$request->name.'%')
                 ->orWhere('name','like',"%{$request->name}%")
                 ->orWhere('number','like',"%{$request->name}%");
+        });*/
+        $request->name   && $projects_query=$projects->where(function($query) use ($request){
+            $query->OrWhereHas('customs',function($q1) use ($request){
+                $q1->orWhere('company_name','like',"%{$request->name}%")
+                    ->orWhere('company_addr','like','%'.$request->name.'%')
+                    ->orWhere('name','like',"%{$request->name}%")
+                    ->orWhere('number','like',"%{$request->name}%");
+
+                $q1->OrWhereHas('position.device',function($q2) use ($request){
+                    $q2->orWhere('number','like',"%{$request->name}%");
         });
         $request->user()->customer_id && $projects_query = $projects->where('customer_id',$request->user()->customer_id);
         $projects = QueryBuilder::for($projects_query)
