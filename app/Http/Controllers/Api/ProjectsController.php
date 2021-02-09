@@ -61,7 +61,7 @@ class ProjectsController extends Controller
     public function index(Request $request , Projects $projects)
     {
 //        DB::connection()->enableQueryLog();
-        $projects_query=Projects::with(['customs','position','position.device']);
+        $projects_query=Projects::with(['customs','positionto','position.device']);
         isset($request->status) && $request->status !=='' && $projects_query=$projects->where('status',$request->status);
         /*$request->name   && $projects_query=$projects->whereHas('customs',function($query) use ($request){
             $query->where('company_name','like',"%{$request->name}%")

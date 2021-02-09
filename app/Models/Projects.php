@@ -73,6 +73,13 @@ class Projects extends Model
     public function position(){
         return $this->hasMany(Position::class, 'project_id', 'id');
     }
+    /**
+     * 关联点位表
+     * @return mixed
+     */
+    public function positionto(){
+        return $this->belongsTo(Position::class, 'project_id', 'id');
+    }
 
     /**
      * 关联预警阈值表
