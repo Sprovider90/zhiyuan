@@ -76,7 +76,7 @@ class ProjectsController extends Controller
                     ->orWhere('name', 'like', "%{$request->name}%");
             });
             $query->orWhereHas('position.device',function($q2) use ($request){
-                    $q2->where('number','like',"%{$request->name}%");
+                    $q2->where('device_number','like',"%{$request->name}%");
                 });
         });
         $request->user()->customer_id && $projects_query = $projects->where('customer_id',$request->user()->customer_id);
