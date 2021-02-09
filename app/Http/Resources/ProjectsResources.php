@@ -16,8 +16,8 @@ class ProjectsResources extends JsonResource
     {
         $data=parent::toArray($request);
         $data['customs'] = new CustomersResources($this->whenLoaded('customs'));
-        $data['position'] = new CustomersResources($this->whenLoaded('position'));
-        $data['position.device'] = new CustomersResources($this->whenLoaded('position.device'));
+        $data['position'] = new PositionsResource($this->whenLoaded('position'));
+        $data['position.device'] = new DeviceResource($this->whenLoaded('position.device'));
         $data['thresholds'] = new ProjectsThresholdsResource($this->whenLoaded('thresholds'));
         $data['waringsetting'] = new ProjectsWaringSettingResource($this->whenLoaded('waringsetting'));
 
