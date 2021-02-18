@@ -235,37 +235,39 @@ class PublicController extends Controller
 
         $v['position'] = ProjectsPositions::find($v["monitorId"]);
 
-//        $data = $this->getProjectThreshold($v['position']['project_id']);
-//        $thresholdinfo_data = json_decode($data->thresholdinfo,true);
+        $data = $this->getProjectThreshold($v['position']['project_id']);
+        $thresholdinfo_data = json_decode($data->thresholdinfo,true);
         $v['position']['tag']  =  1;
+
+
+        if($v){
+            if($thresholdinfo_data){
+                foreach ($thresholdinfo_data as $k => $vv){
+                    if($k == 'co2' || $k == 'pm25'){
+                        $k = strtoupper($k);
+                    }
+                    $arr = explode('~',$vv);
+                    switch ($v[$k]){
+                        case $v[$k] < $arr[0]:
+                            $v[$k.'_tag'] = 1;
+                            break;
+                        case $v[$k] >= $arr[0] && $v[$k] < $arr[1]:
+                            $v[$k.'_tag'] = 2;
+                            $v['position']['tag'] == 1 && $res['position']['tag'] = 2;
+                            break;
+                        case $v[$k] >= $arr[1]:
+                            $v[$k.'_tag'] =  3;
+                            $v['position']['tag'] == 1 || $v['position']['tag'] == 2 && $v['position']['tag'] = 3;
+                            break;
+                    }
+                }
+            }
+        }
+
         $tag = Tag::where('model_type',3)->where('model_id',$v["monitorId"])->orderBy('id','desc')->first();
         if($tag){
             $v['position']['tag'] = $tag->air_quality;
         }
-
-//        if($v){
-//            if($thresholdinfo_data){
-//                foreach ($thresholdinfo_data as $k => $vv){
-//                    if($k == 'co2' || $k == 'pm25'){
-//                        $k = strtoupper($k);
-//                    }
-//                    $arr = explode('~',$vv);
-//                    switch ($v[$k]){
-//                        case $v[$k] < $arr[0]:
-//                            $v[$k.'_tag'] = 1;
-//                            break;
-//                        case $v[$k] >= $arr[0] && $v[$k] < $arr[1]:
-//                            $v[$k.'_tag'] = 2;
-//                            $v['position']['tag'] == 1 && $res['position']['tag'] = 2;
-//                            break;
-//                        case $v[$k] >= $arr[1]:
-//                            $v[$k.'_tag'] =  3;
-//                            $v['position']['tag'] == 1 || $v['position']['tag'] == 2 && $v['position']['tag'] = 3;
-//                            break;
-//                    }
-//                }
-//            }
-//        }
     }
     /**
      * @param Request $request
