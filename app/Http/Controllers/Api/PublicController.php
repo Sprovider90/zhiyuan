@@ -266,7 +266,10 @@ class PublicController extends Controller
     public function getNewPositionDatas(Request $request){
         $tmp_arr=explode(',',$request->monitorIds);
         $ProjectsPositions=ProjectsPositions::whereIn("id",$tmp_arr)->get()->toArray();
-        foreach ($ProjectsPositions as $k=>&$v){
+
+        $newarr = [];
+
+        foreach ($ProjectsPositions as $k=>$v){
             $tag = Tag::where('model_type',3)->where('model_id',$v["id"])->orderBy('id','desc')->first();
             $v['position_tag'] =null;
             $v['original']=null;
@@ -281,6 +284,8 @@ class PublicController extends Controller
                 }
 
             }
+            $kk = array_search($v['id'],$tmp_arr);
+            $newarr[$kk] = $v;
         }
 //        $params["monitorIds"]= $request->monitorIds;
 //        $params["startTime"]= date( 'Y-m-d H:i:s', strtotime('-1 month'));
@@ -305,12 +310,7 @@ class PublicController extends Controller
 //            }
 //        }
 
-        $newarr = [];
-        foreach ($ProjectsPositions as $vv) {
-            $k = array_search($v['id'],$tmp_arr);
-            $newarr[$k] = $vv;
-        }
-        ksort($newarr);
+
 
         return response()->json($newarr);
 
