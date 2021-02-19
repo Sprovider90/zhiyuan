@@ -233,41 +233,30 @@ class PublicController extends Controller
     }
     function getData(&$v){
 
-        $v['position'] = ProjectsPositions::find($v["monitorId"]);
 
-        $data = $this->getProjectThreshold($v['position']['project_id']);
+        $data = $this->getProjectThreshold($v['project_id']);
         $thresholdinfo_data = json_decode($data->thresholdinfo,true);
-        $v['position']['tag']  =  1;
 
-
-        if($v){
-            if($thresholdinfo_data){
-                foreach ($thresholdinfo_data as $k => $vv){
-                    if($k == 'co2' || $k == 'pm25'){
-                        $k = strtoupper($k);
-                    }
-                    $arr = explode('~',$vv);
-                    switch ($v[$k]){
-                        case $v[$k] < $arr[0]:
-                            $v[$k.'_tag'] = 1;
-                            break;
-                        case $v[$k] >= $arr[0] && $v[$k] < $arr[1]:
-                            $v[$k.'_tag'] = 2;
-                            $v['position']['tag'] == 1 && $res['position']['tag'] = 2;
-                            break;
-                        case $v[$k] >= $arr[1]:
-                            $v[$k.'_tag'] =  3;
-                            $v['position']['tag'] == 1 || $v['position']['tag'] == 2 && $v['position']['tag'] = 3;
-                            break;
-                    }
+        if($thresholdinfo_data){
+            foreach ($thresholdinfo_data as $k => $vv){
+                if($k == 'co2' || $k == 'pm25'){
+                    $k = strtoupper($k);
+                }
+                $arr = explode('~',$vv);
+                switch ($v[$k]){
+                    case $v[$k] < $arr[0]:
+                        $v[$k.'_tag'] = 1;
+                        break;
+                    case $v[$k] >= $arr[0] && $v[$k] < $arr[1]:
+                        $v[$k.'_tag'] = 2;
+                        break;
+                    case $v[$k] >= $arr[1]:
+                        $v[$k.'_tag'] =  3;
+                        break;
                 }
             }
         }
 
-        $tag = Tag::where('model_type',3)->where('model_id',$v["monitorId"])->orderBy('id','desc')->first();
-        if($tag){
-            $v['position']['tag'] = $tag->air_quality;
-        }
     }
     /**
      * @param Request $request
@@ -275,30 +264,45 @@ class PublicController extends Controller
      * 批量获取监测点最新的数据
      */
     public function getNewPositionDatas(Request $request){
-
-        $params["monitorIds"]= $request->monitorIds;
-        $params["startTime"]= date( 'Y-m-d H:i:s', strtotime('-1 month'));
-        $params["endTime"]  = date("Y-m-d H:i:s");
-
-        $url=config("javasource.original.furl");
-        $result = Common::curl($url, $params, false);
-        $res = [];
-        if(!empty($result)){
-            $tmp=json_decode($result,true);
-            if($tmp["body"]){
-                /*foreach ($tmp["body"]["list"] as $k=>&$v){
-                    //判断指标是否污染
-                    $v["red"]=$this->getRed($v);
-                }*/
-                $res['data'] = $tmp["body"];
-                foreach ($res['data'] as $k=>&$v){
-                    $this->getData($v);
+        $tmp_arr=explode(',',$request->monitorIds);
+        $ProjectsPositions=ProjectsPositions::whereIn("id",$tmp_arr)->get()->toArray();
+        foreach ($ProjectsPositions as $k=>&$v){
+            $tag = Tag::where('model_type',3)->where('model_id',$v["id"])->orderBy('id','desc')->first();
+            if($tag){
+                $v['position_tag'] = $tag->air_quality;
+                if(file_exists($v["original_file"])){
+                    $files=file_get_contents($v["original_file"]);
+                    $files_arr=json_decode($files,true);
+                    $files_arr_v=array_column($files_arr,"monitorId");
+                    $v['original']=$files_arr_v[$v["id"]];
+                    $this->getData($v['original']);
                 }
-            }else{
-                $res['data'] = [];
+
             }
         }
-        return response()->json($res);
+//        $params["monitorIds"]= $request->monitorIds;
+//        $params["startTime"]= date( 'Y-m-d H:i:s', strtotime('-1 month'));
+//        $params["endTime"]  = date("Y-m-d H:i:s");
+//
+//        $url=config("javasource.original.furl");
+//        $result = Common::curl($url, $params, false);
+//        $res = [];
+//        if(!empty($result)){
+//            $tmp=json_decode($result,true);
+//            if($tmp["body"]){
+//                /*foreach ($tmp["body"]["list"] as $k=>&$v){
+//                    //判断指标是否污染
+//                    $v["red"]=$this->getRed($v);
+//                }*/
+//                $res['data'] = $tmp["body"];
+//                foreach ($res['data'] as $k=>&$v){
+//                    $this->getData($v);
+//                }
+//            }else{
+//                $res['data'] = [];
+//            }
+//        }
+        return response()->json($ProjectsPositions);
 
 
     }
