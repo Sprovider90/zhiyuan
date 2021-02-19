@@ -235,9 +235,8 @@ class PublicController extends Controller
 
 
         $data = $this->getProjectThreshold($project_id);
-        $thresholdinfo_data = json_decode($data->thresholdinfo,true);
-
-        if($thresholdinfo_data){
+        if($data){
+            $thresholdinfo_data = json_decode($data->thresholdinfo,true);
             foreach ($thresholdinfo_data as $k => $vv){
                 if($k == 'co2' || $k == 'pm25'){
                     $k = strtoupper($k);
@@ -256,6 +255,7 @@ class PublicController extends Controller
                 }
             }
         }
+
 
     }
     /**
