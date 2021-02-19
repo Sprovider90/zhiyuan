@@ -57,9 +57,7 @@ class Controller extends BaseController
                 LEFT JOIN thresholds c ON b.threshold_id = c.id
                 LEFT JOIN projects_thresholds d ON a.stage_id = d.stage_id
                 WHERE
-                    a. STATUS IN (4, 5, 6)
-                AND a.stage_id IS NOT NULL
-                AND c.thresholdinfo IS NOT NULL
+                    c.thresholdinfo IS NOT NULL
                 AND a.id='.$project_id);
             return $data ? $data[0] : '';
     }

@@ -268,6 +268,8 @@ class PublicController extends Controller
         $ProjectsPositions=ProjectsPositions::whereIn("id",$tmp_arr)->get()->toArray();
         foreach ($ProjectsPositions as $k=>&$v){
             $tag = Tag::where('model_type',3)->where('model_id',$v["id"])->orderBy('id','desc')->first();
+            $v['position_tag'] =null;
+            $v['original']=null;
             if($tag){
                 $v['position_tag'] = $tag->air_quality;
                 if(file_exists($tag["original_file"])){
