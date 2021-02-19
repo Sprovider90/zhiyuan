@@ -304,8 +304,9 @@ class PublicController extends Controller
 //                $res['data'] = [];
 //            }
 //        }
+        $arr=$ProjectsPositions;
         $newarr = [];
-        foreach ($ProjectsPositions as $v) {
+        foreach ($arr as $v) {
             $k = array_search($v['id'],$tmp_arr);
             $newarr[$k] = $v;
         }
