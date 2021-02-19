@@ -270,10 +270,10 @@ class PublicController extends Controller
             $tag = Tag::where('model_type',3)->where('model_id',$v["id"])->orderBy('id','desc')->first();
             if($tag){
                 $v['position_tag'] = $tag->air_quality;
-                if(file_exists($v["original_file"])){
-                    $files=file_get_contents($v["original_file"]);
+                if(file_exists($tag["original_file"])){
+                    $files=file_get_contents($tag["original_file"]);
                     $files_arr=json_decode($files,true);
-                    $files_arr_v=array_column($files_arr,"monitorId");
+                    $files_arr_v=arrayToArrayKey($files_arr,"monitorId");
                     $v['original']=$files_arr_v[$v["id"]];
                     $this->getData($v['original']);
                 }
