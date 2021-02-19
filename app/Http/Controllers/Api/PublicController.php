@@ -304,11 +304,11 @@ class PublicController extends Controller
 //                $res['data'] = [];
 //            }
 //        }
-        $arr=$ProjectsPositions;
+
         $newarr = [];
-        foreach ($arr as $v) {
+        foreach ($ProjectsPositions as $vv) {
             $k = array_search($v['id'],$tmp_arr);
-            $newarr[$k] = $v;
+            $newarr[$k] = $vv;
         }
         ksort($newarr);
 
