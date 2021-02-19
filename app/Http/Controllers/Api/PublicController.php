@@ -231,10 +231,10 @@ class PublicController extends Controller
         }
         return response()->json($res);
     }
-    function getData(&$v){
+    function getData(&$v,$project_id){
 
 
-        $data = $this->getProjectThreshold($v['project_id']);
+        $data = $this->getProjectThreshold($project_id);
         $thresholdinfo_data = json_decode($data->thresholdinfo,true);
 
         if($thresholdinfo_data){
@@ -275,7 +275,7 @@ class PublicController extends Controller
                     $files_arr=json_decode($files,true);
                     $files_arr_v=arrayToArrayKey($files_arr,"monitorId");
                     $v['original']=$files_arr_v[$v["id"]];
-                    $this->getData($v['original']);
+                    $this->getData($v['original'],$v["project_id"]);
                 }
 
             }
