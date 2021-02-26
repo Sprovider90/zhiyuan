@@ -281,6 +281,10 @@ class PublicController extends Controller
                     $files_arr_v=arrayToArrayKey($files_arr,"monitorId");
                     $v['original']=$files_arr_v[$v["id"]];
                     $this->getData($v['original'],$v["project_id"]);
+                    if(isset($v['original']["timestamp"])&&!empty($v['original']["timestamp"])){
+                        $v['created_at']=$v['updated_at']=$v['original']["timestamp"];
+                    }
+
                 }
 
             }
